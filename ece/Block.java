@@ -1,5 +1,7 @@
 package ece;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.*;
 import javafx.scene.paint.*;
@@ -26,6 +28,16 @@ public class Block extends FlowPane {
         Circle c=new Circle(50);
         this.setBackground(new Background(new BackgroundFill(YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
         this.setShape(c);
+
+        this.setOnMousePressed(mouseEvent -> {
+            Pane myParent = (Pane) this.getParent();
+            myParent.getChildren().remove(this);        //put self to the front
+            myParent.getChildren().add(this);
+            pressed(mouseEvent.getSceneX(),mouseEvent.getSceneY());
+        });
+        this.setOnMouseDragged(mouseEvent -> {
+            dragged(mouseEvent.getSceneX(),mouseEvent.getSceneY());
+        });
         //this.setPrefWidth(U);
 
         //this.getChildren().add(rec);
