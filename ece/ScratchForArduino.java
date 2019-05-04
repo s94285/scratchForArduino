@@ -10,7 +10,7 @@ public class ScratchForArduino extends  Application{
         Parent root =
                 FXMLLoader . load ( getClass (). getResource ( "ui.fxml" ));
         Scene scene = new Scene ( root );
-        stage . setTitle ( "ScratchForArduino" ); // displayed in window's title bar
+        stage . setTitle ( "ScratchFor1234" ); // displayed in window's title bar
         stage . setScene ( scene );
         stage . show ();
     }
