@@ -9,7 +9,7 @@ import javafx.event.* ;
 
 import static javafx.scene.paint.Color.*;
 
-public class Block extends FlowPane {
+public class Block extends Pane {
     private Rectangle rec;
     private double nowlayoutx,nowlayouty;
     private double pressedx,pressedy;
@@ -22,12 +22,12 @@ public class Block extends FlowPane {
     }*/
     public Block(){
 
-        this.setHgap(16);
-        rec=new Rectangle(200,200);
-        rec.setFill(BLUE);
-        Circle c=new Circle(50);
-        this.setBackground(new Background(new BackgroundFill(YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
-        this.setShape(c);
+//        this.setHgap(8);
+        //rec=new Rectangle(200,200);
+        //rec.setFill(BLUE);
+        //Circle c=new Circle(50);
+        //this.setBackground(new Background(new BackgroundFill(YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
+        //this.setShape(c);
 
         this.setOnMousePressed(mouseEvent -> {
             Pane myParent = (Pane) this.getParent();

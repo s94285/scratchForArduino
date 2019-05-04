@@ -29,13 +29,13 @@
                                  <children>
                                     <VBox prefHeight="200.0" prefWidth="195.0" spacing="30.0">
                                        <children>
-                                          <RadioButton mnemonicParsing="false" selected="true" text="Controls">
+                                          <RadioButton fx:id="controlsButton" mnemonicParsing="false" onAction="#typeClicked" selected="true" text="Controls">
                                              <toggleGroup>
                                                 <ToggleGroup fx:id="BlockToggleGroup" />
                                              </toggleGroup>
                                           </RadioButton>
-                                          <RadioButton mnemonicParsing="false" text="Operators" toggleGroup="$BlockToggleGroup" />
-                                          <RadioButton mnemonicParsing="false" text="Robots" toggleGroup="$BlockToggleGroup" />
+                                          <RadioButton fx:id="operatorsButton" mnemonicParsing="false" text="Operators" toggleGroup="$BlockToggleGroup" />
+                                          <RadioButton fx:id="arduinoButton" mnemonicParsing="false" text="Robots" toggleGroup="$BlockToggleGroup" />
                                        </children>
                                        <padding>
                                           <Insets bottom="8.0" left="50.0" right="8.0" top="20.0" />
