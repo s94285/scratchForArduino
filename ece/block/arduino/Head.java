@@ -58,7 +58,8 @@ public class Head extends BlockWithPlug {
         LineTo lineTo7 = new LineTo(0,getHeight()-3);
         path.getElements().addAll(moveTo,arcTo1,lineTo1,lineTo2,lineTo3,lineTo4,lineTo5,lineTo6,lineTo7,new ClosePath());
         this.setShape(path);
-        this.plugs.set(0,new Pair<>(new Point2D(25,getHeight()),this.plugs.get(0).getValue()));
+        this.plugs.get(0).setPoint2D(new Point2D(25,getHeight()));
+//        this.plugs.set(0,new Pair<>(new Point2D(25,getHeight()),this.plugs.get(0).getValue()));
         super.reShape();
     }
 }

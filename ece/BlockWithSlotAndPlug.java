@@ -9,7 +9,7 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 
 public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
-    public Pair<Point2D,BlockWithPlug> slot = new Pair<>(new Point2D(25,0),null);
+    public PointBlockPair<BlockWithPlug> slot = new PointBlockPair<>(new Point2D(25,0),null);
 
     public BlockWithSlotAndPlug(String arg, String blockName, Pane drawingPane, int plugCount){
         super(arg, blockName,drawingPane,plugCount);
@@ -17,6 +17,23 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
     @Override
     public void onMouseDragged(MouseEvent mouseEvent) {
         super.onMouseDragged(mouseEvent);
+        System.out.println("slot dragged" + slot.getBlock());
+        if(slot.getBlock()!=null){
+
+            BlockWithPlug blockWithPlug = slot.getBlock();
+            for(int i=0;i<blockWithPlug.plugs.size();i++){
+                if(blockWithPlug.plugs.get(i).getBlock()==this){
+                    blockWithPlug.plugs.get(i).setBlock(null);
+                    this.slot.setBlock(null);
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onMouseReleased(MouseEvent mouseEvent) {
+        super.onMouseReleased(mouseEvent);
 
     }
 }
