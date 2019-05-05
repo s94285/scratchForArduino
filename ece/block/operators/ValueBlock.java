@@ -3,6 +3,7 @@ package ece.block.operators;
 import ece.block.Block;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
@@ -17,21 +18,23 @@ public class ValueBlock extends Block {
     protected StackPane selectedStackPane = null;
     public ValueBlock(String arg, String blockName,Pane drawingPane) {
         super(arg,blockName,drawingPane);
+        this.setAlignment(Pos.CENTER_LEFT);
 
-        Path path = new Path();
-        MoveTo moveTo = new MoveTo();
-        moveTo.setX(12);
-        moveTo.setY(29);
-        ArcTo arcTo1 = new ArcTo();
-        arcTo1.setX(12);
-        arcTo1.setY(0);
-        arcTo1.setRadiusX(12);
-        arcTo1.setRadiusY(15);
-        arcTo1.setSweepFlag(true);
-        LineTo lineTo1 = new LineTo(62, 0);
-        ArcTo arcTo2 = new ArcTo(12, 15, 0, 62, 29, false, true);
-        path.getElements().addAll(moveTo, arcTo1, lineTo1, arcTo2, new ClosePath());
-        this.setShape(path);
+//        Path path = new Path();
+//        MoveTo moveTo = new MoveTo();
+//        moveTo.setX(12);
+//        moveTo.setY(29);
+//        ArcTo arcTo1 = new ArcTo();
+//        arcTo1.setX(12);
+//        arcTo1.setY(0);
+//        arcTo1.setRadiusX(12);
+//        arcTo1.setRadiusY(15);
+//        arcTo1.setSweepFlag(true);
+//        LineTo lineTo1 = new LineTo(62, 0);
+//        ArcTo arcTo2 = new ArcTo(12, 15, 0, 62, 29, false, true);
+//        path.getElements().addAll(moveTo, arcTo1, lineTo1, arcTo2, new ClosePath());
+//        this.setShape(path);
+        reShape();
         this.setBackground(new Background(new BackgroundFill(Color.rgb(92, 183, 18), CornerRadii.EMPTY, Insets.EMPTY)));
 
 
