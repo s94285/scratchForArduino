@@ -94,23 +94,20 @@ public class ValueBlock extends Block {
         this.widthProperty().addListener((observableValue, oldValue, newValue) -> reShape());
 
         //overriding dragging event
-
-        this.setOnMouseDragged(mouseEvent -> {
-
+        this.setOnMousePressed(mouseEvent -> {
+            pressed(mouseEvent.getSceneX(),mouseEvent.getSceneY(),mouseEvent);
             Node node = (Node)mouseEvent.getTarget();
             while(node != drawingPane){
                 if(node instanceof Block)break;
                 node = node.getParent();
             }
             if(node != this)return;
-            System.out.println(this + " " + mouseEvent.getTarget());
-            dragged(mouseEvent.getSceneX(),mouseEvent.getSceneY());
             if(this.getParent()!=drawingPane){
 //                ((Pane)this.getParent()).getChildren().remove(this);
 //                this.setLayoutX();
-
-                //this.getParent().getParent().getParent().setLayoutX(500);
-                //this.getParent().getParent().getParent().setLayoutY(500);
+//
+//                this.getParent().getParent().getParent().setLayoutX(500);
+//                this.getParent().getParent().getParent().setLayoutY(500);
                 Point2D blockScenePoint = this.localToScene(0,0);
 
                 System.out.println(blockScenePoint);
@@ -118,6 +115,32 @@ public class ValueBlock extends Block {
                 this.relocate(drawingPane.sceneToLocal(blockScenePoint).getX(),drawingPane.sceneToLocal(blockScenePoint).getY());
                 System.out.println(this.getLayoutX() + " " + this.getLayoutY());
             }
+            pressed(mouseEvent.getSceneX(),mouseEvent.getSceneY(),mouseEvent);
+            mouseEvent.consume();
+        });
+        this.setOnMouseDragged(mouseEvent -> {
+
+//            Node node = (Node)mouseEvent.getTarget();
+//            while(node != drawingPane){
+//                if(node instanceof Block)break;
+//                node = node.getParent();
+//            }
+//            if(node != this)return;
+            System.out.println(this + " " + mouseEvent.getTarget());
+            dragged(mouseEvent.getSceneX(),mouseEvent.getSceneY());
+//            if(this.getParent()!=drawingPane){
+////                ((Pane)this.getParent()).getChildren().remove(this);
+////                this.setLayoutX();
+//
+//                //this.getParent().getParent().getParent().setLayoutX(500);
+//                //this.getParent().getParent().getParent().setLayoutY(500);
+//                Point2D blockScenePoint = this.localToScene(0,0);
+//
+//                System.out.println(blockScenePoint);
+//                drawingPane.getChildren().add(this);
+//                this.relocate(drawingPane.sceneToLocal(blockScenePoint).getX(),drawingPane.sceneToLocal(blockScenePoint).getY());
+//                System.out.println(this.getLayoutX() + " " + this.getLayoutY());
+//            }
             Transform blockTransformToScene = this.getLocalToSceneTransform();
             Point2D blockScenePoint = blockTransformToScene.transform(0,0);
             ArrayList<StackPane> stackPanes = getStackPanes(drawingPane);
@@ -127,7 +150,7 @@ public class ValueBlock extends Block {
                 if (stackPaneScenePoint.distance(blockScenePoint) < 15) {
 //                                System.out.println("block" + blockScenePoint);
 //                                System.out.println("stackPane" + stackPaneScenePoint);
-                    stackPane.setEffect(new DropShadow(20, Color.RED));
+//                    stackPane.setEffect(new DropShadow(20, Color.RED));
                     selectedStackPane = stackPane;
                     return;
                 } else {

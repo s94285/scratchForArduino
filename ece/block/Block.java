@@ -12,6 +12,8 @@ public class Block extends Pane {
     protected String blockName;
     private  boolean flag=false;
     public Block(Pane drawingPane){
+       // this.setPrefWidth(USE_COMPUTED_SIZE);
+        //this.setPrefHeight(USE_COMPUTED_SIZE);
         this.drawingPane = drawingPane;
 //        this.setHgap(8);
         //rec=new Rectangle(200,200);
