@@ -7,6 +7,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -56,6 +57,26 @@ public abstract class Block extends VBox {
                             textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
                         });
 
+                        textField.setShape(new Circle(5));
+                        textField.textProperty().addListener((observableValue, oldValue, newValue)->{
+                            if(!newValue.matches("\\d*")){
+                                textField.setText(oldValue);
+                            }
+                            Path path = new Path();
+                            MoveTo moveTo = new MoveTo();
+                            moveTo.setX(12);
+                            moveTo.setY(getHeight());
+                            ArcTo arcTo1 = new ArcTo();
+                            arcTo1.setX(12);
+                            arcTo1.setY(0);
+                            arcTo1.setRadiusX(12);
+                            arcTo1.setRadiusY(getHeight()/2);
+                            arcTo1.setSweepFlag(true);
+                            LineTo lineTo1 = new LineTo(getWidth()-12, 0);
+                            ArcTo arcTo2 = new ArcTo(12, getHeight()/2, 0,getWidth()-12 , getHeight(), false, true);
+                            path.getElements().addAll(moveTo, arcTo1, lineTo1, arcTo2, new ClosePath());
+                            textField.setShape(path);
+                        });
                         stackPane.getChildren().add(textField);
                         break;
                     }
