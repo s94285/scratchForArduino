@@ -1,27 +1,18 @@
-package ece;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
-import javafx.scene.Parent;
+package ece.block;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.shape.*;
-import javafx.scene.paint.*;
-import javafx.event.* ;
 
-import static javafx.scene.paint.Color.*;
 
 public class Block extends Pane {
-    private Rectangle rec;
+    protected final Pane drawingPane;
     private double nowlayoutx,nowlayouty;
     private double pressedx,pressedy;
-   /* private enum Type{
-        HEAD(1);
-        CONTAINER(2);
-        STATEMENT(3);
-        VALUE(4);
-
-    }*/
-    public Block(){
-
+    protected HBox titlePane = new HBox();
+    protected String blockName;
+    private  boolean flag=false;
+    public Block(Pane drawingPane){
+        this.drawingPane = drawingPane;
 //        this.setHgap(8);
         //rec=new Rectangle(200,200);
         //rec.setFill(BLUE);
@@ -30,10 +21,7 @@ public class Block extends Pane {
         //this.setShape(c);
 
         this.setOnMousePressed(mouseEvent -> {
-            Pane myParent = (Pane) this.getParent();
-            myParent.getChildren().remove(this);        //put self to the front
-            myParent.getChildren().add(this);
-            pressed(mouseEvent.getSceneX(),mouseEvent.getSceneY());
+            pressed(mouseEvent.getSceneX(),mouseEvent.getSceneY(),mouseEvent);
         });
         this.setOnMouseDragged(mouseEvent -> {
             dragged(mouseEvent.getSceneX(),mouseEvent.getSceneY());
@@ -42,20 +30,26 @@ public class Block extends Pane {
 
         //this.getChildren().add(rec);
     }
-    public  void pressed(double mousex,double mousey){
+    public  void pressed(double mousex, double mousey, MouseEvent mouseEvent){
+
+        Pane myParent = (Pane) this.getParent();
+        myParent.getChildren().remove(this);        //put self to the front
+        myParent.getChildren().add(this);
         nowlayoutx=this.getLayoutX();
         nowlayouty=this.getLayoutY();
         pressedx=mousex;
         pressedy=mousey;
-        //System.out.print("777");
     }
     public void dragged(double mousex,double mousey){
+
         this.setLayoutX(nowlayoutx+(mousex-pressedx));
         this.setLayoutY(nowlayouty+(mousey-pressedy));
         pressedx=mousex;
         pressedy=mousey;
         nowlayoutx=this.getLayoutX();
         nowlayouty=this.getLayoutY();
-        //System.out.print("666");
     }
+    public void setBlockName(String blockName){this.blockName = blockName;}
+    public String getBlockName(){return blockName;}
+    public HBox getTitlePane(){return titlePane;}
 }
