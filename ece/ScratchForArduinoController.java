@@ -8,8 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 
 public class ScratchForArduinoController {
     @FXML private ToggleGroup BlockToggleGroup;
@@ -40,8 +38,7 @@ public class ScratchForArduinoController {
         drawingPane.getChildren().add(new ValueBlock("%n - %n + %n","valueAdd",drawingPane));
         drawingPane.getChildren().add(new ValueBlock("abc","valueAdd",drawingPane));
         drawingPane.getChildren().add(new StatementBlock("abc %n cde %n","statementblock",drawingPane));
-
-        //drawingPane.getChildren().add(new Rectangle(100,100, Color.BLUE));
+        drawingPane.getChildren().add(new StatementBlock("abc %n cde %n","statementblock",drawingPane));
 
     }
     @FXML

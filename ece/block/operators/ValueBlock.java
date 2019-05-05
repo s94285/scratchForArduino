@@ -20,44 +20,8 @@ public class ValueBlock extends Block {
         super(arg,blockName,drawingPane);
         this.setAlignment(Pos.CENTER_LEFT);
 
-//        Path path = new Path();
-//        MoveTo moveTo = new MoveTo();
-//        moveTo.setX(12);
-//        moveTo.setY(29);
-//        ArcTo arcTo1 = new ArcTo();
-//        arcTo1.setX(12);
-//        arcTo1.setY(0);
-//        arcTo1.setRadiusX(12);
-//        arcTo1.setRadiusY(15);
-//        arcTo1.setSweepFlag(true);
-//        LineTo lineTo1 = new LineTo(62, 0);
-//        ArcTo arcTo2 = new ArcTo(12, 15, 0, 62, 29, false, true);
-//        path.getElements().addAll(moveTo, arcTo1, lineTo1, arcTo2, new ClosePath());
-//        this.setShape(path);
         reShape();
         this.setBackground(new Background(new BackgroundFill(Color.rgb(92, 183, 18), CornerRadii.EMPTY, Insets.EMPTY)));
-
-
-//        this.heightProperty().addListener((observableValue, oldValue, newValue) -> reShape());
-//        this.widthProperty().addListener((observableValue, oldValue, newValue) -> reShape());
-
-        //overriding dragging event
-//        this.setOnMousePressed(mouseEvent -> {
-//            onMousePressed(mouseEvent);
-//
-//            onMousePressed(mouseEvent);
-//            mouseEvent.consume();
-//        });
-//        this.setOnMouseDragged(mouseEvent -> {
-//
-////            Node node = (Node)mouseEvent.getTarget();
-////            while(node != drawingPane){
-////                if(node instanceof Block)break;
-////                node = node.getParent();
-////            }
-////            if(node != this)return;
-//
-//        });
     }
     @Override
     public void reShape() {
@@ -108,11 +72,6 @@ public class ValueBlock extends Block {
         }
         if(node != this)return;
         if(this.getParent()!=drawingPane){
-//                ((Pane)this.getParent()).getChildren().remove(this);
-//                this.setLayoutX();
-//
-//                this.getParent().getParent().getParent().setLayoutX(500);
-//                this.getParent().getParent().getParent().setLayoutY(500);
             Point2D blockScenePoint = this.localToScene(0,0);
 
             System.out.println(blockScenePoint);
@@ -136,8 +95,6 @@ public class ValueBlock extends Block {
             Transform stackPaneTransformToScene = stackPane.getLocalToSceneTransform();
             Point2D stackPaneScenePoint = stackPaneTransformToScene.transform(0, 0);
             if (stackPaneScenePoint.distance(blockScenePoint) < 15) {
-//                                System.out.println("block" + blockScenePoint);
-//                                System.out.println("stackPane" + stackPaneScenePoint);
                 stackPane.setEffect(new DropShadow(2, Color.RED));
                 selectedStackPane = stackPane;
                 return;
@@ -153,7 +110,6 @@ public class ValueBlock extends Block {
         super.onMouseReleased(mouseEvent);
         if(selectedStackPane != null){
             System.out.println("selectedStackPane");
-//                ((Pane)this.getParent()).getChildren().remove(this);
             try {
 
                 selectedStackPane.getChildren().add(this);

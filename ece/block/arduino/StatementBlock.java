@@ -1,17 +1,21 @@
 package ece.block.arduino;
 
+import ece.BlockWithPlug;
+import ece.BlockWithSlotAndPlug;
 import ece.block.Block;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.util.Pair;
 
-public class StatementBlock extends Block {
+public class StatementBlock extends BlockWithSlotAndPlug {
     public StatementBlock(String arg, String blockName, Pane drawingPane) {
-        super(arg, blockName, drawingPane);
+        super(arg, blockName, drawingPane,1);
         reShape();
         this.setBackground(new Background(new BackgroundFill(Color.rgb(10, 134, 152), CornerRadii.EMPTY, Insets.EMPTY)));
     }
@@ -35,7 +39,8 @@ public class StatementBlock extends Block {
         LineTo lineTo11 = new LineTo(0,getHeight()-3);
         path.getElements().addAll(moveTo,lineTo1,lineTo2,lineTo3,lineTo4,lineTo5,lineTo6,lineTo7,lineTo8,lineTo9,lineTo10,lineTo11,new ClosePath());
         this.setShape(path);
-
-
+        this.plugs.set(0,new Pair<>(new Point2D(25,getHeight()),this.plugs.get(0).getValue()));
+        super.reShape();
     }
+
 }
