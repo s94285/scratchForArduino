@@ -1,6 +1,7 @@
 package ece;
 
 import ece.block.arduino.Head;
+import ece.block.arduino.StatementBlock;
 import ece.block.operators.ValueBlock;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,6 +39,7 @@ public class ScratchForArduinoController {
         drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
         drawingPane.getChildren().add(new ValueBlock("%n - %n + %n","valueAdd",drawingPane));
         drawingPane.getChildren().add(new ValueBlock("abc","valueAdd",drawingPane));
+        drawingPane.getChildren().add(new StatementBlock("abc %n cde %n","statementblock",drawingPane));
 
         //drawingPane.getChildren().add(new Rectangle(100,100, Color.BLUE));
 
