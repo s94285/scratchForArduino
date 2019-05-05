@@ -1,57 +1,126 @@
 package ece.block;
-import javafx.scene.Node;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 
-public class Block extends Pane {
+public abstract class Block extends VBox {
     protected final Pane drawingPane;
     private double nowlayoutx,nowlayouty;
     private double pressedx,pressedy;
     protected HBox titlePane = new HBox();
     protected String blockName;
     private  boolean flag=false;
-    public Block(Pane drawingPane){
+    public Block(String arg,String blockName,Pane drawingPane){
        // this.setPrefWidth(USE_COMPUTED_SIZE);
         //this.setPrefHeight(USE_COMPUTED_SIZE);
         this.drawingPane = drawingPane;
+        this.blockName = blockName;
+        String args[] = arg.split(" ");
+        StringBuilder tmp = new StringBuilder();
+        for (String str : args) {
+            if (str.charAt(0) == '%' && str.length() > 1) {
+                if (tmp.length() > 0) {
+                    Label label = new Label(tmp.toString());
+                    label.setFont(new Font(17));
+                    label.setTextFill(Color.WHITE);
+                    this.titlePane.getChildren().add(label);
+                    tmp = new StringBuilder();
+                }
+                StackPane stackPane = new StackPane();
+                switch (str.charAt(1)) {
+                    case 'm':
+                        break;
+                    case 'd':
+                        break;
+                    case 'n': {
+                        TextField textField = new TextField("0");
+                        textField.setAlignment(Pos.CENTER_LEFT);
+                        textField.setPrefColumnCount(1);
+                        textField.setFont(new Font(14));
+                        textField.setPadding(new Insets(0,2,0,2));
+                        textField.textProperty().addListener((observableValue, oldValue, newValue) -> {
+                            System.out.println(newValue.length());
+                            Text text = new Text(newValue);
+                            double width = text.getLayoutBounds().getWidth()*1.17 // This big is the Text in the TextField
+                                    + textField.getPadding().getLeft() + textField.getPadding().getRight() // Add the padding of the TextField
+                                    + 2d; // Add some spacing
+                            textField.setPrefWidth(width+1); // Set the width
+                            textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
+                        });
+
+                        stackPane.getChildren().add(textField);
+                        break;
+                    }
+                    case 's':
+                        break;
+                    case 'b':
+                        break;
+                }
+                this.titlePane.getChildren().add(stackPane);
+            } else {
+                if(tmp.length() == 0)tmp.append(" ");
+                tmp.append(str).append(" ");
+            }
+        }
+        if(tmp.length()>0){
+            Label label = new Label(tmp.toString());
+            label.setFont(new Font(17));
+            label.setTextFill(Color.WHITE);
+            this.titlePane.getChildren().add(label);
+        }
 //        this.setHgap(8);
         //rec=new Rectangle(200,200);
         //rec.setFill(BLUE);
         //Circle c=new Circle(50);
         //this.setBackground(new Background(new BackgroundFill(YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
         //this.setShape(c);
+        titlePane.setAlignment(Pos.CENTER_LEFT);
+        titlePane.setPadding(new Insets(5,5,5,5));
+        this.setEffect(new DropShadow(5,Color.BLACK));
+        this.setPrefWidth(USE_COMPUTED_SIZE);
+        this.setPrefHeight(USE_COMPUTED_SIZE);
+        this.getChildren().add(titlePane);
+        this.setOnMousePressed(mouseEvent -> onMousePressed(mouseEvent));
+        this.setOnMouseDragged(mouseEvent -> onMouseDragged(mouseEvent));
+        this.setOnMouseReleased(mouseEvent -> onMouseReleased(mouseEvent));
 
-        this.setOnMousePressed(mouseEvent -> {
-            pressed(mouseEvent.getSceneX(),mouseEvent.getSceneY(),mouseEvent);
-        });
-        this.setOnMouseDragged(mouseEvent -> {
-            dragged(mouseEvent.getSceneX(),mouseEvent.getSceneY());
-        });
         //this.setPrefWidth(U);
 
         //this.getChildren().add(rec);
+        this.heightProperty().addListener((observableValue, oldValue, newValue) -> reShape());
+        this.widthProperty().addListener((observableValue, oldValue, newValue) -> reShape());
     }
-    public  void pressed(double mousex, double mousey, MouseEvent mouseEvent){
+    public  void onMousePressed(MouseEvent mouseEvent){
 
         Pane myParent = (Pane) this.getParent();
         myParent.getChildren().remove(this);        //put self to the front
         myParent.getChildren().add(this);
         nowlayoutx=this.getLayoutX();
         nowlayouty=this.getLayoutY();
-        pressedx=mousex;
-        pressedy=mousey;
+        pressedx=mouseEvent.getSceneX();
+        pressedy=mouseEvent.getSceneY();
     }
-    public void dragged(double mousex,double mousey){
-
-        this.setLayoutX(nowlayoutx+(mousex-pressedx));
-        this.setLayoutY(nowlayouty+(mousey-pressedy));
-        pressedx=mousex;
-        pressedy=mousey;
+    public void onMouseDragged(MouseEvent mouseEvent){
+        this.setLayoutX(nowlayoutx+(mouseEvent.getSceneX()-pressedx));
+        this.setLayoutY(nowlayouty+(mouseEvent.getSceneY()-pressedy));
+        pressedx=mouseEvent.getSceneX();
+        pressedy=mouseEvent.getSceneY();
         nowlayoutx=this.getLayoutX();
         nowlayouty=this.getLayoutY();
+    }
+    public void onMouseReleased(MouseEvent mouseEvent){
+        //Do nothing
     }
     public void setBlockName(String blockName){this.blockName = blockName;}
     public String getBlockName(){return blockName;}
     public HBox getTitlePane(){return titlePane;}
+    public abstract void reShape();
 }

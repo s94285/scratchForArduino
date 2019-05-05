@@ -16,8 +16,8 @@ public class Head extends Block {
     private  ComboBox comboBox;
     private double height,width;
 
-    public  Head(Pane drawingPane){
-        super(drawingPane);
+    public  Head(String arg, String blockName,Pane drawingPane){
+        super(arg,blockName,drawingPane);
         comboBox=new ComboBox();
 
 
@@ -53,18 +53,17 @@ public class Head extends Block {
         //textLabel.setBackground(new Background(new BackgroundFill(Color.BROWN,CornerRadii.EMPTY,Insets.EMPTY)));
 //        titlePane.setLayoutX(5);
 //        titlePane.setLayoutY(this.getHeight()/2);
-        titlePane.setAlignment(Pos.CENTER_LEFT);
-        titlePane.getChildren().add(textLabel);
-        this.setPrefHeight(USE_COMPUTED_SIZE);
+//        titlePane.setAlignment(Pos.CENTER_LEFT);
+//        titlePane.getChildren().add(textLabel);
+//        this.setPrefHeight(USE_COMPUTED_SIZE);
         titlePane.setPadding(new Insets(15,5,5,5));
-        this.setEffect(new DropShadow(5,Color.BLACK));
+//        this.setEffect(new DropShadow(5,Color.BLACK));
 
-        this.getChildren().add(titlePane);
-        this.heightProperty().addListener((observableValue, oldValue, newValue) -> reShape());
-        this.widthProperty().addListener((observableValue, oldValue, newValue) -> reShape());
+
 
     }
-    private void reShape(){
+    @Override
+    public void reShape(){
         Path path = new Path();
         MoveTo moveTo = new MoveTo();
         moveTo.setX(0);

@@ -21,10 +21,10 @@ public class ScratchForArduinoController {
         operatorsButton.setUserData(BlockClass.OPERATORS);
         arduinoButton.setUserData(BlockClass.ARDUINO);
         System.out.println("TEST");
-        Head block1 = new Head(drawingPane);
+        Head block1 = new Head("Arduino Program","headBlock",drawingPane);
         block1.setLayoutX(100);
         block1.setLayoutY(100);
-        Head head2 = new Head(drawingPane);
+        Head head2 = new Head("Arduino Program","headBlock",drawingPane);
         head2.setLayoutX(100);
         head2.setLayoutY(100);
 
@@ -36,8 +36,8 @@ public class ScratchForArduinoController {
         drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
         drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
         drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-        drawingPane.getChildren().add(new ValueBlock("%n - %n","valueAdd",drawingPane));
-        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
+        drawingPane.getChildren().add(new ValueBlock("%n - %n + %n","valueAdd",drawingPane));
+        drawingPane.getChildren().add(new ValueBlock("abc","valueAdd",drawingPane));
 
         //drawingPane.getChildren().add(new Rectangle(100,100, Color.BLUE));
 
