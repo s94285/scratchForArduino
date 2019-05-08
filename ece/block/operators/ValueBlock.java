@@ -95,10 +95,11 @@ public class ValueBlock extends Block {
             Transform stackPaneTransformToScene = stackPane.getLocalToSceneTransform();
             Point2D stackPaneScenePoint = stackPaneTransformToScene.transform(0, 0);
             if (stackPaneScenePoint.distance(blockScenePoint) < 15) {
-                stackPane.setEffect(new DropShadow(2, Color.RED));
+                stackPane.setEffect(new DropShadow(10, Color.BLACK));
                 selectedStackPane = stackPane;
                 return;
             } else {
+
                 stackPane.setEffect(null);
                 selectedStackPane = null;
             }
@@ -113,7 +114,7 @@ public class ValueBlock extends Block {
             try {
 
                 selectedStackPane.getChildren().add(this);
-
+                selectedStackPane.setEffect(null);
             }catch (Exception e){
                 //do nothing;
             }

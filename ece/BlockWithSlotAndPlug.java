@@ -13,6 +13,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
 
     public BlockWithSlotAndPlug(String arg, String blockName, Pane drawingPane, int plugCount){
         super(arg, blockName,drawingPane,plugCount);
+
     }
     @Override
     public void onMouseDragged(MouseEvent mouseEvent) {

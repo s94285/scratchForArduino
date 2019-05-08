@@ -22,23 +22,32 @@ public class ScratchForArduinoController {
         System.out.println("TEST");
         Head block1 = new Head("Arduino Program","headBlock",drawingPane);
         block1.setLayoutX(100);
-        block1.setLayoutY(100);
-        Head head2 = new Head("Arduino Program","headBlock",drawingPane);
-        head2.setLayoutX(100);
-        head2.setLayoutY(100);
+        block1.setLayoutY(50);
 
         drawingPane.getChildren().add(block1);
-        drawingPane.getChildren().add(head2);
-        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-        drawingPane.getChildren().add(new ValueBlock("%n - %n + %n","valueAdd",drawingPane));
-        drawingPane.getChildren().add(new ValueBlock("abc","valueAdd",drawingPane));
-        drawingPane.getChildren().add(new StatementBlock("abc %n cde %n","statementblock",drawingPane));
-        drawingPane.getChildren().add(new StatementBlock("abc %n cde %n","statementblock",drawingPane));
+        for(int i=0;i<10;i++){
+            ValueBlock valueBlock=new ValueBlock("%n + %n","valueAdd",drawingPane);
+            drawingPane.getChildren().add(valueBlock);
+            valueBlock.setLayoutY(10+i*50);
+
+        }
+        for(int i=0;i<5;i++){
+            StatementBlock statementBlock=new StatementBlock("abc %n cde %n","statementblock",drawingPane);
+            drawingPane.getChildren().add(statementBlock);
+            statementBlock.setLayoutX(100);
+            statementBlock.setLayoutY(100+i*50);
+        }
+//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
+//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
+//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
+//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
+//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
+//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
+//        drawingPane.getChildren().add(new ValueBlock("%n - %n + %n","valueAdd",drawingPane));
+//        drawingPane.getChildren().add(new ValueBlock("abc","valueAdd",drawingPane));
+
+//        drawingPane.getChildren().add(new StatementBlock("abc %n cde %n","statementblock",drawingPane));
+//        drawingPane.getChildren().add(new StatementBlock("abc %n cde %n","statementblock",drawingPane));
 
     }
     @FXML
