@@ -28,6 +28,7 @@ public class ScratchForArduinoController {
         for(int i=0;i<10;i++){
             ValueBlock valueBlock=new ValueBlock("%n + %n","valueAdd",drawingPane);
             drawingPane.getChildren().add(valueBlock);
+            valueBlock.setLayoutX(10);
             valueBlock.setLayoutY(10+i*50);
 
         }

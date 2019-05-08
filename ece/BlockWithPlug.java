@@ -3,8 +3,10 @@ package ece;
 import ece.block.Block;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -35,7 +37,6 @@ public abstract class BlockWithPlug extends Block {
                         System.out.println("Found");
                         plugs.get(i).setBlock(blockWithSlotAndPlug);
 //                        plugs.set(i,new Pair<Point2D, BlockWithSlotAndPlug>(plugs.get(i).getKey(),blockWithSlotAndPlug));
-
                         blockWithSlotAndPlug.slot.setBlock(this);
                                 //new Pair<Point2D, BlockWithPlug>(blockWithSlotAndPlug.slot.getKey(),this);
                         this.setLayoutX(blockWithSlotAndPlug.getLayoutX());
