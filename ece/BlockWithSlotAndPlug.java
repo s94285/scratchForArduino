@@ -40,25 +40,25 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
         super.onMouseReleased(mouseEvent);
-             //find slots
+             //find plug for slot
             for(Node node : drawingPane.getChildren()){
 //                System.out.println(node);
-                if(node instanceof BlockWithSlotAndPlug){
+                if(node instanceof BlockWithPlug){
 
-                    BlockWithSlotAndPlug blockWithSlotAndPlug = (BlockWithSlotAndPlug)node;
+                    BlockWithPlug blockWithPlug = (BlockWithPlug)node;
 //                    System.out.println("blockWithSlotAndPlot: " + blockWithSlotAndPlug);
-                    Point2D slotPoint2D = blockWithSlotAndPlug.localToScene(25,((BlockWithSlotAndPlug) node).getHeight());
+                    Point2D slotPoint2D = blockWithPlug.localToScene(25,((BlockWithPlug) node).getHeight());
 //                    System.out.println("Plug Pos: " + plugs.get(i).getKey());
                     if(this.localToScene(slot.getPoint2D()).distance(slotPoint2D)<15){
                         System.out.println("Found");
                         //plugs.get(0).setBlock(blockWithSlotAndPlug);
 //                        plugs.set(i,new Pair<Point2D, BlockWithSlotAndPlug>(plugs.get(i).getKey(),blockWithSlotAndPlug));
-                        this.slot.setBlock(blockWithSlotAndPlug);
-                        blockWithSlotAndPlug.plugs.get(0).setBlock(this);
+                        this.slot.setBlock(blockWithPlug);
+                        blockWithPlug.plugs.get(0).setBlock(this);
                         //new Pair<Point2D, BlockWithPlug>(blockWithSlotAndPlug.slot.getKey(),this);
-                        this.setLayoutX(blockWithSlotAndPlug.getLayoutX());
+                        this.setLayoutX(blockWithPlug.getLayoutX());
                         this.reAllocate();
-                        this.setLayoutY(blockWithSlotAndPlug.getLayoutY()+blockWithSlotAndPlug.getHeight());
+                        this.setLayoutY(blockWithPlug.getLayoutY()+blockWithPlug.getHeight());
                     }
                 }
             }
