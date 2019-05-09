@@ -24,23 +24,29 @@ public abstract class BlockWithPlug extends Block {
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
         super.onMouseReleased(mouseEvent);
-        for(int i=0;i<plugs.size();i++){        //find slots
-            for(Node node : drawingPane.getChildren()){
+        for (PointBlockPair<BlockWithSlotAndPlug> plug : plugs) {        //find slots for each plug
+            //obtain lowest block's plug
+            BlockWithPlug lowest = this;
+            while(plug.getBlock()!=null){
+                lowest = plug.getBlock();
+                plug = plug.getBlock().plugs.get(0);
+            }
+            for (Node node : drawingPane.getChildren()) {
 //                System.out.println(node);
-                if(node instanceof BlockWithSlotAndPlug){
+                if (node instanceof BlockWithSlotAndPlug) {
 
-                    BlockWithSlotAndPlug blockWithSlotAndPlug = (BlockWithSlotAndPlug)node;
+                    BlockWithSlotAndPlug blockWithSlotAndPlug = (BlockWithSlotAndPlug) node;
 //                    System.out.println("blockWithSlotAndPlot: " + blockWithSlotAndPlug);
-                    Point2D slotPoint2D = blockWithSlotAndPlug.localToScene(25,0);
+                    Point2D slotPoint2D = blockWithSlotAndPlug.localToScene(25, 0);
 //                    System.out.println("Plug Pos: " + plugs.get(i).getKey());
-                    if(this.localToScene(plugs.get(i).getPoint2D()).distance(slotPoint2D)<15){
+                    if (lowest.localToScene(plug.getPoint2D()).distance(slotPoint2D) < 15) {
                         System.out.println("Found");
-                        plugs.get(i).setBlock(blockWithSlotAndPlug);
+                        plug.setBlock(blockWithSlotAndPlug);
 //                        plugs.set(i,new Pair<Point2D, BlockWithSlotAndPlug>(plugs.get(i).getKey(),blockWithSlotAndPlug));
-                        blockWithSlotAndPlug.slot.setBlock(this);
-                                //new Pair<Point2D, BlockWithPlug>(blockWithSlotAndPlug.slot.getKey(),this);
-                        this.setLayoutX(blockWithSlotAndPlug.getLayoutX());
-                        this.setLayoutY(blockWithSlotAndPlug.getLayoutY()-this.getHeight());
+                        blockWithSlotAndPlug.slot.setBlock(lowest);
+                        //new Pair<Point2D, BlockWithPlug>(blockWithSlotAndPlug.slot.getKey(),this);
+                        blockWithSlotAndPlug.setLayoutX(lowest.getLayoutX());
+                        blockWithSlotAndPlug.setLayoutY(lowest.getLayoutY() + lowest.getHeight());
                         break;
                     }
                 }
