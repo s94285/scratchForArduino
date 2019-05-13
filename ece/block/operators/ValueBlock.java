@@ -41,7 +41,7 @@ public class ValueBlock extends Block {
         this.setShape(path);
     }
     private ArrayList<StackPane> getStackPanes(Pane pane){
-        ArrayList<StackPane> list = new ArrayList<StackPane>();
+        ArrayList<StackPane> list = new ArrayList<>();
         for(Node nodeInPane : pane.getChildren()){
             if(nodeInPane == this)continue;
             if(nodeInPane instanceof Block){

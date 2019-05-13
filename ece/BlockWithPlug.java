@@ -81,4 +81,22 @@ public abstract class BlockWithPlug extends Block {
         super.onMouseDragged(mouseEvent);
         System.out.println("plug dragged " + plugs.get(0).getBlock());
     }
+
+    @Override
+    public void onMousePressed(MouseEvent mouseEvent){
+        super.onMousePressed(mouseEvent);
+        bringToFront(this);
+    }
+
+    private void bringToFront(BlockWithPlug blockWithPlug){
+        if(blockWithPlug!=this){        //this already done in Block
+            drawingPane.getChildren().remove(blockWithPlug);
+            drawingPane.getChildren().add(blockWithPlug);
+        }
+        for(PointBlockPair<BlockWithSlotAndPlug> pair:blockWithPlug.plugs){
+            if(pair.getBlock()!=null)
+                bringToFront(pair.getBlock());
+        }
+
+    }
 }
