@@ -1,8 +1,5 @@
-package ece.block.arduino;
+package ece;
 
-import ece.BlockWithPlug;
-import ece.BlockWithSlotAndPlug;
-import ece.block.Block;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Background;
@@ -11,7 +8,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import javafx.util.Pair;
 
 public class StatementBlock extends BlockWithSlotAndPlug {
     public StatementBlock(String arg, String blockName, Pane drawingPane) {

@@ -1,17 +1,12 @@
-package ece.block.arduino;
-import ece.BlockWithPlug;
-import ece.block.Block;
+package ece;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
-import javafx.util.Pair;
 
 public class Head extends BlockWithPlug {
     private Label textLabel;

@@ -1,6 +1,5 @@
-package ece.block.operators;
+package ece;
 
-import ece.block.Block;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;

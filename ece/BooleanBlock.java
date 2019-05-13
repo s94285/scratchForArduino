@@ -1,4 +1,4 @@
-package ece.block.operators;
+package ece;
 
 public class BooleanBlock {
 }
