@@ -64,17 +64,9 @@
                   </Pane>
                </center>
                <right>
-                  <VBox prefWidth="500.0" BorderPane.alignment="CENTER">
+                  <VBox BorderPane.alignment="CENTER_RIGHT">
                      <children>
-                        <ScrollPane prefHeight="1000.0" prefWidth="500.0">
-                           <content>
-                              <AnchorPane maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: white;">
-                                 <padding>
-                                    <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                                 </padding>
-                              </AnchorPane>
-                           </content>
-                        </ScrollPane>
+                        <ScrollPane prefHeight="1000.0" prefWidth="300.0" />
                      </children>
                      <BorderPane.margin>
                         <Insets bottom="8.0" right="8.0" top="8.0" />
