@@ -128,6 +128,7 @@ public abstract class Block extends VBox {
         nowlayouty=this.getLayoutY();
         pressedx=mouseEvent.getSceneX();
         pressedy=mouseEvent.getSceneY();
+        System.out.println("Mouse Pressed");
     }
     public void onMouseDragged(MouseEvent mouseEvent){
         this.setLayoutX(nowlayoutx+(mouseEvent.getSceneX()-pressedx));
@@ -136,6 +137,7 @@ public abstract class Block extends VBox {
         pressedy=mouseEvent.getSceneY();
         nowlayoutx=this.getLayoutX();
         nowlayouty=this.getLayoutY();
+        System.out.println("Mouse Dragged");
     }
     public void onMouseReleased(MouseEvent mouseEvent){
         //Do nothing

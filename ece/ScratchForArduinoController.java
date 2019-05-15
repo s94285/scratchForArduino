@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
@@ -13,6 +14,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.*;
 import javafx.scene.Parent;
+
+import java.awt.*;
+import java.awt.event.InputEvent;
+
 public class ScratchForArduinoController {
     @FXML private ToggleGroup BlockToggleGroup;
     @FXML private Pane drawingPane;
@@ -21,10 +26,16 @@ public class ScratchForArduinoController {
     enum BlockClass{CONTROLS,OPERATORS,ARDUINO}
     private BlockClass currentBlockClass = BlockClass.CONTROLS;
     private  Pane selectedOperatorsPane,selectedRobotPane;
+    private Robot robot;
     public void initialize(){
         controlsButton.setUserData(BlockClass.CONTROLS);
         operatorsButton.setUserData(BlockClass.OPERATORS);
         arduinoButton.setUserData(BlockClass.ARDUINO);
+        try {
+            robot = new Robot();
+        }catch (AWTException e) {
+            e.printStackTrace();
+        }
         System.out.println("TEST");
         Head block1 = new Head("Arduino Program","headBlock",drawingPane);
         block1.setLayoutX(100);
@@ -51,8 +62,23 @@ public class ScratchForArduinoController {
             public void onMousePressed(MouseEvent mouseEvent) {
                 //super.onMousePressed(mouseEvent);
                 System.out.println("Mouse Entered on Click Me Two");
-                ValueBlock valueBlock1=new ValueBlock("%n + %n","valueAdd",drawingPane);
-                drawingPane.getChildren().add(valueBlock1);
+                ValueBlock valueBlock1=new ValueBlock("%n + %n","valueAdd",ScratchForArduinoController.this.drawingPane);
+                ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(),mouseEvent.getSceneY()));
+//                System.out.println("scene"+mouseEvent.getSceneX()+mouseEvent.getSceneY());
+//                System.out.println("scenetoLocal"+scenePoint.getX()+scenePoint.getY());
+//                System.out.println("mouse"+mouseEvent.getX()+mouseEvent.getY());
+                valueBlock1.setLayoutY(scenePoint.getY()-mouseEvent.getY());
+                valueBlock1.setLayoutX(scenePoint.getX()-mouseEvent.getX());
+
+                if(robot!=null){
+
+                    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                    robot.mouseMove((int)mouseEvent.getScreenX(),(int)mouseEvent.getScreenY());
+                    robot.delay(50);
+                    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                }
+
             }
             @Override
             public void onMouseDragged(MouseEvent mouseEvent){
