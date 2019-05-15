@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 public class ScratchForArduinoController {
@@ -13,6 +15,9 @@ public class ScratchForArduinoController {
     enum BlockClass{CONTROLS,OPERATORS,ARDUINO}
     private BlockClass currentBlockClass = BlockClass.CONTROLS;
     public void initialize(){
+        BorderPane parentPane = (BorderPane)drawingPane.getParent();
+        parentPane.setCenter(null);
+        parentPane.setCenter(drawingPane);      //bring drawingPane to the front
         controlsButton.setUserData(BlockClass.CONTROLS);
         operatorsButton.setUserData(BlockClass.OPERATORS);
         arduinoButton.setUserData(BlockClass.ARDUINO);
