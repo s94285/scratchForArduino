@@ -53,16 +53,6 @@
                      </children>
                   </VBox>
                </left>
-               <center>
-                  <Pane fx:id="drawingPane" prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                     </BorderPane.margin>
-                     <opaqueInsets>
-                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                     </opaqueInsets>
-                  </Pane>
-               </center>
                <right>
                   <VBox BorderPane.alignment="CENTER_RIGHT">
                      <children>
@@ -94,6 +84,16 @@
                     </menus>
                   </MenuBar>
                </top>
+                <center>
+                    <Pane fx:id="drawingPane" prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+                        <BorderPane.margin>
+                            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                        </BorderPane.margin>
+                        <opaqueInsets>
+                            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                        </opaqueInsets>
+                    </Pane>
+                </center>
             </BorderPane>
          </content>
     </Tab>
