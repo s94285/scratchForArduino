@@ -72,8 +72,8 @@ public class ValueBlock extends Block {
         if(node != this)return;
         if(this.getParent()!=drawingPane){
             Point2D blockScenePoint = this.localToScene(0,0);
-
-            System.out.println(blockScenePoint);
+            //System.out.println("test");
+            //System.out.println(blockScenePoint);
             drawingPane.getChildren().add(this);
             this.relocate(drawingPane.sceneToLocal(blockScenePoint).getX(),drawingPane.sceneToLocal(blockScenePoint).getY());
             System.out.println(this.getLayoutX() + " " + this.getLayoutY());

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ece.ScratchForArduinoController">
+<TabPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ece.ScratchForArduinoController">
   <tabs>
     <Tab text="Edit">
          <content>
@@ -34,8 +34,8 @@
                                                 <ToggleGroup fx:id="BlockToggleGroup" />
                                              </toggleGroup>
                                           </RadioButton>
-                                          <RadioButton fx:id="operatorsButton" mnemonicParsing="false" text="Operators" toggleGroup="$BlockToggleGroup" />
-                                          <RadioButton fx:id="arduinoButton" mnemonicParsing="false" text="Robots" toggleGroup="$BlockToggleGroup" />
+                                          <RadioButton fx:id="operatorsButton" mnemonicParsing="false" onAction="#typeClicked" text="Operators" toggleGroup="$BlockToggleGroup" />
+                                          <RadioButton fx:id="arduinoButton" mnemonicParsing="false" onAction="#typeClicked" text="Robots" toggleGroup="$BlockToggleGroup" />
                                        </children>
                                        <padding>
                                           <Insets bottom="8.0" left="50.0" right="8.0" top="20.0" />
@@ -43,9 +43,9 @@
                                     </VBox>
                                  </children>
                               </Pane>
-                              <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                              <ScrollPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" />
+                                  <AnchorPane fx:id="blockPane" minHeight="0.0" minWidth="0.0" prefHeight="500.0" />
                                 </content>
                               </ScrollPane>
                            </items>
