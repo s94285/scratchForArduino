@@ -1,23 +1,27 @@
 package ece;
 
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-
+import javafx.scene.*;
+import javafx.scene.Parent;
 public class ScratchForArduinoController {
     @FXML private ToggleGroup BlockToggleGroup;
     @FXML private Pane drawingPane;
     @FXML private RadioButton controlsButton,operatorsButton,arduinoButton;
+    @FXML private AnchorPane blockPane;
     enum BlockClass{CONTROLS,OPERATORS,ARDUINO}
     private BlockClass currentBlockClass = BlockClass.CONTROLS;
+    private  Pane selectedOperatorsPane,selectedRobotPane;
     public void initialize(){
-        BorderPane parentPane = (BorderPane)drawingPane.getParent();
-        parentPane.setCenter(null);
-        parentPane.setCenter(drawingPane);      //bring drawingPane to the front
         controlsButton.setUserData(BlockClass.CONTROLS);
         operatorsButton.setUserData(BlockClass.OPERATORS);
         arduinoButton.setUserData(BlockClass.ARDUINO);
@@ -40,21 +44,69 @@ public class ScratchForArduinoController {
             statementBlock.setLayoutX(100);
             statementBlock.setLayoutY(100+i*50);
         }
-//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-//        drawingPane.getChildren().add(new ValueBlock("%n + %n","valueAdd",drawingPane));
-//        drawingPane.getChildren().add(new ValueBlock("%n - %n + %n","valueAdd",drawingPane));
-//        drawingPane.getChildren().add(new ValueBlock("abc","valueAdd",drawingPane));
 
-//        drawingPane.getChildren().add(new StatementBlock("abc %n cde %n","statementblock",drawingPane));
-//        drawingPane.getChildren().add(new StatementBlock("abc %n cde %n","statementblock",drawingPane));
+        selectedOperatorsPane=new Pane();
+        ValueBlock valueBlock=new ValueBlock("%n + %n","valueAdd",blockPane){
+            @Override
+            public void onMousePressed(MouseEvent mouseEvent) {
+                //super.onMousePressed(mouseEvent);
+                System.out.println("Mouse Entered on Click Me Two");
+                ValueBlock valueBlock1=new ValueBlock("%n + %n","valueAdd",drawingPane);
+                drawingPane.getChildren().add(valueBlock1);
+            }
+            @Override
+            public void onMouseDragged(MouseEvent mouseEvent){
 
+            }
+        };
+        selectedOperatorsPane.getChildren().add(valueBlock);
+        blockPane.getChildren().add(selectedOperatorsPane);
+        valueBlock.setLayoutY(10);
+        valueBlock.setLayoutX(10);
+        selectedOperatorsPane.setVisible(false);
+
+        selectedRobotPane=new Pane();
+        StatementBlock statementBlock=new StatementBlock("abc %n cde %n","statementblock",blockPane);
+        statementBlock.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent e){
+                System.out.println("Mouse Entered on Click Me ");
+            }
+        });
+        statementBlock.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent e){
+
+                System.out.println("Mouse Entered on Click Me ");
+            }
+        });
+        selectedRobotPane.getChildren().add(statementBlock);
+        blockPane.getChildren().add(selectedRobotPane);
+        statementBlock.setLayoutX(10);
+        statementBlock.setLayoutY(10);
+        selectedRobotPane.setVisible(false);
+        selectedBlock(currentBlockClass);
     }
     @FXML
     private void typeClicked(ActionEvent e){
         currentBlockClass=(BlockClass) BlockToggleGroup.getSelectedToggle().getUserData();
+        selectedBlock(currentBlockClass);
     }
+    private  void selectedBlock(BlockClass currentBlockClass){
+        if(currentBlockClass==BlockClass.CONTROLS){
+            System.out.println("clicked 2 Controls");
+            selectedRobotPane.setVisible(false);
+            selectedOperatorsPane.setVisible(true);
+        }
+        else if(currentBlockClass==BlockClass.OPERATORS){
+
+        }
+        else if(currentBlockClass==BlockClass.ARDUINO){
+            System.out.println("clicked 2 Arduino");
+            selectedOperatorsPane.setVisible(false);
+            selectedRobotPane.setVisible(true);
+        }
+
+    }
+
 }
