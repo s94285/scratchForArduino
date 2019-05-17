@@ -55,7 +55,10 @@ public class ScratchForArduinoController {
             statementBlock.setLayoutX(100);
             statementBlock.setLayoutY(100+i*50);
         }
-
+        ControlBlock controlBlock=new ControlBlock("if %n then","controlblock",drawingPane);
+        drawingPane.getChildren().add(controlBlock);
+        controlBlock.setLayoutX(200);
+        controlBlock.setLayoutY(200);
         selectedOperatorsPane=new Pane();
         ValueBlock valueBlock=new ValueBlock("%n + %n","valueAdd",blockPane){
             @Override
@@ -84,6 +87,7 @@ public class ScratchForArduinoController {
             public void onMouseDragged(MouseEvent mouseEvent){
 
             }
+
         };
         selectedOperatorsPane.getChildren().add(valueBlock);
         blockPane.getChildren().add(selectedOperatorsPane);

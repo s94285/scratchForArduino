@@ -24,7 +24,7 @@ public abstract class Block extends VBox {
         //this.setPrefHeight(USE_COMPUTED_SIZE);
         this.drawingPane = drawingPane;
         this.blockName = blockName;
-        String args[] = arg.split(" ");
+        String args[] = arg.split(" +");
         StringBuilder tmp = new StringBuilder();
         for (String str : args) {
             if (str.charAt(0) == '%' && str.length() > 1) {
@@ -137,10 +137,15 @@ public abstract class Block extends VBox {
         pressedy=mouseEvent.getSceneY();
         nowlayoutx=this.getLayoutX();
         nowlayouty=this.getLayoutY();
-        System.out.println("Mouse Dragged");
+        System.out.println("Mouse Dragged x:"+nowlayoutx+"y"+nowlayouty);
     }
     public void onMouseReleased(MouseEvent mouseEvent){
         //Do nothing
+        if(this.getLayoutX()+mouseEvent.getX()<0){
+            Pane myParent = (Pane) this.getParent();
+            myParent.getChildren().remove(this);
+        }
+
     }
     public void setBlockName(String blockName){this.blockName = blockName;}
     public String getBlockName(){return blockName;}
