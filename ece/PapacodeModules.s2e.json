@@ -1,0 +1,499 @@
+{
+    "extensionName": "PapacodeModules",
+    "description": "Extension for PapacodeModules",
+    "version": "1.0",
+    "author": "Kevin Lin (s94285.eed06@nctu.edu.tw)",
+    "homepage": "http://www.papacode.com.tw",
+    "sort":0,
+    "javascriptURL":"",
+    "firmware":"1.0",
+    "extensionPort":0,
+    "blockSpecs": [
+        [
+            "w",
+            "Left Motor run with speed %n",
+            "MotorLeftRun",
+            "100",
+            {
+                "inc":"#include \"Modules.h\"\n",
+                "def":"Motor motor;\n",
+                "setup":"",
+                "work":"motor.leftRun({0});\n",
+                "loop":""
+            }
+        ],
+        [
+            "w",
+            "Right Motor run with speed %n",
+            "MotorRightRun",
+            "100",
+            {
+                "inc":"#include \"Modules.h\"\n",
+                "def":"Motor motor;\n",
+                "setup":"",
+                "work":"motor.rightRun({0});\n",
+                "loop":""
+            }
+        ],
+        [
+            "w",
+            "Left Motor Stop",
+            "MotorLeftStop",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"Motor motor;\n",
+                "setup":"",
+				"work":"motor.leftStop();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "Right Motor Stop",
+            "MotorRightStop",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"Motor motor;\n",
+                "setup":"",
+				"work":"motor.rightStop();\n",
+				"loop":""
+            }
+        ],
+        [
+            "r",
+            "Get Left Motor Speed",
+            "MotorGetLeftSpeed",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"Motor motor;\n",
+                "setup":"",
+				"work":"motor.getLeftSpeed()",
+				"loop":""
+            }
+        ],
+        [
+            "r",
+            "Get Right Motor Speed",
+            "MotorGetRightSpeed",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"Motor motor;\n",
+                "setup":"",
+				"work":"motor.getRightSpeed()",
+				"loop":""
+            }
+        ],
+        [
+            "B",
+            "JoyStick is pressed",
+            "JoyStickIsClicked",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"JoyStick joystick;\n",
+                "setup":"",
+				"work":"joystick.isClicked()",
+				"loop":""
+            }
+        ],
+        [
+            "B",
+            "JoyStick moved upward",
+            "JoyStickUp",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"JoyStick joystick;\n",
+                "setup":"",
+				"work":"joystick.up()",
+				"loop":""
+            }
+        ],
+        [
+            "B",
+            "JoyStick moved downward",
+            "JoyStickDown",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"JoyStick joystick;\n",
+                "setup":"",
+				"work":"joystick.down()",
+				"loop":""
+            }
+        ],
+        [
+            "B",
+            "JoyStick moved leftward",
+            "JoyStickLeft",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"JoyStick joystick;\n",
+                "setup":"",
+				"work":"joystick.left()",
+				"loop":""
+            }
+        ],
+        [
+            "B",
+            "JoyStick moved rightward",
+            "JoyStickRight",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"JoyStick joystick;\n",
+                "setup":"",
+				"work":"joystick.right()",
+				"loop":""
+            }
+        ],
+        [
+            "r",
+            "JoyStick read X-axis value",
+            "JoyStickReadX",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"JoyStick joystick;\n",
+                "setup":"",
+				"work":"joystick.readX()",
+				"loop":""
+            }
+        ],
+        [
+            "r",
+            "JoyStick read Y-axis value",
+            "JoyStickReadY",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"JoyStick joystick;\n",
+                "setup":"",
+				"work":"joystick.readY()",
+				"loop":""
+            }
+        ],
+        [
+            "r",
+            "Ultrasound get distance in CM",
+            "UltrasoundGetDistanceCM",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"Ultrasound ultrasound;\n",
+                "setup":"",
+				"work":"ultrasound.getDistanceCM()",
+				"loop":""
+            }
+        ],
+        [
+            "r",
+            "Ultrasound get distance in INCH",
+            "UltrasoundGetDistanceINCH",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"Ultrasound ultrasound;\n",
+                "setup":"",
+				"work":"ultrasound.getDistanceINCH()",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "TurnSignal turn %d.power left signal",
+            "TurnSignalSetLeft",
+            "ON",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"TurnSignal turnsignal;\n",
+                "setup":"",
+				"work":"turnsignal.setLeft({0});\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "TurnSignal turn %d.power right signal",
+            "TurnSignalSetRight",
+            "ON",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"TurnSignal turnsignal;\n",
+                "setup":"",
+				"work":"turnsignal.setRight({0});\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "TurnSignal turn %d.power left signal blinking",
+            "TurnSignalSetBlinkLeft",
+            "ON",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"TurnSignal turnsignal;\n",
+                "setup":"turnsignal.initBlink();\n",
+				"work":"turnsignal.setBlinkLeft({0});\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "TurnSignal turn %d.power right signal blinking",
+            "TurnSignalSetBlinkRight",
+            "ON",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"TurnSignal turnsignal;\n",
+                "setup":"turnsignal.initBlink();\n",
+				"work":"turnsignal.setBlinkRight({0});\n",
+				"loop":""
+            }
+        ],
+        [
+            "r",
+            "TurnSignal read left signal state",
+            "TurnSignalReadLeftSignal",
+            "ON",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"TurnSignal turnsignal;\n",
+                "setup":"",
+				"work":"turnsignal.readLeftSignal();\n",
+				"loop":""
+            }
+        ],
+        [
+            "r",
+            "TurnSignal read right signal state",
+            "TurnSignalReadRightSignal",
+            "ON",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"TurnSignal turnsignal;\n",
+                "setup":"",
+				"work":"turnsignal.readRightSignal();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "Buzzer set notes %m.notes",
+            "BuzzerSetFrequency",
+            "C4",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"Buzzer buzzer;\n",
+                "setup":"",
+				"work":"buzzer.setFrequency({0});\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "Buzzer start beeping",
+            "BuzzerStart",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"Buzzer buzzer;\n",
+                "setup":"",
+				"work":"buzzer.start();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "Buzzer stop beeping",
+            "BuzzerStop",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"Buzzer buzzer;\n",
+                "setup":"",
+				"work":"buzzer.stop();\n",
+				"loop":""
+            }
+        ],
+        [
+            "r",
+            "Buzzer get current frequency",
+            "BuzzerGetFrequency",
+            {
+                "inc":"#include \"Modules.h\"\n",
+				"def":"Buzzer buzzer;\n",
+                "setup":"",
+				"work":"buzzer.getFrequency();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "OLED clear all",
+            "OLEDClear",
+            {
+                "inc":"#include \"Adafruit_SSD1306.h\"\n#include \"Adafruit_GFX.h\"\n#include \"pictures.h\"\n",
+				"def":"Adafruit_SSD1306 display(128, 64, &Wire, 4);\n",
+                "setup":"display.begin(SSD1306_SWITCHCAPVCC,0x3C);\ndisplay.clearDisplay();\n",
+				"work":"display.clearDisplay();\ndisplay.display();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "OLED show smiling face",
+            "OLEDSmileFace",
+            {
+                "inc":"#include \"Adafruit_SSD1306.h\"\n#include \"Adafruit_GFX.h\"\n#include \"pictures.h\"\n",
+				"def":"Adafruit_SSD1306 display(128, 64, &Wire, 4);\n",
+                "setup":"display.begin(SSD1306_SWITCHCAPVCC,0x3C);\ndisplay.clearDisplay();\n",
+				"work":"display.clearDisplay();\ndisplay.drawBitmap(32, 0, SMILEFACE, 64, 64, 1);\ndisplay.display();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "OLED show sad face",
+            "OLEDSadFace",
+            {
+                "inc":"#include \"Adafruit_SSD1306.h\"\n#include \"Adafruit_GFX.h\"\n#include \"pictures.h\"\n",
+				"def":"Adafruit_SSD1306 display(128, 64, &Wire, 4);\n",
+                "setup":"display.begin(SSD1306_SWITCHCAPVCC,0x3C);\ndisplay.clearDisplay();\n",
+				"work":"display.clearDisplay();\ndisplay.drawBitmap(32, 0, SADFACE, 64, 64, 1);\ndisplay.display();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "OLED show square",
+            "OLEDSquare",
+            {
+                "inc":"#include \"Adafruit_SSD1306.h\"\n#include \"Adafruit_GFX.h\"\n",
+				"def":"Adafruit_SSD1306 display(128, 64, &Wire, 4);\n",
+                "setup":"display.begin(SSD1306_SWITCHCAPVCC,0x3C);\ndisplay.clearDisplay();\n",
+				"work":"display.clearDisplay();\nfor(int i=-2;i<=4;i++)\ndisplay.drawRect(32+8+i,0+8+i,64-8*2-i*2,64-8*2-i*2,WHITE);\ndisplay.display();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "OLED show circle",
+            "OLEDCircle",
+            {
+                "inc":"#include \"Adafruit_SSD1306.h\"\n#include \"Adafruit_GFX.h\"\n",
+				"def":"Adafruit_SSD1306 display(128, 64, &Wire, 4);\n",
+                "setup":"display.begin(SSD1306_SWITCHCAPVCC,0x3C);\ndisplay.clearDisplay();\n",
+				"work":"display.clearDisplay();\ndisplay.fillCircle(64,32,25,WHITE);\ndisplay.fillCircle(64,32,20,INVERSE);\ndisplay.display();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "OLED show cross",
+            "OLEDCross",
+            {
+                "inc":"#include \"Adafruit_SSD1306.h\"\n#include \"Adafruit_GFX.h\"\n",
+				"def":"Adafruit_SSD1306 display(128, 64, &Wire, 4);\n",
+                "setup":"display.begin(SSD1306_SWITCHCAPVCC,0x3C);\ndisplay.clearDisplay();\n",
+				"work":"display.clearDisplay();\nfor(int i=-2;i<=2;i++){\ndisplay.drawLine(32+12+i,0+12-i,96-12+i,64-12-i,WHITE);\ndisplay.drawLine(32+12+i+1,0+12-i,96-12+i+1,64-12-i,WHITE);\ndisplay.drawLine(32+12+i,64-(0+12-i),96-12+i,64-(64-12-i),WHITE);\ndisplay.drawLine(32+12+i+1,64-(0+12-i),96-12+i+1,64-(64-12-i),WHITE);\n}\ndisplay.display();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "OLED show triangle",
+            "OLEDTriangle",
+            {
+                "inc":"#include \"Adafruit_SSD1306.h\"\n#include \"Adafruit_GFX.h\"\n",
+				"def":"Adafruit_SSD1306 display(128, 64, &Wire, 4);\n",
+                "setup":"display.begin(SSD1306_SWITCHCAPVCC,0x3C);\ndisplay.clearDisplay();\n",
+				"work":"display.clearDisplay();\ndisplay.fillTriangle(64-50/2,36+14,64+50/2,36+14,64,36-14*2,WHITE);\ndisplay.fillTriangle(64-34/2,36+9,64+34/2,36+9,64,36-9*2,INVERSE);\ndisplay.display();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "OLED show inverted triangle",
+            "OLEDInvertedTriangle",
+            {
+                "inc":"#include \"Adafruit_SSD1306.h\"\n#include \"Adafruit_GFX.h\"\n",
+				"def":"Adafruit_SSD1306 display(128, 64, &Wire, 4);\n",
+                "setup":"display.begin(SSD1306_SWITCHCAPVCC,0x3C);\ndisplay.clearDisplay();\n",
+				"work":"display.clearDisplay();\ndisplay.fillTriangle(64-50/2,64-(36+14),64+50/2,64-(36+14),64,64-(36-14*2),WHITE);\ndisplay.fillTriangle(64-34/2,64-(36+9),64+34/2,64-(36+9),64,64-(36-9*2),INVERSE);\ndisplay.display();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "OLED show heart",
+            "OLEDHeart",
+            {
+                "inc":"#include \"Adafruit_SSD1306.h\"\n#include \"Adafruit_GFX.h\"\n#include \"pictures.h\"\n",
+				"def":"Adafruit_SSD1306 display(128, 64, &Wire, 4);\n",
+                "setup":"display.begin(SSD1306_SWITCHCAPVCC,0x3C);\ndisplay.clearDisplay();\n",
+				"work":"display.clearDisplay();\ndisplay.drawBitmap(32, 0, HEART, 64, 64, 1);\ndisplay.display();\n",
+				"loop":""
+            }
+        ],
+        [
+            "w",
+            "OLED show star",
+            "OLEDStar",
+            {
+                "inc":"#include \"Adafruit_SSD1306.h\"\n#include \"Adafruit_GFX.h\"\n#include \"pictures.h\"\n",
+				"def":"Adafruit_SSD1306 display(128, 64, &Wire, 4);\n",
+                "setup":"display.begin(SSD1306_SWITCHCAPVCC,0x3C);\ndisplay.clearDisplay();\n",
+				"work":"display.clearDisplay();\ndisplay.drawBitmap(32, 0, STAR, 64, 64, 1);\ndisplay.display();\n",
+				"loop":""
+            }
+        ]
+    ],
+    "menus": {
+        "power": ["ON","OFF"],
+        "notes":["C2","D2","E2","F2","G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4","D4","E4","F4","G4","A4","B4","C5","D5","E5","F5","G5","A5","B5","C6","D6","E6","F6","G6","A6","B6","C7","D7","E7","F7","G7","A7","B7","C8","D8"],
+    },
+    "values":{
+        "ON": 1,
+        "OFF": 0,
+        "B0":31,"C1":33,"D1":37,"E1":41,"F1":44,"G1":49,"A1":55,"B1":62,
+		"C2":65,"D2":73,"E2":82,"F2":87,"G2":98,"A2":110,"B2":123,
+		"C3":131,"D3":147,"E3":165,"F3":175,"G3":196,"A3":220,"B3":247,
+		"C4":262,"D4":294,"E4":330,"F4":349,"G4":392,"A4":440,"B4":494,
+		"C5":523,"D5":587,"E5":659,"F5":698,"G5":784,"A5":880,"B5":988,
+		"C6":1047,"D6":1175,"E6":1319,"F6":1397,"G6":1568,"A6":1760,"B6":1976,
+		"C7":2093,"D7":2349,"E7":2637,"F7":2794,"G7":3136,"A7":3520,"B7":3951,
+		"C8":4186,"D8":4699
+    },
+    "translators":{
+        "zh_TW":{
+            "ON":"開啟",
+            "OFF":"關閉",
+            "Left Motor run with speed %n":"馬達 左馬達以 %n 速度轉動",
+            "Right Motor run with speed %n":"馬達 右馬達以 %n 速度轉動",
+            "Left Motor Stop":"馬達 左馬達停止",
+            "Right Motor Stop":"馬達 右馬達停止",
+            "Get Left Motor Speed":"馬達 左馬達速度",
+            "Get Right Motor Speed":"馬達 右馬達速度",
+            "JoyStick is pressed":"搖桿 被按下",
+            "JoyStick moved upward":"搖桿 向上",
+            "JoyStick moved downward":"搖桿 向下",
+            "JoyStick moved leftward":"搖桿 向左",
+            "JoyStick moved rightward":"搖桿 向右",
+            "JoyStick read X-axis value":"搖桿 讀取X-軸數值",
+            "JoyStick read Y-axis value":"搖桿 讀取Y-軸數值",
+            "Ultrasound get distance in CM":"超音波 取得距離(公分)",
+            "Ultrasound get distance in INCH":"超音波 取得距離(英吋)",
+            "TurnSignal turn %d.power left signal":"方向燈 %d.power 左燈號",
+            "TurnSignal turn %d.power right signal":"方向燈 %d.power 右燈號",
+            "TurnSignal turn %d.power left signal blinking":"方向燈 %d.power 閃爍左燈號",
+            "TurnSignal turn %d.power right signal blinking":"方向燈 %d.power 閃爍右燈號",
+            "TurnSignal read left signal state":"方向燈 讀取左燈號狀態",
+            "TurnSignal read right signal state":"方向燈 讀取右燈號狀態",
+            "Buzzer set notes %m.notes":"蜂鳴器 設定音階為 %m.notes",
+            "Buzzer start beeping":"蜂鳴器 開始鳴叫",
+             "Buzzer stop beeping":"蜂鳴器 停止鳴叫",
+             "Buzzer get current frequency":"蜂鳴器 取得目前設定頻率",
+             "OLED clear all":"螢幕 清除畫面",
+             "OLED show smiling face":"螢幕 顯示 笑臉",
+             "OLED show sad face":"螢幕 顯示 哭臉",
+             "OLED show square":"螢幕 顯示 正方形",
+             "OLED show circle":"螢幕 顯示 圓形",
+             "OLED show cross":"螢幕 顯示 叉叉",
+             "OLED show triangle":"螢幕 顯示 三角形",
+             "OLED show inverted triangle":"螢幕 顯示 倒三角形",
+             "OLED show heart":"螢幕 顯示 愛心",
+             "OLED show star":"螢幕 顯示 星星",
+        }
+    }
+}
