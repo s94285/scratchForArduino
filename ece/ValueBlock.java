@@ -92,7 +92,7 @@ public class ValueBlock extends Block {
         ArrayList<StackPane> stackPanes = getStackPanes(drawingPane);
         for(StackPane stackPane : stackPanes) {
             Transform stackPaneTransformToScene = stackPane.getLocalToSceneTransform();
-            Point2D stackPaneScenePoint = stackPaneTransformToScene.transform(0, 0);
+            Point2D stackPaneScenePoint = stackPaneTransformToScene.transform(0, stackPane.getHeight()/2.0);
             if (stackPaneScenePoint.distance(blockScenePoint) < 15) {
                 stackPane.setEffect(new DropShadow(10, Color.BLACK));
                 selectedStackPane = stackPane;

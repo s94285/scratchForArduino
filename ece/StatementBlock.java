@@ -36,7 +36,6 @@ public class StatementBlock extends BlockWithSlotAndPlug {
         path.getElements().addAll(moveTo,lineTo1,lineTo2,lineTo3,lineTo4,lineTo5,lineTo6,lineTo7,lineTo8,lineTo9,lineTo10,lineTo11,new ClosePath());
         this.setShape(path);
         this.plugs.get(0).setPoint2D(new Point2D(25,getHeight()));
-//        this.plugs.set(0,new Pair<>(new Point2D(25,getHeight()),this.plugs.get(0).getValue()));
         super.reShape();
     }
 

@@ -69,7 +69,6 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
 
         this.plugs.get(0).setPoint2D(new Point2D(25,getHeight()));      //lowest plug
         this.plugs.get(1).setPoint2D(new Point2D(43,getHeight()-32-containedBlockHeight));      //inner plug
-//        this.plugs.set(0,new Pair<>(new Point2D(25,getHeight()),this.plugs.get(0).getValue()));
         super.reShape();
     }
 }

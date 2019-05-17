@@ -13,8 +13,7 @@ public abstract class BlockWithPlug extends Block {
         super(arg, blockName,drawingPane);
         for(int i=0;i<plugCount;i++)
             plugs.add(new PointBlockPair<BlockWithSlotAndPlug>(new Point2D(0,0),null));
-        this.layoutXProperty().addListener(((observableValue, oldValue, newValue) -> reAllocate()));
-        this.layoutYProperty().addListener(((observableValue, oldValue, newValue) -> reAllocate()));
+
 
     }
     @Override
@@ -39,11 +38,10 @@ public abstract class BlockWithPlug extends Block {
                         System.out.println("Found");
                         if(blockWithSlotAndPlug.slot.getBlock()==null){
                             plug.setBlock(blockWithSlotAndPlug);
-//                        plugs.set(i,new Pair<Point2D, BlockWithSlotAndPlug>(plugs.get(i).getKey(),blockWithSlotAndPlug));
+
                             blockWithSlotAndPlug.slot.setBlock(lowest);
-                            //new Pair<Point2D, BlockWithPlug>(blockWithSlotAndPlug.slot.getKey(),this);
-//                        blockWithSlotAndPlug.setLayoutX(lowest.getLayoutX());
-//                        blockWithSlotAndPlug.setLayoutY(lowest.getLayoutY() + lowest.getHeight());
+
+                            lowest.reAllocate();
                             break;
                         }
 
@@ -52,15 +50,9 @@ public abstract class BlockWithPlug extends Block {
                 }
             }
         }
-        reAllocate();   //reallocate block position
         bringToFront(this);
     }
-//
-//    @Override
-//    public void onMouseDragged(MouseEvent mouseEvent) {
-//        super.onMouseDragged(mouseEvent);
-//
-//    }
+
 
     public void reAllocate(){
         for(PointBlockPair<BlockWithSlotAndPlug> plug : plugs){

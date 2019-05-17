@@ -20,8 +20,6 @@ public abstract class Block extends VBox {
     protected String blockName;
     private  boolean flag=false;
     public Block(String arg,String blockName,Pane drawingPane){
-       // this.setPrefWidth(USE_COMPUTED_SIZE);
-        //this.setPrefHeight(USE_COMPUTED_SIZE);
         this.drawingPane = drawingPane;
         this.blockName = blockName;
         StringBuilder tmp = new StringBuilder();
@@ -96,12 +94,6 @@ public abstract class Block extends VBox {
             label.setTextFill(Color.WHITE);
             this.titlePane.getChildren().add(label);
         }
-//        this.setHgap(8);
-        //rec=new Rectangle(200,200);
-        //rec.setFill(BLUE);
-        //Circle c=new Circle(50);
-        //this.setBackground(new Background(new BackgroundFill(YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
-        //this.setShape(c);
         titlePane.setAlignment(Pos.CENTER_LEFT);
         titlePane.setPadding(new Insets(5,5,5,5));
         this.setEffect(new DropShadow(5,Color.BLACK));
