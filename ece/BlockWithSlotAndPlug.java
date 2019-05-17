@@ -35,6 +35,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
     public void onMouseReleased(MouseEvent mouseEvent) {
         super.onMouseReleased(mouseEvent);
              //find plug for slot
+
             for(Node node : drawingPane.getChildren()){
 //                System.out.println(node);
                 if(node instanceof BlockWithPlug){
@@ -56,6 +57,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
                     }
                 }
             }
+
 
     }
 }

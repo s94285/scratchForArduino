@@ -41,13 +41,14 @@ public abstract class BlockWithPlug extends Block {
 //                        plugs.set(i,new Pair<Point2D, BlockWithSlotAndPlug>(plugs.get(i).getKey(),blockWithSlotAndPlug));
                         blockWithSlotAndPlug.slot.setBlock(lowest);
                         //new Pair<Point2D, BlockWithPlug>(blockWithSlotAndPlug.slot.getKey(),this);
-                        blockWithSlotAndPlug.setLayoutX(lowest.getLayoutX());
-                        blockWithSlotAndPlug.setLayoutY(lowest.getLayoutY() + lowest.getHeight());
+//                        blockWithSlotAndPlug.setLayoutX(lowest.getLayoutX());
+//                        blockWithSlotAndPlug.setLayoutY(lowest.getLayoutY() + lowest.getHeight());
                         break;
                     }
                 }
             }
         }
+        reAllocate();   //reallocate block position
     }
 //
 //    @Override
