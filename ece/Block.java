@@ -24,10 +24,9 @@ public abstract class Block extends VBox {
         //this.setPrefHeight(USE_COMPUTED_SIZE);
         this.drawingPane = drawingPane;
         this.blockName = blockName;
-        String args[] = arg.split(" +");
         StringBuilder tmp = new StringBuilder();
-        for (String str : args) {
-            if (str.charAt(0) == '%' && str.length() > 1) {
+        for(int i=0;i<arg.length();i++){
+            if(arg.charAt(i)=='%'){
                 if (tmp.length() > 0) {
                     Label label = new Label(tmp.toString());
                     label.setFont(new Font(17));
@@ -36,14 +35,14 @@ public abstract class Block extends VBox {
                     tmp = new StringBuilder();
                 }
                 StackPane stackPane = new StackPane();
-                switch (str.charAt(1)) {
+                switch (arg.charAt(++i)) {      //read next character
                     case 'm':
                         break;
                     case 'd':
                         break;
                     case 'n': {
                         TextField textField = new TextField("0");
-                        textField.setAlignment(Pos.CENTER_LEFT);
+                        textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
                         textField.setFont(new Font(14));
                         textField.setPadding(new Insets(0,2,0,2));
@@ -86,9 +85,9 @@ public abstract class Block extends VBox {
                         break;
                 }
                 this.titlePane.getChildren().add(stackPane);
-            } else {
-                if(tmp.length() == 0)tmp.append(" ");
-                tmp.append(str).append(" ");
+            }else{
+//                if(tmp.length() == 0)tmp.append(" ");
+                tmp.append(arg.charAt(i));
             }
         }
         if(tmp.length()>0){
