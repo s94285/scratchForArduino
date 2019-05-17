@@ -5,6 +5,8 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+import java.util.ArrayList;
+
 public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
     public PointBlockPair<BlockWithPlug> slot = new PointBlockPair<>(new Point2D(25,0),null);
 
@@ -24,6 +26,16 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
             for(int i=0;i<blockWithPlug.plugs.size();i++){
                 if(blockWithPlug.plugs.get(i).getBlock()==this){
                     blockWithPlug.plugs.get(i).setBlock(null);
+                    BlockWithPlug blockWithPlug1 = blockWithPlug;
+                    while(blockWithPlug1!=null){
+                        if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
+                            if(blockWithPlug1 instanceof ControlBlock)blockWithPlug1.reShape();
+                            blockWithPlug1 = ((BlockWithSlotAndPlug)blockWithPlug1).slot.getBlock();
+                        }else{
+                            blockWithPlug1 = null;
+                        }
+                    }
+
                     this.slot.setBlock(null);
                     break;
                 }
@@ -42,19 +54,32 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
 
                     BlockWithPlug blockWithPlug = (BlockWithPlug)node;
 //                    System.out.println("blockWithSlotAndPlot: " + blockWithSlotAndPlug);
-                    Point2D slotPoint2D = blockWithPlug.localToScene(25,((BlockWithPlug) node).getHeight());
+                    for(PointBlockPair<BlockWithSlotAndPlug> plug : ((BlockWithPlug) node).plugs){
+                        Point2D slotPoint2D = blockWithPlug.localToScene(plug.getPoint2D());
 //                    System.out.println("Plug Pos: " + plugs.get(i).getKey());
-                    if(this.localToScene(slot.getPoint2D()).distance(slotPoint2D)<15){
-                        System.out.println("Found");
-                        //plugs.get(0).setBlock(blockWithSlotAndPlug);
+                        if(this.localToScene(slot.getPoint2D()).distance(slotPoint2D)<15){
+                            System.out.println("Found");
+                            //plugs.get(0).setBlock(blockWithSlotAndPlug);
 //                        plugs.set(i,new Pair<Point2D, BlockWithSlotAndPlug>(plugs.get(i).getKey(),blockWithSlotAndPlug));
-                        this.slot.setBlock(blockWithPlug);
-                        blockWithPlug.plugs.get(0).setBlock(this);
-                        //new Pair<Point2D, BlockWithPlug>(blockWithSlotAndPlug.slot.getKey(),this);
-                        this.setLayoutX(blockWithPlug.getLayoutX());
-                        this.reAllocate();
-                        this.setLayoutY(blockWithPlug.getLayoutY()+blockWithPlug.getHeight());
+                            this.slot.setBlock(blockWithPlug);
+                            plug.setBlock(this);
+                            //reshape
+                            BlockWithPlug blockWithPlug1 = blockWithPlug;
+                            while(blockWithPlug1!=null){
+                                if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
+                                    if(blockWithPlug1 instanceof ControlBlock)blockWithPlug1.reShape();
+                                    blockWithPlug1 = ((BlockWithSlotAndPlug)blockWithPlug1).slot.getBlock();
+                                }else{
+                                    blockWithPlug1 = null;
+                                }
+                            }
+                            //move current blockWithSlot to plug's location
+                            this.setLayoutX(blockWithPlug.localToParent(plug.getPoint2D()).getX()-slot.getPoint2D().getX());
+                            this.reAllocate();
+                            this.setLayoutY(blockWithPlug.localToParent(plug.getPoint2D()).getY()-slot.getPoint2D().getY());
+                        }
                     }
+
                 }
             }
 

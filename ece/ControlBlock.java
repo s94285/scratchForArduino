@@ -36,6 +36,8 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
             containedBlockHeight+=blockWithSlotAndPlug.getHeight();
             blockWithSlotAndPlug = blockWithSlotAndPlug.plugs.get(0).getBlock();
         }
+        if(containedBlockHeight!=0)
+            containedBlockHeight-=5;
         this.setPadding(new Insets(0,0,36+containedBlockHeight,5));
         System.out.println(containedBlockHeight);
         Path path = new Path();
@@ -66,7 +68,7 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
         this.setShape(path);
 
         this.plugs.get(0).setPoint2D(new Point2D(25,getHeight()));      //lowest plug
-        this.plugs.get(1).setPoint2D(new Point2D(43,getHeight()-36-containedBlockHeight+5));      //inner plug
+        this.plugs.get(1).setPoint2D(new Point2D(43,getHeight()-32-containedBlockHeight));      //inner plug
 //        this.plugs.set(0,new Pair<>(new Point2D(25,getHeight()),this.plugs.get(0).getValue()));
         super.reShape();
     }

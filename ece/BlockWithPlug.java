@@ -37,18 +37,23 @@ public abstract class BlockWithPlug extends Block {
 //                    System.out.println("Plug Pos: " + plugs.get(i).getKey());
                     if (lowest.localToScene(plug.getPoint2D()).distance(slotPoint2D) < 15) {
                         System.out.println("Found");
-                        plug.setBlock(blockWithSlotAndPlug);
+                        if(blockWithSlotAndPlug.slot.getBlock()==null){
+                            plug.setBlock(blockWithSlotAndPlug);
 //                        plugs.set(i,new Pair<Point2D, BlockWithSlotAndPlug>(plugs.get(i).getKey(),blockWithSlotAndPlug));
-                        blockWithSlotAndPlug.slot.setBlock(lowest);
-                        //new Pair<Point2D, BlockWithPlug>(blockWithSlotAndPlug.slot.getKey(),this);
+                            blockWithSlotAndPlug.slot.setBlock(lowest);
+                            //new Pair<Point2D, BlockWithPlug>(blockWithSlotAndPlug.slot.getKey(),this);
 //                        blockWithSlotAndPlug.setLayoutX(lowest.getLayoutX());
 //                        blockWithSlotAndPlug.setLayoutY(lowest.getLayoutY() + lowest.getHeight());
-                        break;
+                            break;
+                        }
+
+
                     }
                 }
             }
         }
         reAllocate();   //reallocate block position
+        bringToFront(this);
     }
 //
 //    @Override
