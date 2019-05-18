@@ -108,10 +108,10 @@ public class IfandElseBlock extends BlockWithSlotAndPlug {
 //        Rectangle dummy = new Rectangle();
 //        this.getChildren().add(dummy);
 //        this.getChildren().remove(dummy);
-//        int myIndex = drawingPane.getChildren().indexOf(this);
-//        if(myIndex>0){
-//            drawingPane.getChildren().remove(this);
-//            drawingPane.getChildren().add(myIndex,this);
-//        }
+        int myIndex = drawingPane.getChildren().indexOf(this);
+        if(myIndex>0){
+            drawingPane.getChildren().remove(this);
+            drawingPane.getChildren().add(myIndex,this);
+        }
     }
 }

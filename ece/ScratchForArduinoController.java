@@ -1,19 +1,15 @@
 package ece;
 
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.*;
-import javafx.scene.Parent;
+import javafx.scene.layout.VBox;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -25,7 +21,7 @@ public class ScratchForArduinoController {
     @FXML private AnchorPane blockPane;
     enum BlockClass{CONTROLS,OPERATORS,ARDUINO}
     private BlockClass currentBlockClass = BlockClass.CONTROLS;
-    private  Pane selectedOperatorsPane,selectedRobotPane;
+    private VBox selectedOperatorsPane, selectedArduinoPane,selectedControlsPane;
     private Robot robot;
     public void initialize(){
         controlsButton.setUserData(BlockClass.CONTROLS);
@@ -36,7 +32,16 @@ public class ScratchForArduinoController {
         }catch (AWTException e) {
             e.printStackTrace();
         }
-        System.out.println("TEST");
+        selectedOperatorsPane = new VBox();
+        selectedArduinoPane = new VBox();
+        selectedControlsPane = new VBox();
+        selectedOperatorsPane.setVisible(false);
+        selectedArduinoPane.setVisible(true);
+        selectedControlsPane.setVisible(false);
+        blockPane.getChildren().addAll(selectedControlsPane,selectedOperatorsPane, selectedArduinoPane);
+        initializeBlocks();     //add blocks to left pane
+        //finish interface initialize
+
         Head block1 = new Head("Arduino Program","headBlock",drawingPane);
         block1.setLayoutX(100);
         block1.setLayoutY(50);
@@ -68,7 +73,7 @@ public class ScratchForArduinoController {
         ifandElseBlock.setLayoutX(300);
         ifandElseBlock.setLayoutY(300);
 
-        selectedOperatorsPane=new Pane();
+
         ValueBlock valueBlock=new ValueBlock("%n + %n","valueAdd",blockPane){
             @Override
             public void onMousePressed(MouseEvent mouseEvent) {
@@ -99,12 +104,7 @@ public class ScratchForArduinoController {
 
         };
         selectedOperatorsPane.getChildren().add(valueBlock);
-        blockPane.getChildren().add(selectedOperatorsPane);
-        valueBlock.setLayoutY(10);
-        valueBlock.setLayoutX(10);
-        selectedOperatorsPane.setVisible(false);
 
-        selectedRobotPane=new Pane();
         StatementBlock statementBlock=new StatementBlock("abc %n cde %n","statementblock",blockPane);
         statementBlock.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>(){
             @Override
@@ -119,33 +119,17 @@ public class ScratchForArduinoController {
                 System.out.println("Mouse Entered on Click Me ");
             }
         });
-        selectedRobotPane.getChildren().add(statementBlock);
-        blockPane.getChildren().add(selectedRobotPane);
-        statementBlock.setLayoutX(10);
-        statementBlock.setLayoutY(10);
-        selectedRobotPane.setVisible(false);
-        selectedBlock(currentBlockClass);
+        selectedArduinoPane.getChildren().add(statementBlock);
     }
     @FXML
     private void typeClicked(ActionEvent e){
         currentBlockClass=(BlockClass) BlockToggleGroup.getSelectedToggle().getUserData();
-        selectedBlock(currentBlockClass);
-    }
-    private  void selectedBlock(BlockClass currentBlockClass){
-        if(currentBlockClass==BlockClass.CONTROLS){
-            System.out.println("clicked 2 Controls");
-            selectedRobotPane.setVisible(false);
-            selectedOperatorsPane.setVisible(true);
-        }
-        else if(currentBlockClass==BlockClass.OPERATORS){
-
-        }
-        else if(currentBlockClass==BlockClass.ARDUINO){
-            System.out.println("clicked 2 Arduino");
-            selectedOperatorsPane.setVisible(false);
-            selectedRobotPane.setVisible(true);
-        }
-
+        selectedOperatorsPane.setVisible(currentBlockClass==BlockClass.OPERATORS);
+        selectedControlsPane.setVisible(currentBlockClass==BlockClass.CONTROLS);
+        selectedArduinoPane.setVisible(currentBlockClass==BlockClass.ARDUINO);
     }
 
+    private void initializeBlocks(){
+
+    }
 }
