@@ -68,10 +68,17 @@ public class ScratchForArduinoController {
         drawingPane.getChildren().add(controlBlock1);
         controlBlock1.setLayoutX(250);
         controlBlock1.setLayoutY(250);
+
         IfandElseBlock ifandElseBlock=new IfandElseBlock("if     %n     then","statementblock",drawingPane);
         drawingPane.getChildren().add(ifandElseBlock);
         ifandElseBlock.setLayoutX(300);
         ifandElseBlock.setLayoutY(300);
+
+        ForeverLoopBlock foreverLoopBlock=new ForeverLoopBlock("Forever           ","statementblock",drawingPane);
+        drawingPane.getChildren().add(foreverLoopBlock);
+        foreverLoopBlock.setLayoutX(350);
+        foreverLoopBlock.setLayoutY(350);
+
 
 
         ValueBlock valueBlock=new ValueBlock("%n + %n","valueAdd",blockPane){

@@ -1,26 +1,26 @@
 package ece;
 
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 
-public class ControlBlock extends  BlockWithSlotAndPlug {
-    public ControlBlock(String arg, String blockName, Pane drawingPane) {
-        super(arg, blockName, drawingPane, 2);
+public class ForeverLoopBlock extends BlockWithSlotAndPlug {
+    public ForeverLoopBlock(String arg, String blockName, Pane drawingPane) {
+        super(arg, blockName, drawingPane, 1);
         this.setAlignment(Pos.TOP_LEFT);
         reShape();
         this.setBackground(new Background(new BackgroundFill(Color.rgb(225, 169, 26), CornerRadii.EMPTY, Insets.EMPTY)));
     }
-
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
         super.onMouseReleased(mouseEvent);
@@ -30,7 +30,7 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
     @Override
     public void reShape() {
         int containedBlockHeight = 0;
-        BlockWithSlotAndPlug blockWithSlotAndPlug = this.plugs.get(1).getBlock();
+        BlockWithSlotAndPlug blockWithSlotAndPlug = this.plugs.get(0).getBlock();
         while(blockWithSlotAndPlug!=null){
             containedBlockHeight+=blockWithSlotAndPlug.getHeight();
             blockWithSlotAndPlug = blockWithSlotAndPlug.plugs.get(0).getBlock();
@@ -39,9 +39,6 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
             containedBlockHeight-=5;
 //        System.out.println("old: " + containedBlockHeight + " , " + getHeight());
         this.setPadding(new Insets(0,0,36+containedBlockHeight,5));
-//        this.applyCss();
-//        this.layout();
-//        this.setPrefHeight(USE_COMPUTED_SIZE);
         System.out.println("new: " + containedBlockHeight + " , " + getHeight());
         Path path = new Path();
         MoveTo moveTo = new MoveTo();
@@ -60,19 +57,20 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
         LineTo lineTo11 = new LineTo(16,getHeight()-36-containedBlockHeight);
         LineTo lineTo12 = new LineTo(16,getHeight()-24);
         LineTo lineTo13 = new LineTo(getWidth(),getHeight()-24);
-        LineTo lineTo14 = new LineTo(getWidth(),getHeight()-3);
-        LineTo lineTo15 = new LineTo(34,getHeight()-3);
-        LineTo lineTo16 = new LineTo(30,getHeight());
-        LineTo lineTo17 = new LineTo(20,getHeight());
-        LineTo lineTo18 = new LineTo(16,getHeight()-3);
-        LineTo lineTo19 = new LineTo(0,getHeight()-3);
-        path.getElements().addAll(moveTo,lineTo1,lineTo2,lineTo3,lineTo4,lineTo5,lineTo6,lineTo7,lineTo8,lineTo9,lineTo10,lineTo11,lineTo12,lineTo13,lineTo14,lineTo15,lineTo16,
-                lineTo17,lineTo18,lineTo19,new ClosePath());
+        LineTo lineTo14 = new LineTo(getWidth(),getHeight());
+        LineTo lineTo15 = new LineTo(0,getHeight());
+
+        path.getElements().addAll(moveTo,lineTo1,lineTo2,lineTo3,lineTo4,lineTo5,lineTo6,lineTo7,lineTo8,lineTo9,lineTo10,lineTo11,lineTo12,lineTo13,lineTo14,lineTo15,new ClosePath());
         this.setShape(path);
 
-        this.plugs.get(0).setPoint2D(new Point2D(25,getHeight()));      //lowest plug
-        this.plugs.get(1).setPoint2D(new Point2D(43,getHeight()-32-containedBlockHeight));      //inner plug
+        //this.plugs.get(0).setPoint2D(new Point2D(25,getHeight()));      //lowest plug
+        this.plugs.get(0).setPoint2D(new Point2D(43,getHeight()-32-containedBlockHeight));      //inner plug
         super.reShape();
+
+
+//        Rectangle dummy = new Rectangle();
+//        this.getChildren().add(dummy);
+//        this.getChildren().remove(dummy);
         int myIndex = drawingPane.getChildren().indexOf(this);
         if(myIndex>0){
             drawingPane.getChildren().remove(this);
