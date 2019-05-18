@@ -13,8 +13,8 @@ public abstract class BlockWithPlug extends Block {
         super(arg, blockName,drawingPane);
         for(int i=0;i<plugCount;i++)
             plugs.add(new PointBlockPair<BlockWithSlotAndPlug>(new Point2D(0,0),null));
-
-
+        this.layoutXProperty().addListener(((observableValue, oldValue, newValue) -> reAllocate()));
+        this.layoutYProperty().addListener(((observableValue, oldValue, newValue) -> reAllocate()));
     }
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {

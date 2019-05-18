@@ -12,8 +12,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
 
     public BlockWithSlotAndPlug(String arg, String blockName, Pane drawingPane, int plugCount){
         super(arg, blockName,drawingPane,plugCount);
-        this.layoutXProperty().addListener(((observableValue, oldValue, newValue) -> {
-            reAllocate();
+        this.heightProperty().addListener(observable -> {
             BlockWithPlug blockWithPlug1 = BlockWithSlotAndPlug.this;
             while(blockWithPlug1!=null){
                 if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
@@ -23,9 +22,8 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
                     blockWithPlug1 = null;
                 }
             }
-        }));
-        this.layoutYProperty().addListener(((observableValue, oldValue, newValue) -> {
-            reAllocate();
+        });
+        this.widthProperty().addListener(observable -> {
             BlockWithPlug blockWithPlug1 = BlockWithSlotAndPlug.this;
             while(blockWithPlug1!=null){
                 if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
@@ -35,7 +33,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
                     blockWithPlug1 = null;
                 }
             }
-        }));
+        });
 
     }
     @Override
@@ -76,15 +74,26 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
 
                     BlockWithPlug blockWithPlug = (BlockWithPlug)node;
 //                    System.out.println("blockWithSlotAndPlot: " + blockWithSlotAndPlug);
-                    for(PointBlockPair<BlockWithSlotAndPlug> plug : ((BlockWithPlug) node).plugs){
-                        if(plug.getBlock()!=null)continue;
+                    for(PointBlockPair<BlockWithSlotAndPlug> plug : blockWithPlug.plugs){
                         Point2D slotPoint2D = blockWithPlug.localToScene(plug.getPoint2D());
 //                    System.out.println("Plug Pos: " + plugs.get(i).getKey());
                         if(this.localToScene(slot.getPoint2D()).distance(slotPoint2D)<15){
                             System.out.println("Found");
-
-                            this.slot.setBlock(blockWithPlug);
-                            plug.setBlock(this);
+                            if(plug.getBlock()!=null){
+                                //get my lowest block's plug
+                                BlockWithPlug lowest = this;
+                                while(lowest.plugs.get(0).getBlock()!=null){
+                                    lowest = lowest.plugs.get(0).getBlock();
+                                }
+                                //insert this and lower blocks in between
+                                lowest.plugs.get(0).setBlock(plug.getBlock());
+                                plug.getBlock().slot.setBlock(lowest);
+                                this.slot.setBlock(blockWithPlug);
+                                plug.setBlock(this);
+                            }else {
+                                this.slot.setBlock(blockWithPlug);
+                                plug.setBlock(this);
+                            }
                             //reshape
                             BlockWithPlug blockWithPlug1 = blockWithPlug;
                             while(blockWithPlug1!=null){
@@ -97,8 +106,8 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
                             }
                             //move current blockWithSlot to plug's location
                             this.setLayoutX(blockWithPlug.localToParent(plug.getPoint2D()).getX()-slot.getPoint2D().getX());
-                            this.reAllocate();
                             this.setLayoutY(blockWithPlug.localToParent(plug.getPoint2D()).getY()-slot.getPoint2D().getY());
+                            this.reAllocate();
                         }
                     }
 
