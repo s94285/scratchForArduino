@@ -79,8 +79,10 @@ public class ScratchForArduinoController {
         foreverLoopBlock.setLayoutX(350);
         foreverLoopBlock.setLayoutY(350);
 
-
-
+        BooleanBlock booleanBlock=new BooleanBlock("%n + %n","valueAdd",drawingPane);
+        drawingPane.getChildren().add(booleanBlock);
+        booleanBlock.setLayoutX(400);
+        booleanBlock.setLayoutY(400);
         ValueBlock valueBlock=new ValueBlock("%n + %n","valueAdd",blockPane){
             @Override
             public void onMousePressed(MouseEvent mouseEvent) {
