@@ -1,18 +1,17 @@
 package ece;
 
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
+import javafx.scene.shape.*;
 
 public class ControlBlock extends  BlockWithSlotAndPlug {
     public ControlBlock(String arg, String blockName, Pane drawingPane) {
@@ -38,8 +37,12 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
         }
         if(containedBlockHeight!=0)
             containedBlockHeight-=5;
+//        System.out.println("old: " + containedBlockHeight + " , " + getHeight());
         this.setPadding(new Insets(0,0,36+containedBlockHeight,5));
-        System.out.println(containedBlockHeight);
+//        this.applyCss();
+//        this.layout();
+//        this.setPrefHeight(USE_COMPUTED_SIZE);
+        System.out.println("new: " + containedBlockHeight + " , " + getHeight());
         Path path = new Path();
         MoveTo moveTo = new MoveTo();
         moveTo.setX(0);
@@ -70,5 +73,15 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
         this.plugs.get(0).setPoint2D(new Point2D(25,getHeight()));      //lowest plug
         this.plugs.get(1).setPoint2D(new Point2D(43,getHeight()-32-containedBlockHeight));      //inner plug
         super.reShape();
+
+
+//        Rectangle dummy = new Rectangle();
+//        this.getChildren().add(dummy);
+//        this.getChildren().remove(dummy);
+//        int myIndex = drawingPane.getChildren().indexOf(this);
+//        if(myIndex>0){
+//            drawingPane.getChildren().remove(this);
+//            drawingPane.getChildren().add(myIndex,this);
+//        }
     }
 }

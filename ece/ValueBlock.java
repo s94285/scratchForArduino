@@ -85,7 +85,7 @@ public class ValueBlock extends Block {
     @Override
     public void onMouseDragged(MouseEvent mouseEvent) {
         super.onMouseDragged(mouseEvent);
-        System.out.println(this + " " + mouseEvent.getTarget());
+//        System.out.println(this + " " + mouseEvent.getTarget());
 
         Transform blockTransformToScene = this.getLocalToSceneTransform();
         Point2D blockScenePoint = blockTransformToScene.transform(0,0);
@@ -109,7 +109,7 @@ public class ValueBlock extends Block {
     public void onMouseReleased(MouseEvent mouseEvent) {
         super.onMouseReleased(mouseEvent);
         if(selectedStackPane != null){
-            System.out.println("selectedStackPane");
+//            System.out.println("selectedStackPane");
             try {
 
                 selectedStackPane.getChildren().add(this);

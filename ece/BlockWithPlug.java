@@ -73,7 +73,7 @@ public abstract class BlockWithPlug extends Block {
     @Override
     public void onMouseDragged(MouseEvent mouseEvent) {
         super.onMouseDragged(mouseEvent);
-        System.out.println("plug dragged " + plugs.get(0).getBlock());
+//        System.out.println("plug dragged " + plugs.get(0).getBlock());
     }
 
     @Override

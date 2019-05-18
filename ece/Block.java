@@ -1,4 +1,6 @@
 package ece;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -18,6 +20,13 @@ public abstract class Block extends VBox {
     private double pressedx,pressedy;
     protected HBox titlePane = new HBox();
     protected String blockName;
+    protected ChangeListener<?super Number> sizeChangeListener = new ChangeListener<Number>() {
+        @Override
+        public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+            System.out.println("called in block height changed");
+            reShape();
+        }
+    };
     private  boolean flag=false;
     public Block(String arg,String blockName,Pane drawingPane){
         this.drawingPane = drawingPane;
@@ -107,8 +116,8 @@ public abstract class Block extends VBox {
         //this.setPrefWidth(U);
 
         //this.getChildren().add(rec);
-        this.heightProperty().addListener((observableValue, oldValue, newValue) -> reShape());
-        this.widthProperty().addListener((observableValue, oldValue, newValue) -> reShape());
+        this.heightProperty().addListener(sizeChangeListener);
+        this.widthProperty().addListener(sizeChangeListener);
     }
     public  void onMousePressed(MouseEvent mouseEvent){
 
@@ -119,7 +128,7 @@ public abstract class Block extends VBox {
         nowlayouty=this.getLayoutY();
         pressedx=mouseEvent.getSceneX();
         pressedy=mouseEvent.getSceneY();
-        System.out.println("Mouse Pressed");
+//        System.out.println("Mouse Pressed");
     }
     public void onMouseDragged(MouseEvent mouseEvent){
         this.setLayoutX(nowlayoutx+(mouseEvent.getSceneX()-pressedx));
@@ -128,7 +137,7 @@ public abstract class Block extends VBox {
         pressedy=mouseEvent.getSceneY();
         nowlayoutx=this.getLayoutX();
         nowlayouty=this.getLayoutY();
-        System.out.println("Mouse Dragged x:"+nowlayoutx+"y"+nowlayouty);
+//        System.out.println("Mouse Dragged x:"+nowlayoutx+"y"+nowlayouty);
     }
     public void onMouseReleased(MouseEvent mouseEvent){
         //Do nothing

@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
@@ -12,34 +13,41 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
 
     public BlockWithSlotAndPlug(String arg, String blockName, Pane drawingPane, int plugCount){
         super(arg, blockName,drawingPane,plugCount);
+        this.heightProperty().removeListener(this.sizeChangeListener);
         this.heightProperty().addListener(observable -> {
+            reShape();
             BlockWithPlug blockWithPlug1 = BlockWithSlotAndPlug.this;
             while(blockWithPlug1!=null){
                 if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
-                    if(blockWithPlug1 instanceof ControlBlock)blockWithPlug1.reShape();
+                    if(blockWithPlug1 instanceof ControlBlock && blockWithPlug1 != this){
+                        blockWithPlug1.reShape();
+//                        blockWithPlug1.reShape();
+                    }
                     blockWithPlug1 = ((BlockWithSlotAndPlug)blockWithPlug1).slot.getBlock();
                 }else{
                     blockWithPlug1 = null;
                 }
             }
+//            reShape();
         });
-        this.widthProperty().addListener(observable -> {
-            BlockWithPlug blockWithPlug1 = BlockWithSlotAndPlug.this;
-            while(blockWithPlug1!=null){
-                if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
-                    if(blockWithPlug1 instanceof ControlBlock)blockWithPlug1.reShape();
-                    blockWithPlug1 = ((BlockWithSlotAndPlug)blockWithPlug1).slot.getBlock();
-                }else{
-                    blockWithPlug1 = null;
-                }
-            }
-        });
+//        this.widthProperty().addListener(observable -> {
+//            BlockWithPlug blockWithPlug1 = BlockWithSlotAndPlug.this;
+//            while(blockWithPlug1!=null){
+//                if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
+//                    if(blockWithPlug1 instanceof ControlBlock && blockWithPlug1 != this)blockWithPlug1.reShape();
+//                    blockWithPlug1 = ((BlockWithSlotAndPlug)blockWithPlug1).slot.getBlock();
+//                }else{
+//                    blockWithPlug1 = null;
+//                }
+//            }
+////            reShape();
+//        });
 
     }
     @Override
     public void onMouseDragged(MouseEvent mouseEvent) {
         super.onMouseDragged(mouseEvent);
-        System.out.println("slot dragged" + slot.getBlock());
+//        System.out.println("slot dragged" + slot.getBlock());
         if(slot.getBlock()!=null){
 
             BlockWithPlug blockWithPlug = slot.getBlock();
@@ -69,6 +77,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
              //find plug for slot
 
             for(Node node : drawingPane.getChildren()){
+                if(node instanceof javafx.scene.shape.Rectangle)continue;
 //                System.out.println(node);
                 if(node instanceof BlockWithPlug){
 
