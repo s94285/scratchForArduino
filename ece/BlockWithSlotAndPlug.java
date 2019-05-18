@@ -19,7 +19,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
             BlockWithPlug blockWithPlug1 = BlockWithSlotAndPlug.this;
             while(blockWithPlug1!=null){
                 if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
-                    if(blockWithPlug1 instanceof ControlBlock && blockWithPlug1 != this){
+                    if((blockWithPlug1 instanceof ControlBlock || blockWithPlug1 instanceof IfandElseBlock) && blockWithPlug1 != this){
                         blockWithPlug1.reShape();
 //                        blockWithPlug1.reShape();
                     }
@@ -34,7 +34,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
 //            BlockWithPlug blockWithPlug1 = BlockWithSlotAndPlug.this;
 //            while(blockWithPlug1!=null){
 //                if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
-//                    if(blockWithPlug1 instanceof ControlBlock && blockWithPlug1 != this)blockWithPlug1.reShape();
+//                    if((blockWithPlug1 instanceof ControlBlock || blockWithPlug1 instanceof IfandElseBlock) && blockWithPlug1 != this)blockWithPlug1.reShape();
 //                    blockWithPlug1 = ((BlockWithSlotAndPlug)blockWithPlug1).slot.getBlock();
 //                }else{
 //                    blockWithPlug1 = null;
@@ -57,7 +57,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
                     BlockWithPlug blockWithPlug1 = blockWithPlug;
                     while(blockWithPlug1!=null){
                         if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
-                            if(blockWithPlug1 instanceof ControlBlock)blockWithPlug1.reShape();
+                            if((blockWithPlug1 instanceof ControlBlock || blockWithPlug1 instanceof IfandElseBlock))blockWithPlug1.reShape();
                             blockWithPlug1 = ((BlockWithSlotAndPlug)blockWithPlug1).slot.getBlock();
                         }else{
                             blockWithPlug1 = null;
@@ -107,7 +107,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
                             BlockWithPlug blockWithPlug1 = blockWithPlug;
                             while(blockWithPlug1!=null){
                                 if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
-                                    if(blockWithPlug1 instanceof ControlBlock)blockWithPlug1.reShape();
+                                    if((blockWithPlug1 instanceof ControlBlock || blockWithPlug1 instanceof IfandElseBlock))blockWithPlug1.reShape();
                                     blockWithPlug1 = ((BlockWithSlotAndPlug)blockWithPlug1).slot.getBlock();
                                 }else{
                                     blockWithPlug1 = null;

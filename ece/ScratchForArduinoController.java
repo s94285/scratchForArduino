@@ -59,6 +59,15 @@ public class ScratchForArduinoController {
         drawingPane.getChildren().add(controlBlock);
         controlBlock.setLayoutX(200);
         controlBlock.setLayoutY(200);
+        ControlBlock controlBlock1=new ControlBlock("if     %n     then","controlblock",drawingPane);
+        drawingPane.getChildren().add(controlBlock1);
+        controlBlock1.setLayoutX(250);
+        controlBlock1.setLayoutY(250);
+        IfandElseBlock ifandElseBlock=new IfandElseBlock("if     %n     then","statementblock",drawingPane);
+        drawingPane.getChildren().add(ifandElseBlock);
+        ifandElseBlock.setLayoutX(300);
+        ifandElseBlock.setLayoutY(300);
+
         selectedOperatorsPane=new Pane();
         ValueBlock valueBlock=new ValueBlock("%n + %n","valueAdd",blockPane){
             @Override
