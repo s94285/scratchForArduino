@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public abstract class BlockWithPlug extends Block {
     public ArrayList<PointBlockPair<BlockWithSlotAndPlug>> plugs = new ArrayList<>();
-    public BlockWithPlug(String arg, String blockName, Pane drawingPane,int plugCount){
-        super(arg, blockName,drawingPane);
+    public BlockWithPlug(BlockSpec blockSpec, Pane drawingPane,int plugCount){
+        super(blockSpec,drawingPane);
         for(int i=0;i<plugCount;i++)
             plugs.add(new PointBlockPair<BlockWithSlotAndPlug>(new Point2D(0,0),null));
         this.layoutXProperty().addListener(((observableValue, oldValue, newValue) -> reAllocate()));

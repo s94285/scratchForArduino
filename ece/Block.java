@@ -20,6 +20,7 @@ public abstract class Block extends VBox {
     private double pressedx,pressedy;
     protected HBox titlePane = new HBox();
     protected String blockName;
+    protected BlockSpec blockSpec;
     protected ChangeListener<?super Number> sizeChangeListener = new ChangeListener<Number>() {
         @Override
         public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -28,7 +29,10 @@ public abstract class Block extends VBox {
         }
     };
     private  boolean flag=false;
-    public Block(String arg,String blockName,Pane drawingPane){
+    public Block(BlockSpec blockSpec,Pane drawingPane){
+        this.blockSpec = blockSpec;
+        String arg = blockSpec.title;
+        String blockName = blockSpec.name;
         this.drawingPane = drawingPane;
         this.blockName = blockName;
         StringBuilder tmp = new StringBuilder();
@@ -151,4 +155,8 @@ public abstract class Block extends VBox {
     public String getBlockName(){return blockName;}
     public HBox getTitlePane(){return titlePane;}
     public abstract void reShape();
+
+    public BlockSpec getBlockSpec() {
+        return blockSpec;
+    }
 }

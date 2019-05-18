@@ -14,8 +14,8 @@ public class Head extends BlockWithPlug {
     private  ComboBox comboBox;
     private double height,width;
 
-    public  Head(String arg, String blockName,Pane drawingPane){
-        super(arg,blockName,drawingPane,1);
+    public  Head(BlockSpec blockSpec,Pane drawingPane){
+        super(blockSpec,drawingPane,1);
         comboBox=new ComboBox();
 
         reShape();

@@ -14,8 +14,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
 public class ControlBlock extends  BlockWithSlotAndPlug {
-    public ControlBlock(String arg, String blockName, Pane drawingPane) {
-        super(arg, blockName, drawingPane, 2);
+    public ControlBlock(BlockSpec blockSpec, Pane drawingPane) {
+        super(blockSpec, drawingPane, 2);
         this.setAlignment(Pos.TOP_LEFT);
         reShape();
         this.setBackground(new Background(new BackgroundFill(Color.rgb(225, 169, 26), CornerRadii.EMPTY, Insets.EMPTY)));

@@ -10,8 +10,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
 public class StatementBlock extends BlockWithSlotAndPlug {
-    public StatementBlock(String arg, String blockName, Pane drawingPane) {
-        super(arg, blockName, drawingPane,1);
+    public StatementBlock(BlockSpec blockSpec, Pane drawingPane) {
+        super(blockSpec, drawingPane,1);
         reShape();
         this.setBackground(new Background(new BackgroundFill(Color.rgb(10, 134, 152), CornerRadii.EMPTY, Insets.EMPTY)));
     }

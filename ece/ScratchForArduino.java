@@ -4,11 +4,6 @@ import javafx.fxml.FXMLLoader ;
 import javafx.scene.Parent ;
 import javafx.scene.Scene ;
 import javafx.stage.Stage ;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.net.URL;
-import java.util.Scanner;
 
 public class ScratchForArduino extends  Application{
     @Override

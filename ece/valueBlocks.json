@@ -1,0 +1,34 @@
+[
+  {
+    "name": "plus",
+    "type": "r",
+    "title": "%n + %n",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "include",
+      "def": "define",
+      "setup": "setup",
+      "work": "work",
+      "loop": "loop"
+    }
+  },
+  {
+    "name": "minus",
+    "type": "r",
+    "title": "%n - %n",
+    "field": [
+      "1",
+      "2"
+    ],
+    "code": {
+      "inc": "include",
+      "def": "define",
+      "setup": "setup",
+      "work": "work",
+      "loop": "loop"
+    }
+  }
+]

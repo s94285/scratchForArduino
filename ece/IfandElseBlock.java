@@ -20,8 +20,8 @@ public class IfandElseBlock extends BlockWithSlotAndPlug {
     private Pane blankPane;
     private Label labelElse = new Label("else");
     private static final int TITLEPANE_TO_LABELELSE = 10;
-    public IfandElseBlock(String arg, String blockName, Pane drawingPane) {
-        super(arg, blockName, drawingPane, 3);
+    public IfandElseBlock(BlockSpec blockSpec, Pane drawingPane) {
+        super(blockSpec, drawingPane, 3);
         this.setAlignment(Pos.TOP_LEFT);
         blankPane = new Pane();
         labelElse.setPrefSize(60,22);

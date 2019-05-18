@@ -15,8 +15,8 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 
 public class ForeverLoopBlock extends BlockWithSlotAndPlug {
-    public ForeverLoopBlock(String arg, String blockName, Pane drawingPane) {
-        super(arg, blockName, drawingPane, 1);
+    public ForeverLoopBlock(BlockSpec blockSpec, Pane drawingPane) {
+        super(blockSpec, drawingPane, 1);
         this.setAlignment(Pos.TOP_LEFT);
         reShape();
         this.setBackground(new Background(new BackgroundFill(Color.rgb(225, 169, 26), CornerRadii.EMPTY, Insets.EMPTY)));

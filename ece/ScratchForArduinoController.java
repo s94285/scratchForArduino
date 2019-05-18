@@ -3,6 +3,7 @@ package ece;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -10,9 +11,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.codehaus.jackson.map.ObjectMapper;
 
-import java.awt.*;
+import java.awt.Robot;
 import java.awt.event.InputEvent;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
 public class ScratchForArduinoController {
     @FXML private ToggleGroup BlockToggleGroup;
@@ -29,12 +38,18 @@ public class ScratchForArduinoController {
         arduinoButton.setUserData(BlockClass.ARDUINO);
         try {
             robot = new Robot();
-        }catch (AWTException e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
         selectedOperatorsPane = new VBox();
         selectedArduinoPane = new VBox();
         selectedControlsPane = new VBox();
+        selectedOperatorsPane.setSpacing(10);
+        selectedOperatorsPane.setPadding(new Insets(10,10,10,10));
+        selectedArduinoPane.setSpacing(10);
+        selectedArduinoPane.setPadding(new Insets(10,10,10,10));
+        selectedControlsPane.setSpacing(10);
+        selectedControlsPane.setPadding(new Insets(10,10,10,10));
         selectedOperatorsPane.setVisible(false);
         selectedArduinoPane.setVisible(true);
         selectedControlsPane.setVisible(false);
@@ -42,53 +57,53 @@ public class ScratchForArduinoController {
         initializeBlocks();     //add blocks to left pane
         //finish interface initialize
 
-        Head block1 = new Head("Arduino Program","headBlock",drawingPane);
+        Head block1 = new Head(blockSpecBuilder("Arduino Program","headBlock"),drawingPane);
         block1.setLayoutX(100);
         block1.setLayoutY(50);
 
         drawingPane.getChildren().add(block1);
         for(int i=0;i<10;i++){
-            ValueBlock valueBlock=new ValueBlock("%n + %n","valueAdd",drawingPane);
+            ValueBlock valueBlock=new ValueBlock(blockSpecBuilder("%n + %n","valueAdd"),drawingPane);
             drawingPane.getChildren().add(valueBlock);
             valueBlock.setLayoutX(10);
             valueBlock.setLayoutY(10+i*50);
 
         }
         for(int i=0;i<5;i++){
-            StatementBlock statementBlock=new StatementBlock("abc %n cde %n","statementblock",drawingPane);
+            StatementBlock statementBlock=new StatementBlock(blockSpecBuilder("abc %n cde %n","statementblock"),drawingPane);
             drawingPane.getChildren().add(statementBlock);
             statementBlock.setLayoutX(100);
             statementBlock.setLayoutY(100+i*50);
         }
-        ControlBlock controlBlock=new ControlBlock("if     %n     then","controlblock",drawingPane);
+        ControlBlock controlBlock=new ControlBlock(blockSpecBuilder("if     %n     then","controlblock"),drawingPane);
         drawingPane.getChildren().add(controlBlock);
         controlBlock.setLayoutX(200);
         controlBlock.setLayoutY(200);
-        ControlBlock controlBlock1=new ControlBlock("if     %n     then","controlblock",drawingPane);
+        ControlBlock controlBlock1=new ControlBlock(blockSpecBuilder("if     %n     then","controlblock"),drawingPane);
         drawingPane.getChildren().add(controlBlock1);
         controlBlock1.setLayoutX(250);
         controlBlock1.setLayoutY(250);
 
-        IfandElseBlock ifandElseBlock=new IfandElseBlock("if     %n     then","statementblock",drawingPane);
+        IfandElseBlock ifandElseBlock=new IfandElseBlock(blockSpecBuilder("if     %n     then","statementblock"),drawingPane);
         drawingPane.getChildren().add(ifandElseBlock);
         ifandElseBlock.setLayoutX(300);
         ifandElseBlock.setLayoutY(300);
 
-        ForeverLoopBlock foreverLoopBlock=new ForeverLoopBlock("Forever           ","statementblock",drawingPane);
+        ForeverLoopBlock foreverLoopBlock=new ForeverLoopBlock(blockSpecBuilder("Forever           ","statementblock"),drawingPane);
         drawingPane.getChildren().add(foreverLoopBlock);
         foreverLoopBlock.setLayoutX(350);
         foreverLoopBlock.setLayoutY(350);
 
-        BooleanBlock booleanBlock=new BooleanBlock("%n + %n","valueAdd",drawingPane);
+        BooleanBlock booleanBlock=new BooleanBlock(blockSpecBuilder("%n + %n","valueAdd"),drawingPane);
         drawingPane.getChildren().add(booleanBlock);
         booleanBlock.setLayoutX(400);
         booleanBlock.setLayoutY(400);
-        ValueBlock valueBlock=new ValueBlock("%n + %n","valueAdd",blockPane){
+        ValueBlock valueBlock=new ValueBlock(blockSpecBuilder("%n + %n","valueAdd"),blockPane){
             @Override
             public void onMousePressed(MouseEvent mouseEvent) {
                 //super.onMousePressed(mouseEvent);
                 System.out.println("Mouse Entered on Click Me Two");
-                ValueBlock valueBlock1=new ValueBlock("%n + %n","valueAdd",ScratchForArduinoController.this.drawingPane);
+                ValueBlock valueBlock1=new ValueBlock(blockSpecBuilder("%n + %n","valueAdd"),ScratchForArduinoController.this.drawingPane);
                 ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
                 Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(),mouseEvent.getSceneY()));
 //                System.out.println("scene"+mouseEvent.getSceneX()+mouseEvent.getSceneY());
@@ -114,7 +129,7 @@ public class ScratchForArduinoController {
         };
         selectedOperatorsPane.getChildren().add(valueBlock);
 
-        StatementBlock statementBlock=new StatementBlock("abc %n cde %n","statementblock",blockPane);
+        StatementBlock statementBlock=new StatementBlock(blockSpecBuilder("abc %n cde %n","statementblock"),blockPane);
         statementBlock.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent e){
@@ -139,6 +154,60 @@ public class ScratchForArduinoController {
     }
 
     private void initializeBlocks(){
+        //value blocks
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("valueBlocks.json").toURI()), BlockSpec[].class));
+            for(BlockSpec blockSpec : blockSpecList) {
+                System.out.println(blockSpec);
+                ValueBlock valueBlock = new ValueBlock(blockSpec, blockPane) {
+                    @Override
+                    public void onMousePressed(MouseEvent mouseEvent) {
+                        //super.onMousePressed(mouseEvent);
+                        System.out.println("Mouse Entered on Click Me Two");
+                        ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                        ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                        Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+//                System.out.println("scene"+mouseEvent.getSceneX()+mouseEvent.getSceneY());
+//                System.out.println("scenetoLocal"+scenePoint.getX()+scenePoint.getY());
+//                System.out.println("mouse"+mouseEvent.getX()+mouseEvent.getY());
+                        valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                        valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
 
+                        if (robot != null) {
+
+                            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                            robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                            robot.delay(50);
+                            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                        }
+
+                    }
+
+                    @Override
+                    public void onMouseDragged(MouseEvent mouseEvent) {
+
+                    }
+
+                };
+                selectedOperatorsPane.getChildren().add(valueBlock);
+            }
+        }catch(Exception e){e.printStackTrace();}
+
+    }
+
+    private BlockSpec blockSpecBuilder(String title,String name){
+        BlockSpec blockSpec = new BlockSpec();
+        blockSpec.title = title;
+        blockSpec.name = name;
+        blockSpec.type = "";
+        blockSpec.field = new String[0];
+        blockSpec.code = new BlockSpec.BlockSpecCode();
+        blockSpec.code.inc = "";
+        blockSpec.code.def = "";
+        blockSpec.code.setup = "";
+        blockSpec.code.work = "";
+        blockSpec.code.loop = "";
+        return blockSpec;
     }
 }

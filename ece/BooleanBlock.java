@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 public class BooleanBlock extends Block {
     protected StackPane selectedStackPane = null;
-    public BooleanBlock(String arg, String blockName,Pane drawingPane) {
-        super(arg,blockName,drawingPane);
+    public BooleanBlock(BlockSpec blockSpec,Pane drawingPane) {
+        super(blockSpec,drawingPane);
         this.setAlignment(Pos.CENTER_LEFT);
 
         reShape();

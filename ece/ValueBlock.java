@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 public class ValueBlock extends Block {
     protected StackPane selectedStackPane = null;
-    public ValueBlock(String arg, String blockName,Pane drawingPane) {
-        super(arg,blockName,drawingPane);
+    public ValueBlock(BlockSpec blockSpec,Pane drawingPane) {
+        super(blockSpec,drawingPane);
         this.setAlignment(Pos.CENTER_LEFT);
 
         reShape();

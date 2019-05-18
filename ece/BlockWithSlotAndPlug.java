@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
     public PointBlockPair<BlockWithPlug> slot = new PointBlockPair<>(new Point2D(25,0),null);
 
-    public BlockWithSlotAndPlug(String arg, String blockName, Pane drawingPane, int plugCount){
-        super(arg, blockName,drawingPane,plugCount);
+    public BlockWithSlotAndPlug(BlockSpec blockSpec, Pane drawingPane, int plugCount){
+        super(blockSpec,drawingPane,plugCount);
         this.heightProperty().removeListener(this.sizeChangeListener);
         this.heightProperty().addListener(observable -> {
             reShape();
