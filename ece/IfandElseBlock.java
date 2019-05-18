@@ -45,11 +45,13 @@ public class IfandElseBlock extends BlockWithSlotAndPlug {
         BlockWithSlotAndPlug blockWithSlotAndPlug = this.plugs.get(1).getBlock();
         while(blockWithSlotAndPlug!=null){
             containedBlockHeight1+=blockWithSlotAndPlug.getHeight();
+            if(blockWithSlotAndPlug instanceof ForeverLoopBlock)break;
             blockWithSlotAndPlug = blockWithSlotAndPlug.plugs.get(0).getBlock();
         }
         blockWithSlotAndPlug=this.plugs.get(2).getBlock();
         while(blockWithSlotAndPlug!=null){
             containedBlockHeight2+=blockWithSlotAndPlug.getHeight();
+            if(blockWithSlotAndPlug instanceof ForeverLoopBlock)break;
             blockWithSlotAndPlug = blockWithSlotAndPlug.plugs.get(0).getBlock();
         }
         if(containedBlockHeight1!=0)

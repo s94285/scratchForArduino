@@ -1,0 +1,17 @@
+[
+  {
+    "name": "If then",
+    "type": "w",
+    "title": "If      %n      then",
+    "field": [
+      "0"
+    ],
+    "code": {
+      "inc": "include",
+      "def": "define",
+      "setup": "setup",
+      "work": "work",
+      "loop": "loop"
+    }
+  }
+]

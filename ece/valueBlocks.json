@@ -30,5 +30,37 @@
       "work": "work",
       "loop": "loop"
     }
+  },
+  {
+    "name": "multiplication",
+    "type": "r",
+    "title": "%n * %n",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "include",
+      "def": "define",
+      "setup": "setup",
+      "work": "work",
+      "loop": "loop"
+    }
+  },
+  {
+    "name": "divide",
+    "type": "r",
+    "title": "%n / %n",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "include",
+      "def": "define",
+      "setup": "setup",
+      "work": "work",
+      "loop": "loop"
+    }
   }
 ]

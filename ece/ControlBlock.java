@@ -33,6 +33,7 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
         BlockWithSlotAndPlug blockWithSlotAndPlug = this.plugs.get(1).getBlock();
         while(blockWithSlotAndPlug!=null){
             containedBlockHeight+=blockWithSlotAndPlug.getHeight();
+            if(blockWithSlotAndPlug instanceof ForeverLoopBlock)break;
             blockWithSlotAndPlug = blockWithSlotAndPlug.plugs.get(0).getBlock();
         }
         if(containedBlockHeight!=0)
