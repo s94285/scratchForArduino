@@ -155,7 +155,7 @@ public abstract class Block extends VBox {
     public String getBlockName(){return blockName;}
     public HBox getTitlePane(){return titlePane;}
     public abstract void reShape();
-
+    public abstract void generateCode(Code code);
     public BlockSpec getBlockSpec() {
         return blockSpec;
     }

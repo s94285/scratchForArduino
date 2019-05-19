@@ -1,17 +1,75 @@
 [
   {
-    "name": "If then",
-    "type": "w",
+    "name": "if then",
+    "type": "one block",
     "title": "If      %n      then",
     "field": [
       "0"
     ],
     "code": {
-      "inc": "include",
-      "def": "define",
-      "setup": "setup",
-      "work": "work",
-      "loop": "loop"
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "if({0})",
+      "loop": ""
+    }
+  },
+  {
+    "name": "forever loop",
+    "type": "loop",
+    "title": "forever",
+    "field": [],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "",
+      "loop": ""
+    }
+  },
+  {
+    "name": "repeat",
+    "type": "one block",
+    "title": "repeat %n",
+    "field": [
+      "0"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "for(int _i=0;_i<({0});_i++)",
+      "loop": ""
+    }
+  },
+  {
+    "name": "repeat until",
+    "type": "one block",
+    "title": "repeat until %n",
+    "field": [
+      "0"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "while(!({0}))",
+      "loop": ""
+    }
+  },
+  {
+    "name": "if else",
+    "type": "two block",
+    "title": "if    %n   then",
+    "field": [
+      "0"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "if({0})",
+      "loop": ""
     }
   }
 ]

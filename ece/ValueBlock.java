@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -39,6 +40,30 @@ public class ValueBlock extends Block {
         path.getElements().addAll(moveTo, arcTo1, lineTo1, arcTo2, new ClosePath());
         this.setShape(path);
     }
+
+    @Override
+    public void generateCode(Code code) {
+        ArrayList<StackPane> allStackPanes = new ArrayList<>();
+        //get all stackPanes
+        for(Node node:titlePane.getChildren())
+            if(node instanceof StackPane)
+                allStackPanes.add((StackPane)node);
+        String[] workString = this.blockSpec.code.work.split("\\{[0-9]+}");
+        code.code.append(workString[0]);
+        for(int i=1;i<workString.length;i++){
+            StackPane stackPane = allStackPanes.get(i-1);
+            if(stackPane.getChildren().size()>1){
+                //has inner block
+                ((Block)stackPane.getChildren().get(1)).generateCode(code);
+            }else{
+                code.code.append(((TextField)stackPane.getChildren().get(0)).getText());
+            }
+            code.code.append(workString[i]);
+        }
+        code.define.add(blockSpec.code.def);
+        code.include.add(blockSpec.code.inc);
+    }
+
     private ArrayList<StackPane> getStackPanes(Pane pane){
         ArrayList<StackPane> list = new ArrayList<>();
         for(Node nodeInPane : pane.getChildren()){

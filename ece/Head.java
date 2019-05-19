@@ -57,4 +57,11 @@ public class Head extends BlockWithPlug {
 //        this.plugs.set(0,new Pair<>(new Point2D(25,getHeight()),this.plugs.get(0).getValue()));
         super.reShape();
     }
+
+    @Override
+    public void generateCode(Code code) {
+        if(this.plugs.get(0).getBlock()!=null && !(this.plugs.get(0).getBlock() instanceof ForeverLoopBlock)){
+            this.plugs.get(0).getBlock().generateCode(code);
+        }
+    }
 }

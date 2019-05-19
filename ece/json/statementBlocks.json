@@ -8,11 +8,11 @@
       "1"
     ],
     "code": {
-      "inc": "include",
-      "def": "define",
-      "setup": "setup",
-      "work": "work",
-      "loop": "loop"
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "digitalWrite({0},{1});\n",
+      "loop": ""
     }
   }
 ]

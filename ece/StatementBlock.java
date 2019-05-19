@@ -2,12 +2,13 @@ package ece;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+
+import java.util.ArrayList;
 
 public class StatementBlock extends BlockWithSlotAndPlug {
     public StatementBlock(BlockSpec blockSpec, Pane drawingPane) {
@@ -39,4 +40,29 @@ public class StatementBlock extends BlockWithSlotAndPlug {
         super.reShape();
     }
 
+    @Override
+    public void generateCode(Code code) {
+        ArrayList<StackPane> allStackPanes = new ArrayList<>();
+        //get all stackPanes
+        for(Node node:titlePane.getChildren())
+            if(node instanceof StackPane)
+                allStackPanes.add((StackPane)node);
+        String[] workString = this.blockSpec.code.work.split("\\{[0-9]+}");
+        code.code.append(workString[0]);
+        for(int i=1;i<workString.length;i++){
+            StackPane stackPane = allStackPanes.get(i-1);
+            if(stackPane.getChildren().size()>1){
+                //has inner block
+                ((Block)stackPane.getChildren().get(1)).generateCode(code);
+            }else{
+                code.code.append(((TextField)stackPane.getChildren().get(0)).getText());
+            }
+            code.code.append(workString[i]);
+        }
+        code.define.add(blockSpec.code.def);
+        code.include.add(blockSpec.code.inc);
+        if(this.plugs.get(0).getBlock()!=null && !(this.plugs.get(0).getBlock() instanceof ForeverLoopBlock)){
+            this.plugs.get(0).getBlock().generateCode(code);
+        }
+    }
 }
