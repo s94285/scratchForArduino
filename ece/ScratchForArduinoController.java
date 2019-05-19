@@ -157,7 +157,7 @@ public class ScratchForArduinoController {
         //value blocks
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("valueBlocks.json").toURI()), BlockSpec[].class));
+            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("json/valueBlocks.json").toURI()), BlockSpec[].class));
             for(BlockSpec blockSpec : blockSpecList) {
                 System.out.println(blockSpec);
                 ValueBlock valueBlock = new ValueBlock(blockSpec, blockPane) {
@@ -196,7 +196,7 @@ public class ScratchForArduinoController {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("statementBlocks.json").toURI()), BlockSpec[].class));
+            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("json/statementBlocks.json").toURI()), BlockSpec[].class));
             for(BlockSpec blockSpec : blockSpecList) {
                 System.out.println(blockSpec);
                 StatementBlock statementBlock = new StatementBlock(blockSpec, blockPane) {
@@ -234,7 +234,7 @@ public class ScratchForArduinoController {
         }catch(Exception e){e.printStackTrace();}
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("controlBlocks.json").toURI()), BlockSpec[].class));
+            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("json/controlBlocks.json").toURI()), BlockSpec[].class));
             for(BlockSpec blockSpec : blockSpecList) {
                 System.out.println(blockSpec);
                 ControlBlock controlBlock = new ControlBlock(blockSpec, blockPane) {
