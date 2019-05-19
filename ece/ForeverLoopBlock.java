@@ -24,7 +24,7 @@ public class ForeverLoopBlock extends BlockWithSlotAndPlug {
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
         super.onMouseReleased(mouseEvent);
-        reShape();
+        reShape();      //for reshape after plug to others
     }
 
     @Override
@@ -40,6 +40,7 @@ public class ForeverLoopBlock extends BlockWithSlotAndPlug {
             containedBlockHeight-=5;
 //        System.out.println("old: " + containedBlockHeight + " , " + getHeight());
         this.setPadding(new Insets(0,0,36+containedBlockHeight,5));
+        this.autosize();        //force height computation
         System.out.println("new: " + containedBlockHeight + " , " + getHeight());
         Path path = new Path();
         MoveTo moveTo = new MoveTo();
@@ -67,15 +68,5 @@ public class ForeverLoopBlock extends BlockWithSlotAndPlug {
         //this.plugs.get(0).setPoint2D(new Point2D(25,getHeight()));      //lowest plug
         this.plugs.get(0).setPoint2D(new Point2D(43,getHeight()-32-containedBlockHeight));      //inner plug
         super.reShape();
-
-
-//        Rectangle dummy = new Rectangle();
-//        this.getChildren().add(dummy);
-//        this.getChildren().remove(dummy);
-        int myIndex = drawingPane.getChildren().indexOf(this);
-        if(myIndex>0){
-            drawingPane.getChildren().remove(this);
-            drawingPane.getChildren().add(myIndex,this);
-        }
     }
 }

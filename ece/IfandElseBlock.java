@@ -35,7 +35,7 @@ public class IfandElseBlock extends BlockWithSlotAndPlug {
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
         super.onMouseReleased(mouseEvent);
-        reShape();
+        reShape();  //for reshape after plug to others
     }
 
     @Override
@@ -62,10 +62,8 @@ public class IfandElseBlock extends BlockWithSlotAndPlug {
         blankPane.setPrefWidth(10);
 //        System.out.println("old: " + containedBlockHeight2 + " , " + getHeight());
         this.setPadding(new Insets(0,0,70+containedBlockHeight1-22-TITLEPANE_TO_LABELELSE,5));
-//        this.applyCss();
-//        this.layout();
-//        this.setPrefHeight(USE_COMPUTED_SIZE);
-        System.out.println("new: " + containedBlockHeight1 + " , " + containedBlockHeight2);
+        this.autosize();
+//        System.out.println("new: " + containedBlockHeight1 + " , " + containedBlockHeight2);
         Path path = new Path();
         MoveTo moveTo = new MoveTo();
         moveTo.setX(0);
@@ -105,15 +103,5 @@ public class IfandElseBlock extends BlockWithSlotAndPlug {
         this.plugs.get(1).setPoint2D(new Point2D(43,getHeight()-32-containedBlockHeight1));      //inner plug
         this.plugs.get(2).setPoint2D(new Point2D(43,getHeight()-66-containedBlockHeight2-containedBlockHeight1));
         super.reShape();
-
-
-//        Rectangle dummy = new Rectangle();
-//        this.getChildren().add(dummy);
-//        this.getChildren().remove(dummy);
-        int myIndex = drawingPane.getChildren().indexOf(this);
-        if(myIndex>0){
-            drawingPane.getChildren().remove(this);
-            drawingPane.getChildren().add(myIndex,this);
-        }
     }
 }

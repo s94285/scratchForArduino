@@ -24,7 +24,7 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
         super.onMouseReleased(mouseEvent);
-        reShape();
+        reShape();      //for reshape after plug to others
     }
 
     @Override
@@ -40,10 +40,8 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
             containedBlockHeight-=5;
 //        System.out.println("old: " + containedBlockHeight + " , " + getHeight());
         this.setPadding(new Insets(0,0,36+containedBlockHeight,5));
-//        this.applyCss();
-//        this.layout();
-//        this.setPrefHeight(USE_COMPUTED_SIZE);
-        System.out.println("new: " + containedBlockHeight + " , " + getHeight());
+        this.autosize();        //force height computation
+//        System.out.println("new: " + containedBlockHeight + " , " + getHeight());
         Path path = new Path();
         MoveTo moveTo = new MoveTo();
         moveTo.setX(0);
@@ -74,10 +72,5 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
         this.plugs.get(0).setPoint2D(new Point2D(25,getHeight()));      //lowest plug
         this.plugs.get(1).setPoint2D(new Point2D(43,getHeight()-32-containedBlockHeight));      //inner plug
         super.reShape();
-        int myIndex = drawingPane.getChildren().indexOf(this);
-        if(myIndex>0){
-            drawingPane.getChildren().remove(this);
-            drawingPane.getChildren().add(myIndex,this);
-        }
     }
 }
