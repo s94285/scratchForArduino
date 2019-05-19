@@ -88,44 +88,31 @@ public abstract class Block extends VBox {
                         stackPane.getChildren().add(textField);
                         break;
                     }
-                    case 's':
+                    case 's':{
+                        TextField textField = new TextField(" ");
+                        textField.setAlignment(Pos.CENTER);
+                        textField.setPrefColumnCount(1);
+                        textField.setFont(new Font(14));
+                        textField.setPadding(new Insets(0,2,0,2));
+                        textField.textProperty().addListener((observableValue, oldValue, newValue) -> {
+                            System.out.println(newValue.length());
+                            Text text = new Text(newValue);
+                            double width = text.getLayoutBounds().getWidth()*1.17 // This big is the Text in the TextField
+                                    + textField.getPadding().getLeft() + textField.getPadding().getRight() // Add the padding of the TextField
+                                    + 2d; // Add some spacing
+                            textField.setPrefWidth(width+1); // Set the width
+                            textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
+                        });
+                        stackPane.getChildren().add(textField);
                         break;
+                    }
                     case 'b':{
                         TextField textField = new TextField(" ");
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
                         textField.setFont(new Font(14));
                         textField.setPadding(new Insets(0,2,0,2));
-//                        textField.textProperty().addListener((observableValue, oldValue, newValue) -> {
-//                            System.out.println(newValue.length());
-//                            Text text = new Text(newValue);
-//                            double width = text.getLayoutBounds().getWidth()*1.17 // This big is the Text in the TextField
-//                                    + textField.getPadding().getLeft() + textField.getPadding().getRight() // Add the padding of the TextField
-//                                    + 2d; // Add some spacing
-//                            textField.setPrefWidth(width+1); // Set the width
-//                            textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
-//                        });
-
                         textField.setShape(new Circle(5));
-//                        textField.textProperty().addListener((observableValue, oldValue, newValue)->{
-//                            if(!newValue.matches("\\d*")){
-//                                textField.setText(oldValue);
-//                            }
-//                            Path path = new Path();
-//                            MoveTo moveTo = new MoveTo();
-//                            moveTo.setX(12);
-//                            moveTo.setY(getHeight());
-//                            ArcTo arcTo1 = new ArcTo();
-//                            arcTo1.setX(12);
-//                            arcTo1.setY(0);
-//                            arcTo1.setRadiusX(12);
-//                            arcTo1.setRadiusY(getHeight()/2);
-//                            arcTo1.setSweepFlag(true);
-//                            LineTo lineTo1 = new LineTo(getWidth()-12, 0);
-//                            ArcTo arcTo2 = new ArcTo(12, getHeight()/2, 0,getWidth()-12 , getHeight(), false, true);
-//                            path.getElements().addAll(moveTo, arcTo1, lineTo1, arcTo2, new ClosePath());
-//                            textField.setShape(path);
-//                        });
                         textField.setEditable(false);
                         textField.setFocusTraversable(false);
                         textField.setMouseTransparent(true);

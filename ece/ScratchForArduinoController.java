@@ -57,7 +57,8 @@ public class ScratchForArduinoController {
 //        codeArea.setEditable(false);
         codeArea.setFont(new Font("consolas",17));
         initializeBlocks();     //add blocks to left pane
-        drawingPane.setOnMouseReleased(this::refreshCode);
+        drawingPane.setOnMouseReleased(mouseEvent -> refreshCode());
+        drawingPane.setOnKeyReleased(keyEvent -> refreshCode());
         //finish interface initialize
 
         Head block1 = new Head(blockSpecBuilder("Arduino Program","headBlock"),drawingPane);
@@ -308,7 +309,7 @@ public class ScratchForArduinoController {
         return blockSpec;
     }
 
-    private void refreshCode(MouseEvent event){
+    private void refreshCode(){
         Code code = new Code();
         String loop="",workInSetup;
         StringBuilder setup = new StringBuilder();

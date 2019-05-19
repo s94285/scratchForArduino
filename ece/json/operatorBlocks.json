@@ -75,7 +75,87 @@
       "inc": "",
       "def": "",
       "setup": "",
-      "work": "({0})/({1})",
+      "work": "({0})&&({1})",
+      "loop": ""
+    }
+  },
+  {
+    "name": "or",
+    "type": "b",
+    "title": "%b or %b",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "({0})||({1})",
+      "loop": ""
+    }
+  },
+  {
+    "name": "not",
+    "type": "b",
+    "title": "not %b",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "!({0})",
+      "loop": ""
+    }
+  },
+  {
+    "name": "larger then",
+    "type": "b",
+    "title": "%s > %s",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "({0})>({1})",
+      "loop": ""
+    }
+  },
+  {
+    "name": "equal to",
+    "type": "b",
+    "title": "%s = %s",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "({0})=({1})",
+      "loop": ""
+    }
+  },
+  {
+    "name": "less then",
+    "type": "b",
+    "title": "%s < %s",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "({0})<({1})",
       "loop": ""
     }
   }
