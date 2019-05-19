@@ -19,6 +19,7 @@ public class StatementBlock extends BlockWithSlotAndPlug {
 
     @Override
     public void reShape() {
+        autosize();
         Path path = new Path();
         MoveTo moveTo = new MoveTo();
         moveTo.setX(0);

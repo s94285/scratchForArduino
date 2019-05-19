@@ -11,6 +11,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -74,49 +75,86 @@ public class ScratchForArduinoController {
     }
 
     private void initializeBlocks(){
-        //value blocks
+        //operators blocks
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("json/valueBlocks.json").toURI()), BlockSpec[].class));
+            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("json/operatorBlocks.json").toURI()), BlockSpec[].class));
             for(BlockSpec blockSpec : blockSpecList) {
                 System.out.println(blockSpec);
-                ValueBlock valueBlock = new ValueBlock(blockSpec, blockPane) {
-                    @Override
-                    public void onMousePressed(MouseEvent mouseEvent) {
-                        //super.onMousePressed(mouseEvent);
-                        System.out.println("Mouse Entered on Click Me Two");
-                        ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
-                        ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
-                        Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                Block newBlock = null;
+                switch(blockSpec.type){
+                    case "r":
+                        newBlock = new ValueBlock(blockSpec, blockPane) {
+                            @Override
+                            public void onMousePressed(MouseEvent mouseEvent) {
+                                //super.onMousePressed(mouseEvent);
+                                System.out.println("Mouse Entered on Click Me Two");
+                                ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                                ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                                Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
 //                System.out.println("scene"+mouseEvent.getSceneX()+mouseEvent.getSceneY());
 //                System.out.println("scenetoLocal"+scenePoint.getX()+scenePoint.getY());
 //                System.out.println("mouse"+mouseEvent.getX()+mouseEvent.getY());
-                        valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
-                        valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+                                valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                                valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
 
-                        if (robot != null) {
+                                if (robot != null) {
 
-                            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-                            robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                            robot.delay(50);
-                            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-                        }
+                                    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                                    robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                                    robot.delay(50);
+                                    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                                }
 
-                    }
+                            }
 
-                    @Override
-                    public void onMouseDragged(MouseEvent mouseEvent) {
+                            @Override
+                            public void onMouseDragged(MouseEvent mouseEvent) {
 
-                    }
+                            }
 
-                };
-                selectedOperatorsPane.getChildren().add(valueBlock);
+                        };
+                        break;
+                    case "b":
+                        newBlock = new BooleanBlock(blockSpec, blockPane) {
+                            @Override
+                            public void onMousePressed(MouseEvent mouseEvent) {
+                                //super.onMousePressed(mouseEvent);
+                                System.out.println("Mouse Entered on Click Me Two");
+                                BooleanBlock valueBlock1 = new BooleanBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                                ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                                Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+//                System.out.println("scene"+mouseEvent.getSceneX()+mouseEvent.getSceneY());
+//                System.out.println("scenetoLocal"+scenePoint.getX()+scenePoint.getY());
+//                System.out.println("mouse"+mouseEvent.getX()+mouseEvent.getY());
+                                valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                                valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+
+                                if (robot != null) {
+
+                                    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                                    robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                                    robot.delay(50);
+                                    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                                }
+
+                            }
+
+                            @Override
+                            public void onMouseDragged(MouseEvent mouseEvent) {
+
+                            }
+
+                        };
+                        break;
+                }
+                selectedOperatorsPane.getChildren().add(newBlock);
             }
         }catch(Exception e){e.printStackTrace();}
-
+        //statements blocks
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("json/statementBlocks.json").toURI()), BlockSpec[].class));
+            List<BlockSpec> blockSpecList = Arrays.asList(objectMapper.readValue(new File(getClass().getResource("json/arduinoBlocks.json").toURI()), BlockSpec[].class));
             for(BlockSpec blockSpec : blockSpecList) {
                 System.out.println(blockSpec);
                 StatementBlock statementBlock = new StatementBlock(blockSpec, blockPane) {

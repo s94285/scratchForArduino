@@ -21,10 +21,12 @@ public class ValueBlock extends Block {
         this.setAlignment(Pos.CENTER_LEFT);
 
         reShape();
+
         this.setBackground(new Background(new BackgroundFill(Color.rgb(92, 183, 18), CornerRadii.EMPTY, Insets.EMPTY)));
     }
     @Override
     public void reShape() {
+        autosize();
         Path path = new Path();
         MoveTo moveTo = new MoveTo();
         moveTo.setX(12);
@@ -92,7 +94,8 @@ public class ValueBlock extends Block {
                         if(stackPane.getChildren().size()>1){
                             list.addAll(getStackPanes(stackPane));
                         }else{
-                            list.add(stackPane);
+                            if(((TextField)stackPane.getChildren().get(0)).editableProperty().getValue())
+                                list.add(stackPane);
                         }
                     }
                 }

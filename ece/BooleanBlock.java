@@ -25,6 +25,7 @@ public class BooleanBlock extends Block {
     }
     @Override
     public void reShape() {
+        autosize();
         Path path = new Path();
         MoveTo moveTo = new MoveTo();
         moveTo.setX(0);
@@ -57,6 +58,22 @@ public class BooleanBlock extends Block {
             }
             code.code.append(workString[i]);
         }
+        String[] setupString = this.blockSpec.code.setup.split("\\{[0-9]+}");
+        StringBuilder setup = new StringBuilder();
+        setup.append(setupString[0]);
+        for(int i=1;i<setupString.length;i++){
+            StackPane stackPane = allStackPanes.get(i-1);
+            if(stackPane.getChildren().size()>1){
+                //has inner block
+                Code tmpCode = new Code();
+                ((Block)stackPane.getChildren().get(1)).generateCode(tmpCode);
+                setup.append(tmpCode.code);
+            }else{
+                setup.append(((TextField)stackPane.getChildren().get(0)).getText());
+            }
+            setup.append(setupString[i]);
+        }
+        code.setup.add(setup.toString());
         code.define.add(blockSpec.code.def);
         code.include.add(blockSpec.code.inc);
     }
