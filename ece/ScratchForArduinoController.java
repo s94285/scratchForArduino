@@ -18,6 +18,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.awt.event.InputEvent;
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class ScratchForArduinoController {
@@ -259,8 +260,7 @@ public class ScratchForArduinoController {
         blockSpec.title = title;
         blockSpec.name = name;
         blockSpec.type = "";
-        blockSpec.field = new String[0
-                ];
+        blockSpec.field = new String[0];
         blockSpec.code = new BlockSpec.BlockSpecCode();
         blockSpec.code.inc = "";
         blockSpec.code.def = "";
@@ -272,7 +272,9 @@ public class ScratchForArduinoController {
 
     private void refreshCode(MouseEvent event){
         Code code = new Code();
-        String setup="",loop="";
+        String loop="",workInSetup;
+        StringBuilder setup = new StringBuilder();
+        HashSet<String> setupSet = new HashSet<>();
         Head headBlock = null;
         for(Node node : drawingPane.getChildren())
             if(node instanceof Head){
@@ -281,7 +283,8 @@ public class ScratchForArduinoController {
             }
         if(headBlock==null)return;
         headBlock.generateCode(code);
-        setup = code.code.toString();
+        setupSet.addAll(code.setup);
+        workInSetup = code.code.toString();
 
         //find foreverloopblock
         ForeverLoopBlock foreverLoopBlock = null;
@@ -299,15 +302,19 @@ public class ScratchForArduinoController {
             foreverLoopBlock.generateCode(code);
             loop = code.code.toString();
         }
+        setupSet.addAll(code.setup);
+        for(String s:setupSet)
+            setup.append(s);
+        setup.append(workInSetup);
 
         StringBuilder str = new StringBuilder();
         str.append("#include <Arduino.h>\n" +
                 "#include <Wire.h>\n" +
                 "#include <SoftwareSerial.h>\n");
-        for(String s : code.include)
-            str.append(s);
-        for(String s : code.define)
-            str.append(s);
+//        for(String s : code.include)
+//            str.append(s);
+//        for(String s : code.define)
+//            str.append(s);
         str.append("\nvoid setup(){\n");
         str.append(setup);
         str.append("}\n\nvoid loop(){\n");

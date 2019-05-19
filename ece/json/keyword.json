@@ -1,0 +1,16 @@
+{
+  "red": [
+    "#include",
+    "void",
+    "double",
+    "int"
+  ],
+  "yellow": [
+    "setup",
+    "loop",
+    "while",
+    "if",
+    "else",
+    "for"
+  ]
+}

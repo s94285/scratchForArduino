@@ -10,7 +10,7 @@
     "code": {
       "inc": "",
       "def": "",
-      "setup": "",
+      "setup": "pinMode({0},OUTPUT);\n",
       "work": "digitalWrite({0},{1});\n",
       "loop": ""
     }

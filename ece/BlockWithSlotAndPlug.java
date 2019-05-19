@@ -109,10 +109,4 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
             }
         }
     }
-
-    @Override
-    public void reAllocate() {
-        super.reAllocate();
-
-    }
 }

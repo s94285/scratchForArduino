@@ -48,6 +48,7 @@ public class StatementBlock extends BlockWithSlotAndPlug {
             if(node instanceof StackPane)
                 allStackPanes.add((StackPane)node);
         String[] workString = this.blockSpec.code.work.split("\\{[0-9]+}");
+
         code.code.append(workString[0]);
         for(int i=1;i<workString.length;i++){
             StackPane stackPane = allStackPanes.get(i-1);
@@ -59,8 +60,25 @@ public class StatementBlock extends BlockWithSlotAndPlug {
             }
             code.code.append(workString[i]);
         }
+
+        String[] setupString = this.blockSpec.code.setup.split("\\{[0-9]+}");
+        StringBuilder setup = new StringBuilder();
+        setup.append(setupString[0]);
+        for(int i=1;i<setupString.length;i++){
+            StackPane stackPane = allStackPanes.get(i-1);
+            if(stackPane.getChildren().size()>1){
+                //has inner block
+                Code tmpCode = new Code();
+                ((Block)stackPane.getChildren().get(1)).generateCode(tmpCode);
+                setup.append(tmpCode.code);
+            }else{
+                setup.append(((TextField)stackPane.getChildren().get(0)).getText());
+            }
+            setup.append(setupString[i]);
+        }
         code.define.add(blockSpec.code.def);
         code.include.add(blockSpec.code.inc);
+        code.setup.add(setup.toString());
         if(this.plugs.get(0).getBlock()!=null && !(this.plugs.get(0).getBlock() instanceof ForeverLoopBlock)){
             this.plugs.get(0).getBlock().generateCode(code);
         }
