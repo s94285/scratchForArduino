@@ -62,5 +62,85 @@
       "work": "analogWrite({0},{1});\n",
       "loop": ""
     }
+  },
+  {
+    "name": "play tone",
+    "type": "w",
+    "title": "play tone pin %n on note %n beat %n",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "pinMode({0},OUTPUT);\n",
+      "work": "tone({0},{1},{2});\n",
+      "loop": ""
+    }
+  },
+  {
+    "name": "set servo",
+    "type": "w",
+    "title": "set servo pin %n angle as %n",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "#include <Servo.h>\n",
+      "def": "Servo servo_{0};\n",
+      "setup": "servo_{0}.attach({0});\n",
+      "work": "servo_{0}.write({1});\n",
+      "loop": ""
+    }
+  },
+  {
+    "name": "serial write",
+    "type": "w",
+    "title": "serial write text %s",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "Serial.begin(115200);\n",
+      "work": "Serial.println({0});\n",
+      "loop": ""
+    }
+  },
+  {
+    "name": "serial available",
+    "type": "r",
+    "title": "serial available bytes",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "Serial.begin(115200);\n",
+      "work": "Serial.available()",
+      "loop": ""
+    }
+  },
+  {
+    "name": "serial read",
+    "type": "r",
+    "title": "serial read bytes",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "Serial.begin(115200);\n",
+      "work": "Serial.read()",
+      "loop": ""
+    }
   }
 ]

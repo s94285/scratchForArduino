@@ -45,7 +45,7 @@
   {
     "name": "repeat until",
     "type": "one block",
-    "title": "repeat until %n",
+    "title": "repeat until %b",
     "field": [
       "0"
     ],

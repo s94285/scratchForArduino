@@ -158,5 +158,21 @@
       "work": "({0})<({1})",
       "loop": ""
     }
+  },
+  {
+    "name": "join string",
+    "type": "r",
+    "title": "join %s %s",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "String({0})+String({1})",
+      "loop": ""
+    }
   }
 ]
