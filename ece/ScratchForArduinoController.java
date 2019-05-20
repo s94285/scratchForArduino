@@ -9,10 +9,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Pair;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -97,6 +95,8 @@ public class ScratchForArduinoController {
                                     //super.onMousePressed(mouseEvent);
                                     System.out.println("Mouse Entered on Click Me Two");
                                     ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                                    if(stringPanePair.getValue() == selectedArduinoPane)
+                                        valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(10,134,152), CornerRadii.EMPTY, Insets.EMPTY)));
                                     ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
                                     Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
                                     valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
@@ -111,6 +111,8 @@ public class ScratchForArduinoController {
                                 @Override
                                 public void onMouseDragged(MouseEvent mouseEvent) {}
                             };
+                            if(stringPanePair.getValue() == selectedArduinoPane)
+                                newBlock.setBackground(new Background(new BackgroundFill(Color.rgb(10,134,152), CornerRadii.EMPTY, Insets.EMPTY)));
                             break;
                         case "b":
                             newBlock = new BooleanBlock(blockSpec, blockPane) {
@@ -119,6 +121,8 @@ public class ScratchForArduinoController {
                                     //super.onMousePressed(mouseEvent);
                                     System.out.println("Mouse Entered on Click Me Two");
                                     BooleanBlock valueBlock1 = new BooleanBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                                    if(stringPanePair.getValue() == selectedArduinoPane)
+                                        valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(10,134,152), CornerRadii.EMPTY, Insets.EMPTY)));
                                     ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
                                     Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
                                     valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
@@ -133,6 +137,8 @@ public class ScratchForArduinoController {
                                 @Override
                                 public void onMouseDragged(MouseEvent mouseEvent) {}
                             };
+                            if(stringPanePair.getValue() == selectedArduinoPane)
+                                newBlock.setBackground(new Background(new BackgroundFill(Color.rgb(10,134,152), CornerRadii.EMPTY, Insets.EMPTY)));
                             break;
                         case "w":
                             newBlock = new StatementBlock(blockSpec, blockPane) {

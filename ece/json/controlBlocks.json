@@ -2,7 +2,7 @@
   {
     "name": "if then",
     "type": "one block",
-    "title": "If      %n      then",
+    "title": "If      %b      then",
     "field": [
       "0"
     ],
@@ -60,7 +60,7 @@
   {
     "name": "if else",
     "type": "two block",
-    "title": "if    %n   then",
+    "title": "if    %b   then",
     "field": [
       "0"
     ],

@@ -14,5 +14,53 @@
       "work": "digitalWrite({0},{1});\n",
       "loop": ""
     }
+  },
+  {
+    "name": "read digital pin ",
+    "type": "b",
+    "title": "read digital pin %n",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "pinMode({0},INPUT);\n",
+      "work": "digitalRead({0})",
+      "loop": ""
+    }
+  },
+  {
+    "name": "read analog pin",
+    "type": "r",
+    "title": "read analog pin (A) %n",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "pinMode(A0+{0},INPUT);\n",
+      "work": "analogRead(A0+{0})",
+      "loop": ""
+    }
+  },
+  {
+    "name": "set pwm pin output as",
+    "type": "w",
+    "title": "set pwm pin %n output as %n",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "pinMode({0},OUTPUT);\n",
+      "work": "analogWrite({0},{1});\n",
+      "loop": ""
+    }
   }
 ]
