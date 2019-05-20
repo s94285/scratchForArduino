@@ -74,7 +74,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
 //                    System.out.println("Plug Pos: " + plugs.get(i).getKey());
                     if(this.localToScene(slot.getPoint2D()).distance(slotPoint2D)<15){
                         System.out.println("Found");
-                        if(plug.getBlock()!=null){
+                        if(plug.getBlock()!=null && plug.getBlock()!=this){
                             //get my lowest block's plug
                             BlockWithPlug lowest = this;
                             while(lowest.plugs.get(0).getBlock()!=null){
