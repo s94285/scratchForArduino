@@ -169,8 +169,8 @@ public abstract class Block extends VBox {
 //        System.out.println("Mouse Dragged x:"+nowlayoutx+"y"+nowlayouty);
     }
     public void onMouseReleased(MouseEvent mouseEvent){
-        //Do nothing
-        if(this.getLayoutX()+mouseEvent.getX()<0){
+        //Remove this block if not head
+        if(this.getLayoutX()+mouseEvent.getX()<0 && !(this instanceof Head)){
             Pane myParent = (Pane) this.getParent();
             myParent.getChildren().remove(this);
         }
