@@ -139,6 +139,7 @@ public class BooleanBlock extends Block {
             } else {
 
                 stackPane.setEffect(null);
+                stackPane.getChildren().get(0).setVisible(true);
                 selectedStackPane = null;
             }
         }
@@ -150,7 +151,7 @@ public class BooleanBlock extends Block {
         if(selectedStackPane != null){
 //            System.out.println("selectedStackPane");
             try {
-
+                selectedStackPane.getChildren().get(0).setVisible(false);
                 selectedStackPane.getChildren().add(this);
                 selectedStackPane.setEffect(null);
             }catch (Exception e){

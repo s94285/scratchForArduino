@@ -112,7 +112,7 @@ public abstract class Block extends VBox {
                         textField.setPrefColumnCount(1);
                         textField.setFont(new Font(14));
                         textField.setPadding(new Insets(0,2,0,2));
-                        textField.setShape(new Circle(5));
+                        textField.setShape(new Polygon(0,6,6,0,30,0,36,6,30,12,6,12));
                         textField.setEditable(false);
                         textField.setFocusTraversable(false);
                         textField.setMouseTransparent(true);
