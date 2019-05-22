@@ -113,6 +113,7 @@ public class BooleanBlock extends Block {
             Point2D blockScenePoint = this.localToScene(0,0);
             //System.out.println("test");
             //System.out.println(blockScenePoint);
+            this.getParent().getChildrenUnmodifiable().get(0).setVisible(true);
             drawingPane.getChildren().add(this);
             this.relocate(drawingPane.sceneToLocal(blockScenePoint).getX(),drawingPane.sceneToLocal(blockScenePoint).getY());
             System.out.println(this.getLayoutX() + " " + this.getLayoutY());
@@ -139,7 +140,7 @@ public class BooleanBlock extends Block {
             } else {
 
                 stackPane.setEffect(null);
-                stackPane.getChildren().get(0).setVisible(true);
+//                stackPane.getChildren().get(0).setVisible(true);
                 selectedStackPane = null;
             }
         }
