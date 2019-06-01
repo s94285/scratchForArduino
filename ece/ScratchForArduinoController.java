@@ -19,12 +19,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
 import javafx.util.Pair;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -374,5 +377,39 @@ public class ScratchForArduinoController {
 
         codeArea.setText(result.toString());
         System.out.println("Refresh Code");
+    }
+
+    @FXML
+    public void openFile(ActionEvent event){
+//        System.out.println("open pressed");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Files","*"));
+        File file = fileChooser.showSaveDialog(drawingPane.getScene().getWindow());
+        if(file != null){
+            System.out.println(file);
+
+        }
+    }
+
+    @FXML
+    public void saveFile(ActionEvent event){
+//        System.out.println("save pressed");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Files","*"));
+        File file = fileChooser.showSaveDialog(drawingPane.getScene().getWindow());
+        if(file != null){
+            System.out.println(file);
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+
+                String jsonInString = mapper.writeValueAsString(drawingPane.getChildren().get(0));
+
+
+                System.out.println("The Object  was succesfully written to a file\n"+jsonInString);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }
