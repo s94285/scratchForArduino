@@ -9,6 +9,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.util.Pair;
 
@@ -119,5 +120,50 @@ public class FunctionBlock extends Head {
                 }
             }
         }
+    }
+
+    @Override
+    public void reShape() {
+        Path path = new Path();
+        MoveTo moveTo = new MoveTo();
+        moveTo.setX(0);
+        moveTo.setY(16);
+        ArcTo arcTo1 = new ArcTo();
+        arcTo1.setX(getWidth());
+        arcTo1.setY(16);
+        arcTo1.setRadiusX(getWidth()/2);
+        arcTo1.setRadiusY(16);
+        arcTo1.setSweepFlag(true);
+        LineTo lineTo2 = new LineTo(getWidth(),getHeight()-3);
+        LineTo lineTo3 = new LineTo(34,getHeight()-3);
+        LineTo lineTo4 = new LineTo(30,getHeight());
+        LineTo lineTo5 = new LineTo(20,getHeight());
+        LineTo lineTo6 = new LineTo(16,getHeight()-3);
+        LineTo lineTo7 = new LineTo(0,getHeight()-3);
+        path.getElements().addAll(moveTo,arcTo1,lineTo2,lineTo3,lineTo4,lineTo5,lineTo6,lineTo7,new ClosePath());
+        this.setShape(path);
+        this.plugs.get(0).setPoint2D(new Point2D(25,getHeight()));
+//        this.plugs.set(0,new Pair<>(new Point2D(25,getHeight()),this.plugs.get(0).getValue()));
+        reAllocate();
+    }
+
+    public String getFunctionPrototype() {
+        StringBuilder str = new StringBuilder();
+        str.append("void ").append(functionSpec.get(0).getValue()).append("(");
+        for(Pair<ArgumentType,String> pair:functionSpec){
+            switch(pair.getKey()) {
+                case TEXT:    //do nothing
+                    break;
+                case NUMBER:
+                    str.append("double ").append(pair.getValue()).append(", ");break;
+                case STRING:
+                    str.append("String ").append(pair.getValue()).append(", ");break;
+                case BOOLEAN:
+                    str.append("Boolean ").append(pair.getValue()).append(", ");break;
+            }
+        }
+        if(str.charAt(str.length()-2)==',')str.deleteCharAt(str.length()-2);
+        str.append(')');
+        return str.toString();
     }
 }

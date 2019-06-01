@@ -106,9 +106,9 @@ public class FunctionDialogController {
             textField.textProperty().addListener((observableValue, oldValue, newValue) -> {
 //                System.out.println(newValue.length());
                 Text text = new Text(newValue);
-                double width = text.getLayoutBounds().getWidth() * 1 // This big is the Text in the TextField
+                double width = text.getLayoutBounds().getWidth() * 1.17 // This big is the Text in the TextField
                         + textField.getPadding().getLeft() + textField.getPadding().getRight() // Add the padding of the TextField
-                        ; // Add some spacing
+                        +2d; // Add some spacing
                 textField.setPrefWidth(width + 1); // Set the width
                 textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
             });

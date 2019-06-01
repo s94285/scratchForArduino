@@ -28,11 +28,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import ece.FunctionDialogController.ArgumentType;
+
+import javax.sql.StatementEvent;
+
+import static ece.FunctionBlock.ARGUMENT_COLOR;
+import static ece.FunctionBlock.FUNCTION_COLOR;
 
 public class ScratchForArduinoController {
     @FXML private ToggleGroup BlockToggleGroup;
@@ -94,10 +100,60 @@ public class ScratchForArduinoController {
                 ArrayList<Pair<ArgumentType,String>> funcSpec = fxmlLoader.<FunctionDialogController>getController().getArgumentList();
                 System.out.println(funcSpec);
                 if(funcSpec!=null){
-                    FunctionBlock functionBlock = new FunctionBlock(blockSpecBuilder("define ","function"),drawingPane,funcSpec);
+                    FunctionBlock functionBlock = new FunctionBlock(blockSpecBuilder("define ",funcSpec.get(0).getValue()),drawingPane,funcSpec);
                     functionBlock.setLayoutX(50);
                     functionBlock.setLayoutY(50);
                     drawingPane.getChildren().add(functionBlock);
+                    BlockSpec blockSpec = blockSpecBuilder(funcSpec.get(0).getValue(),funcSpec.get(0).getValue());
+                    StringBuilder parameters = new StringBuilder();
+                    StringBuilder title = new StringBuilder();
+                    int paraCnt = 0;
+                    for(Pair<ArgumentType,String> pair : funcSpec){
+                        switch(pair.getKey()){
+                            case NUMBER:
+                                title.append("%n");
+                                parameters.append("{").append(paraCnt++).append("},");
+                                break;
+                            case STRING:
+                                title.append("%s");
+                                parameters.append("{").append(paraCnt++).append("},");
+                                break;
+                            case BOOLEAN:
+                                title.append("%b");
+                                parameters.append("{").append(paraCnt++).append("},");
+                                break;
+                            case TEXT:
+                                title.append(pair.getValue());
+                                break;
+                        }
+                        title.append(" ");
+                    }
+                    if(parameters.length()>0)parameters.deleteCharAt(parameters.length()-1);
+                    blockSpec.title = title.toString();
+                    blockSpec.code.work = funcSpec.get(0).getValue() + "(" + parameters.toString() + ");\n";
+                    StatementBlock statementBlock = new StatementBlock(blockSpec, functionPane) {
+                        @Override
+                        public void onMousePressed(MouseEvent mouseEvent) {
+                            //super.onMousePressed(mouseEvent);
+                            System.out.println("Mouse Entered on Click Me Two");
+                            StatementBlock valueBlock1 = new StatementBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                            valueBlock1.setBackground(new Background(new BackgroundFill(FUNCTION_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+                            ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                            Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                            valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                            valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+                            if (robot != null) {
+                                robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                                robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                                robot.delay(50);
+                                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                            }
+                        }
+                        @Override
+                        public void onMouseDragged(MouseEvent mouseEvent) {}
+                    };
+                    statementBlock.setBackground(new Background(new BackgroundFill(FUNCTION_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+                    functionPane.getChildren().add(statementBlock);
                 }else
                     System.out.println("Not valid function block");
             }catch (IOException e){
@@ -312,16 +368,17 @@ public class ScratchForArduinoController {
         Code code = new Code();
         String loop="",workInSetup;
         StringBuilder setup = new StringBuilder();
-        HashSet<String> setupSet = new HashSet<>();
+        ArrayList<StringBuilder> functions = new ArrayList<>();
+//        HashSet<String> setupSet = new HashSet<>();
         Head headBlock = null;
         for(Node node : drawingPane.getChildren())
-            if(node instanceof Head){
+            if(node instanceof Head && !(node instanceof FunctionBlock)){
                 headBlock = (Head)node;
                 break;
             }
         if(headBlock==null)return;
         headBlock.generateCode(code);
-        setupSet.addAll(code.setup);
+//        setupSet.addAll(code.setup);
         workInSetup = code.code.toString();
 
         //find foreverloopblock
@@ -340,8 +397,21 @@ public class ScratchForArduinoController {
             foreverLoopBlock.generateCode(code);
             loop = code.code.toString();
         }
-        setupSet.addAll(code.setup);
-        for(String s:setupSet)
+//        setupSet.addAll();
+        for(Node node : drawingPane.getChildren())
+            if((node instanceof FunctionBlock)){
+                FunctionBlock functionBlock = (FunctionBlock)node;
+                StringBuilder functionCode = new StringBuilder();
+                if(code.code.length()>0)
+                    code.code.delete(0,code.code.length());
+                //prototype
+                code.define.add(functionBlock.getFunctionPrototype()+";\n");
+                functionBlock.generateCode(code);
+                functionCode.append(functionBlock.getFunctionPrototype()).append("{\n");
+                functionCode.append(code.code.toString()).append("}\n");
+                functions.add(functionCode);
+            }
+        for(String s:code.setup)
             setup.append(s);
         setup.append(workInSetup);
 
@@ -358,6 +428,8 @@ public class ScratchForArduinoController {
         str.append("}\n\nvoid loop(){\n");
         str.append(loop);
         str.append("}\n");
+        for(StringBuilder s:functions)
+            str.append(s.toString());
 
         //indent
         StringBuilder result = new StringBuilder();
