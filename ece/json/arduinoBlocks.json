@@ -2,7 +2,7 @@
   {
     "name": "set digital pin as",
     "type": "w",
-    "title": "set digital pin %n output as %n",
+    "title": "set digital pin %n output as %m",
     "field": [
       "0",
       "1"

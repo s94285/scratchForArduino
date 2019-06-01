@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ece.ScratchForArduinoController">
+<TabPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ece.ScratchForArduinoController">
   <tabs>
     <Tab text="Edit">
          <content>
@@ -37,6 +37,7 @@
                                           </RadioButton>
                                           <RadioButton fx:id="controlsButton" mnemonicParsing="false" onAction="#typeClicked" text="Controls" toggleGroup="$BlockToggleGroup" />
                                           <RadioButton fx:id="operatorsButton" mnemonicParsing="false" onAction="#typeClicked" text="Operators" toggleGroup="$BlockToggleGroup" />
+                                          <RadioButton fx:id="userDefinedButton" layoutX="60.0" layoutY="122.0" mnemonicParsing="false" onAction="#typeClicked" text="User Defined" toggleGroup="$BlockToggleGroup" />
                                        </children>
                                        <padding>
                                           <Insets bottom="8.0" left="50.0" right="8.0" top="20.0" />
@@ -58,7 +59,7 @@
                   <VBox BorderPane.alignment="CENTER_RIGHT">
                      <children>
                         <ScrollPane prefHeight="1000.0" prefWidth="500.0">
-                                <TextArea fx:id="codeArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="500.0" />
+                                <TextArea fx:id="codeArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="1500.0" />
                          </ScrollPane>
                      </children>
                      <BorderPane.margin>

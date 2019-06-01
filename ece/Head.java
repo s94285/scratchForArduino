@@ -9,24 +9,13 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 
 public class Head extends BlockWithPlug {
-    private Label textLabel;
-    private TextField textField;
-    private  ComboBox comboBox;
     private double height,width;
 
     public  Head(BlockSpec blockSpec,Pane drawingPane){
         super(blockSpec,drawingPane,1);
-        comboBox=new ComboBox();
 
         reShape();
         this.setBackground(new Background(new BackgroundFill(Color.rgb(10,134,152), CornerRadii.EMPTY, Insets.EMPTY)));
-
-        comboBox.setItems(FXCollections.observableArrayList("A", "B", new Separator(), "C", "D"));
-        textLabel=new Label();
-        textLabel.setText("Arduino Program");
-        textLabel.setFont(new Font(17));
-        textLabel.setTextFill(Color.WHITE);
-
         titlePane.setPadding(new Insets(15,5,5,5));
 
 

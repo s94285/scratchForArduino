@@ -1,10 +1,10 @@
 package ece;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 
 public abstract class Block extends VBox {
@@ -48,6 +49,51 @@ public abstract class Block extends VBox {
                 StackPane stackPane = new StackPane();
                 switch (arg.charAt(++i)) {      //read next character
                     case 'm':
+                        String title[] = new String[10];
+
+                        for (int k=0; k < 10; k++)
+                            title[k] = "Item " + k;
+
+                        final ComboBox combobox1 = new ComboBox();
+
+                        combobox1.setItems(FXCollections.observableArrayList(title));
+                        combobox1.setValue("Item 0");
+                        combobox1.setPromptText("Editable");
+                        combobox1.setVisibleRowCount(5);
+                        combobox1.setEditable(true);
+
+// Cell Factory
+                        combobox1.setCellFactory(
+                                new Callback<ListView<String>, ListCell<String>>() {
+                                    @Override
+                                    public ListCell<String> call(ListView<String> param) {
+
+                                        return new ListCell<String>()
+                                        {
+                                            {
+                                                super.setPrefWidth(60);
+                                            }
+                                            @Override
+                                            protected void updateItem(String item, boolean empty) {
+                                                super.updateItem(item, empty);
+
+                                                if (item != null) {
+                                                    setText(item);
+
+                                                    if (item.contains("Item 0"))
+                                                        setTextFill(Color.RED);
+                                                    else if (item.contains("Item 1"))
+                                                        setTextFill(Color.GREEN);
+                                                }
+                                                else {
+                                                    setText(null);
+                                                }
+                                            }
+                                        };
+                                    }
+                                });
+                        //combobox1.setPrefWidth();
+                        stackPane.getChildren().add(combobox1);
                         break;
                     case 'd':
                         break;

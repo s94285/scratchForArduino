@@ -1,10 +1,15 @@
 package ece;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
@@ -12,30 +17,37 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.awt.event.InputEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import ece.FunctionDialogController.ArgumentType;
 
 public class ScratchForArduinoController {
     @FXML private ToggleGroup BlockToggleGroup;
     @FXML private Pane drawingPane;
-    @FXML private RadioButton controlsButton,operatorsButton,arduinoButton;
+    @FXML private RadioButton controlsButton,operatorsButton,arduinoButton,userDefinedButton;
     @FXML private AnchorPane blockPane;
     @FXML private TextArea codeArea;
-    enum BlockClass{CONTROLS,OPERATORS,ARDUINO}
-    private BlockClass currentBlockClass = BlockClass.CONTROLS;
-    private VBox selectedOperatorsPane, selectedArduinoPane,selectedControlsPane;
+    enum BlockClass{CONTROLS,OPERATORS,ARDUINO,USER_DEFINED}
+    private BlockClass currentBlockClass = BlockClass.ARDUINO;
+    private VBox selectedOperatorsPane, selectedArduinoPane,selectedControlsPane,selectedUserDefinedPane,variablePane,functionPane;
+    private final Button makeVariableButton = new Button("Make a Variable");
+    private final Button makeFunctionButton = new Button("Make a Function");
     private java.awt.Robot robot;
     public void initialize(){
         controlsButton.setUserData(BlockClass.CONTROLS);
         operatorsButton.setUserData(BlockClass.OPERATORS);
         arduinoButton.setUserData(BlockClass.ARDUINO);
+        userDefinedButton.setUserData(BlockClass.USER_DEFINED);
         try {
             robot = new java.awt.Robot();
         }catch (Exception e) {
@@ -50,15 +62,57 @@ public class ScratchForArduinoController {
         selectedArduinoPane.setPadding(new Insets(10,10,10,10));
         selectedControlsPane.setSpacing(10);
         selectedControlsPane.setPadding(new Insets(10,10,10,10));
-        selectedOperatorsPane.setVisible(false);
-        selectedArduinoPane.setVisible(true);
-        selectedControlsPane.setVisible(false);
-        blockPane.getChildren().addAll(selectedControlsPane,selectedOperatorsPane, selectedArduinoPane);
+        selectedUserDefinedPane = new VBox();
+        variablePane = new VBox();
+        functionPane = new VBox();
+        selectedUserDefinedPane.setSpacing(10);
+        selectedUserDefinedPane.setPadding(new Insets(10,10,10,10));
+        variablePane.setSpacing(10);
+        variablePane.setPadding(new Insets(10,10,10,10));
+        makeVariableButton.setOnAction(actionEvent -> {
+           //TODO: call dialog
+        });
+        variablePane.getChildren().add(makeVariableButton);
+        functionPane.setSpacing(10);
+        functionPane.setPadding(new Insets(10,10,10,10));
+        makeFunctionButton.setOnAction(actionEvent -> {
+            //call newFunctionDialog
+            try{
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("newFunctionDialog.fxml"));
+                Parent parent = fxmlLoader.load();
+                Scene scene = new Scene(parent);
+                Stage stage = new Stage();
+                stage.setScene(scene);
+//                stage.setResizable(false);
+                stage.sizeToScene();
+                stage.setTitle("Make a Function");
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.showAndWait();
+                ArrayList<Pair<ArgumentType,String>> funcSpec = fxmlLoader.<FunctionDialogController>getController().getArgumentList();
+                System.out.println(funcSpec);
+                if(funcSpec!=null){
+                    FunctionBlock functionBlock = new FunctionBlock(blockSpecBuilder("define ","function"),drawingPane,funcSpec);
+                    functionBlock.setLayoutX(50);
+                    functionBlock.setLayoutY(50);
+                    drawingPane.getChildren().add(functionBlock);
+                }else
+                    System.out.println("Not valid function block");
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        });
+        functionPane.getChildren().add(makeFunctionButton);
+        selectedUserDefinedPane.getChildren().addAll(variablePane,functionPane);
+        blockPane.getChildren().addAll(selectedControlsPane,selectedOperatorsPane, selectedArduinoPane,selectedUserDefinedPane);
 //        codeArea.setEditable(false);
         codeArea.setFont(new Font("consolas",17));
         initializeBlocks();     //add blocks to left pane
         drawingPane.setOnMouseReleased(mouseEvent -> refreshCode());
         drawingPane.setOnKeyReleased(keyEvent -> refreshCode());
+        selectedOperatorsPane.setVisible(currentBlockClass==BlockClass.OPERATORS);
+        selectedControlsPane.setVisible(currentBlockClass==BlockClass.CONTROLS);
+        selectedArduinoPane.setVisible(currentBlockClass==BlockClass.ARDUINO);
+        selectedUserDefinedPane.setVisible(currentBlockClass==BlockClass.USER_DEFINED);
         //finish interface initialize
 
         Head block1 = new Head(blockSpecBuilder("Arduino Program","headBlock"),drawingPane);
@@ -73,6 +127,7 @@ public class ScratchForArduinoController {
         selectedOperatorsPane.setVisible(currentBlockClass==BlockClass.OPERATORS);
         selectedControlsPane.setVisible(currentBlockClass==BlockClass.CONTROLS);
         selectedArduinoPane.setVisible(currentBlockClass==BlockClass.ARDUINO);
+        selectedUserDefinedPane.setVisible(currentBlockClass==BlockClass.USER_DEFINED);
     }
 
     private void initializeBlocks(){
@@ -235,7 +290,7 @@ public class ScratchForArduinoController {
         }
     }
 
-    private BlockSpec blockSpecBuilder(String title,String name){
+    public static BlockSpec blockSpecBuilder(String title,String name){
         BlockSpec blockSpec = new BlockSpec();
         blockSpec.title = title;
         blockSpec.name = name;
@@ -291,10 +346,10 @@ public class ScratchForArduinoController {
         str.append("#include <Arduino.h>\n" +
                 "#include <Wire.h>\n" +
                 "#include <SoftwareSerial.h>\n");
-//        for(String s : code.include)
-//            str.append(s);
-//        for(String s : code.define)
-//            str.append(s);
+        for(String s : code.include)
+            str.append(s);
+        for(String s : code.define)
+            str.append(s);
         str.append("\nvoid setup(){\n");
         str.append(setup);
         str.append("}\n\nvoid loop(){\n");

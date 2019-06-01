@@ -13,6 +13,8 @@ import javafx.scene.shape.*;
 import javafx.scene.transform.Transform;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ValueBlock extends Block {
     protected StackPane selectedStackPane = null;
@@ -50,10 +52,29 @@ public class ValueBlock extends Block {
         for(Node node:titlePane.getChildren())
             if(node instanceof StackPane)
                 allStackPanes.add((StackPane)node);
+
+        String rule = "(?<=\\{)[0-9]+(?=})";    //look behind and look ahead
+        Pattern pattern = Pattern.compile(rule);
+
+        Matcher matcherSetup = pattern.matcher(this.blockSpec.code.setup);
+        ArrayList<Integer> argCountSetup = new ArrayList<>();
+        while(matcherSetup.find())
+            argCountSetup.add(Integer.valueOf(matcherSetup.group()));
+
+        Matcher matcherDefine = pattern.matcher(this.blockSpec.code.def);
+        ArrayList<Integer> argCountDefine = new ArrayList<>();
+        while(matcherDefine.find())
+            argCountDefine.add(Integer.valueOf(matcherDefine.group()));
+
+        Matcher matcherWork = pattern.matcher(this.blockSpec.code.work);
+        ArrayList<Integer> argCountWork = new ArrayList<>();
+        while(matcherWork.find())
+            argCountWork.add(Integer.valueOf(matcherWork.group()));
+
         String[] workString = this.blockSpec.code.work.split("\\{[0-9]+}");
         code.code.append(workString[0]);
         for(int i=1;i<workString.length;i++){
-            StackPane stackPane = allStackPanes.get(i-1);
+            StackPane stackPane = allStackPanes.get(argCountWork.get(i-1));
             if(stackPane.getChildren().size()>1){
                 //has inner block
                 ((Block)stackPane.getChildren().get(1)).generateCode(code);
@@ -65,8 +86,9 @@ public class ValueBlock extends Block {
         String[] setupString = this.blockSpec.code.setup.split("\\{[0-9]+}");
         StringBuilder setup = new StringBuilder();
         setup.append(setupString[0]);
+        System.out.println("setupString.length = "+setupString.length);
         for(int i=1;i<setupString.length;i++){
-            StackPane stackPane = allStackPanes.get(i-1);
+            StackPane stackPane = allStackPanes.get(argCountSetup.get(i-1));
             if(stackPane.getChildren().size()>1){
                 //has inner block
                 Code tmpCode = new Code();
@@ -77,8 +99,25 @@ public class ValueBlock extends Block {
             }
             setup.append(setupString[i]);
         }
+
+        String[] defineString = this.blockSpec.code.def.split("\\{[0-9]+}");
+        StringBuilder define = new StringBuilder();
+        define.append(defineString[0]);
+        for(int i=1;i<defineString.length;i++){
+            StackPane stackPane = allStackPanes.get(argCountDefine.get(i-1));
+            if(stackPane.getChildren().size()>1){
+                //has inner block
+                Code tmpCode = new Code();
+                ((Block)stackPane.getChildren().get(1)).generateCode(tmpCode);
+                define.append(tmpCode.code);
+            }else{
+                define.append(((TextField)stackPane.getChildren().get(0)).getText());
+            }
+            define.append(defineString[i]);
+        }
+
+        code.define.add(define.toString());
         code.setup.add(setup.toString());
-        code.define.add(blockSpec.code.def);
         code.include.add(blockSpec.code.inc);
     }
 
