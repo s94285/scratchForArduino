@@ -1,0 +1,65 @@
+[
+  {
+    "name": "setDouble",
+    "type": "w",
+    "title": "set %n to %n",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "{0} = {1};\n",
+      "loop": ""
+    },
+    "menu": {
+    },
+    "value": {
+    }
+  },
+  {
+    "name": "changeBy",
+    "type": "w",
+    "title": "change %n by %n",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "{0} += {1};\n",
+      "loop": ""
+    },
+    "menu": {
+    },
+    "value": {
+    }
+  },
+  {
+    "name": "setBoolean",
+    "type": "w",
+    "title": "set %b to %m.val",
+    "field": [
+      "0",
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "{0} = {1};\n",
+      "loop": ""
+    },
+    "menu": {
+      "val": ["TRUE","FALSE"]
+    },
+    "value": {
+      "TRUE" : 1,
+      "FALSE" : 0
+    }
+  }
+]

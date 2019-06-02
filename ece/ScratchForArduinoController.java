@@ -1,5 +1,6 @@
 package ece;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
@@ -9,14 +10,12 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -80,6 +79,63 @@ public class ScratchForArduinoController {
         variablePane.setPadding(new Insets(10,10,10,10));
         makeVariableButton.setOnAction(actionEvent -> {
            //TODO: call dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Make a Variable");
+            GridPane gridPane = new GridPane();
+            Label labelName = new Label("Variable Name");
+            Label labelType = new Label("Variable Type");
+            TextField textFieldName = new TextField();
+            textFieldName.setPrefColumnCount(10);
+            String types[] = {"double","boolean"};
+            ComboBox<String> comboBoxType = new ComboBox<>(FXCollections.observableArrayList(types));
+            comboBoxType.setValue("double");
+            gridPane.add(labelName,0,0);
+            gridPane.add(labelType,0,1);
+            gridPane.add(textFieldName,1,0);
+            gridPane.add(comboBoxType,1,1);
+            gridPane.setHgap(10);
+            gridPane.setVgap(15);
+            alert.getDialogPane().setContent(gridPane);
+            alert.showAndWait();
+            if(alert.getResult()==ButtonType.CANCEL)return;
+            String varName = textFieldName.getText();
+            if(varName.length()==0||varName.contains(" ")){
+                Alert alert1 = new Alert(Alert.AlertType.WARNING);
+                alert1.setTitle("Invalid variable name");
+                alert1.setContentText((varName.contains(" "))?"Variable name cannot contain space":((varName.length()==0)?"Variable name cannot be empty":"Invalid variable name"));
+                alert1.showAndWait();
+                return;
+            }
+            if(comboBoxType.getValue().equals("double")){
+                BlockSpec blockSpec = blockSpecBuilder(varName,varName);
+                blockSpec.code.work = varName;
+                blockSpec.code.def = "double " + varName + ";\n";
+                ValueBlock valueBlock = new ValueBlock(blockSpec,variablePane){
+                    @Override
+                    public void onMousePressed(MouseEvent mouseEvent) {
+                        //super.onMousePressed(mouseEvent);
+                        System.out.println("Mouse Entered on Click Me Two");
+                        ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                        valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238,125,22), CornerRadii.EMPTY, Insets.EMPTY)));
+                        valueBlock1.setPadding(new Insets(-5,2,-2,2));
+                        ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                        Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                        valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                        valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+                        if (robot != null) {
+                            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                            robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                            robot.delay(50);
+                            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                        }
+                    }
+                    @Override
+                    public void onMouseDragged(MouseEvent mouseEvent) {}
+                };
+                valueBlock.setBackground(new Background(new BackgroundFill(Color.rgb(238,125,22), CornerRadii.EMPTY, Insets.EMPTY)));
+                valueBlock.setPadding(new Insets(-5,2,-2,2));
+                variablePane.getChildren().add(valueBlock);
+            }
         });
         variablePane.getChildren().add(makeVariableButton);
         functionPane.setSpacing(10);
@@ -194,6 +250,7 @@ public class ScratchForArduinoController {
         filePanePairs.add(new Pair<>("json/operatorBlocks.json",selectedOperatorsPane));
         filePanePairs.add(new Pair<>("json/arduinoBlocks.json",selectedArduinoPane));
         filePanePairs.add(new Pair<>("json/controlBlocks.json",selectedControlsPane));
+        filePanePairs.add(new Pair<>("json/variableBlocks.json",variablePane));
         for(Pair<String,Pane> stringPanePair : filePanePairs){
             try{
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -225,8 +282,6 @@ public class ScratchForArduinoController {
                                 @Override
                                 public void onMouseDragged(MouseEvent mouseEvent) {}
                             };
-                            if(stringPanePair.getValue() == selectedArduinoPane)
-                                newBlock.setBackground(new Background(new BackgroundFill(Color.rgb(10,134,152), CornerRadii.EMPTY, Insets.EMPTY)));
                             break;
                         case "b":
                             newBlock = new BooleanBlock(blockSpec, blockPane) {
@@ -251,8 +306,6 @@ public class ScratchForArduinoController {
                                 @Override
                                 public void onMouseDragged(MouseEvent mouseEvent) {}
                             };
-                            if(stringPanePair.getValue() == selectedArduinoPane)
-                                newBlock.setBackground(new Background(new BackgroundFill(Color.rgb(10,134,152), CornerRadii.EMPTY, Insets.EMPTY)));
                             break;
                         case "w":
                             newBlock = new StatementBlock(blockSpec, blockPane) {
@@ -261,6 +314,8 @@ public class ScratchForArduinoController {
                                     //super.onMousePressed(mouseEvent);
                                     System.out.println("Mouse Entered on Click Me Two");
                                     StatementBlock valueBlock1 = new StatementBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                                    if(stringPanePair.getValue() == variablePane)
+                                        valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238,125,22), CornerRadii.EMPTY, Insets.EMPTY)));
                                     ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
                                     Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
                                     valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
@@ -343,6 +398,10 @@ public class ScratchForArduinoController {
                             };
                             break;
                     }
+                    if(newBlock != null && stringPanePair.getValue() == selectedArduinoPane)
+                        newBlock.setBackground(new Background(new BackgroundFill(Color.rgb(10,134,152), CornerRadii.EMPTY, Insets.EMPTY)));
+                    if(newBlock != null && stringPanePair.getValue() == variablePane)
+                        newBlock.setBackground(new Background(new BackgroundFill(Color.rgb(238,125,22), CornerRadii.EMPTY, Insets.EMPTY)));
                     stringPanePair.getValue().getChildren().add(newBlock);
                 }
             }catch(Exception e){e.printStackTrace();}

@@ -229,6 +229,7 @@ public abstract class Block extends VBox {
                     }
                     case 'b':{
                         TextField textField = new TextField("");
+                        textField.setUserData("number");
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
                         textField.setFont(new Font(14));

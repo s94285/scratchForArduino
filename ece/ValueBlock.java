@@ -22,7 +22,7 @@ public class ValueBlock extends Block {
     public ValueBlock(BlockSpec blockSpec,Pane drawingPane) {
         super(blockSpec,drawingPane);
         this.setAlignment(Pos.CENTER_LEFT);
-
+        titlePane.setAlignment(Pos.CENTER);
         reShape();
 
         this.setBackground(new Background(new BackgroundFill(Color.rgb(92, 183, 18), CornerRadii.EMPTY, Insets.EMPTY)));
