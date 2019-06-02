@@ -220,7 +220,6 @@ public abstract class Block extends VBox {
             Pane myParent = (Pane) this.getParent();
             myParent.getChildren().remove(this);
         }
-
     }
     public void setBlockName(String blockName){this.blockName = blockName;}
     public String getBlockName(){return blockName;}

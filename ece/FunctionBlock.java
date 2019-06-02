@@ -2,6 +2,7 @@ package ece;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -22,8 +23,10 @@ public class FunctionBlock extends Head {
     public static final Color ARGUMENT_COLOR =  Color.rgb(89, 71, 177);
     private ArrayList<Pair<ArgumentType,String>> functionSpec;
     private java.awt.Robot robot;
-    public FunctionBlock(BlockSpec blockSpec, Pane drawingPane, ArrayList<Pair<ArgumentType,String>> functionSpec) {
+    private Pane functionPane;
+    public FunctionBlock(BlockSpec blockSpec, Pane drawingPane, ArrayList<Pair<ArgumentType,String>> functionSpec,Pane functionPane) {
         super(blockSpec, drawingPane);
+        this.functionPane = functionPane;
         try {
             robot = new java.awt.Robot();
         }catch (Exception e) {
@@ -165,5 +168,59 @@ public class FunctionBlock extends Head {
         if(str.charAt(str.length()-2)==',')str.deleteCharAt(str.length()-2);
         str.append(')');
         return str.toString();
+    }
+
+    @Override
+    public void onMouseReleased(MouseEvent mouseEvent) {
+        super.onMouseReleased(mouseEvent);
+        //not only remove FunctionBlock, also statementBlock
+        if(this.getLayoutX()+mouseEvent.getX()<0){
+            //delete statementBlock in functionPane
+            for(Node node :functionPane.getChildren()){
+                if(node instanceof StatementBlock){
+                    StatementBlock statementBlock = (StatementBlock) node;
+                    if(statementBlock.blockSpec.name.equals(functionSpec.get(0).getValue())){
+                        functionPane.getChildren().remove(statementBlock);
+                        break;
+                    }
+                }
+            }
+            //delete statementBlock in drawingPane if any
+            ArrayList<Node> toRemove = new ArrayList<>();
+            for(Node node :drawingPane.getChildren()){
+                if(node instanceof StatementBlock){
+                    StatementBlock statementBlock = (StatementBlock) node;
+                    if(statementBlock.blockSpec.name.equals(functionSpec.get(0).getValue())){
+                        toRemove.add(statementBlock);
+                        //remove plug and slot
+                        BlockWithPlug upperBlock = statementBlock.slot.getBlock();
+                        BlockWithSlotAndPlug lowerBlock = statementBlock.plugs.get(0).getBlock();
+                        if(upperBlock!=null)
+                            for(PointBlockPair<BlockWithSlotAndPlug> pair : upperBlock.plugs)
+                                if(pair.getBlock() == statementBlock) {
+                                    pair.setBlock(lowerBlock);
+                                    break;
+                                }
+                        if(lowerBlock!=null)
+                            lowerBlock.slot.setBlock(upperBlock);
+                        if(upperBlock!=null){
+                            //reshape
+                            BlockWithPlug blockWithPlug1 = upperBlock;
+                            while(blockWithPlug1!=null){
+                                if(blockWithPlug1 instanceof BlockWithSlotAndPlug){
+                                    if((blockWithPlug1 instanceof ControlBlock || blockWithPlug1 instanceof IfandElseBlock|| blockWithPlug1 instanceof ForeverLoopBlock))blockWithPlug1.reShape();
+                                    blockWithPlug1 = ((BlockWithSlotAndPlug)blockWithPlug1).slot.getBlock();
+                                }else{
+                                    blockWithPlug1 = null;
+                                }
+                            }
+                            upperBlock.reAllocate();
+                        }
+                    }
+                }
+            }
+            drawingPane.getChildren().removeAll(toRemove);
+            drawingPane.getChildren().remove(this);
+        }
     }
 }

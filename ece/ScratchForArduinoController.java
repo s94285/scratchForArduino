@@ -100,7 +100,7 @@ public class ScratchForArduinoController {
                 ArrayList<Pair<ArgumentType,String>> funcSpec = fxmlLoader.<FunctionDialogController>getController().getArgumentList();
                 System.out.println(funcSpec);
                 if(funcSpec!=null){
-                    FunctionBlock functionBlock = new FunctionBlock(blockSpecBuilder("define ",funcSpec.get(0).getValue()),drawingPane,funcSpec);
+                    FunctionBlock functionBlock = new FunctionBlock(blockSpecBuilder("define ",funcSpec.get(0).getValue()),drawingPane,funcSpec,functionPane);
                     functionBlock.setLayoutX(50);
                     functionBlock.setLayoutY(50);
                     drawingPane.getChildren().add(functionBlock);
