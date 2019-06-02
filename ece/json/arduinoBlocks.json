@@ -2,7 +2,7 @@
   {
     "name": "set digital pin as",
     "type": "w",
-    "title": "set digital pin %n output as %m",
+    "title": "set digital pin %n output as %m.power",
     "field": [
       "0",
       "1"
@@ -13,6 +13,13 @@
       "setup": "pinMode({0},OUTPUT);\n",
       "work": "digitalWrite({0},{1});\n",
       "loop": ""
+    },
+    "menu": {
+      "power": ["HIGH","LOW"]
+    },
+    "value": {
+      "HIGH": 1,
+      "LOW": 0
     }
   },
   {

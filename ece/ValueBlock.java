@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
@@ -66,23 +67,51 @@ public class ValueBlock extends Block {
         while(matcherDefine.find())
             argCountDefine.add(Integer.valueOf(matcherDefine.group()));
 
-        Matcher matcherWork = pattern.matcher(this.blockSpec.code.work);
+        //check for comboBox first time
+        String newWorkString = this.blockSpec.code.work;
+        for(int i=0;i<allStackPanes.size();i++){
+            StackPane stackPane = allStackPanes.get(i);
+            if(stackPane.getChildren().size()==1){
+                Node node = stackPane.getChildren().get(0);
+                    if(node instanceof ComboBox && ((ComboBox)node).getValue() instanceof String) {
+                    String keyString = ((ComboBox<String>) stackPane.getChildren().get(0)).getValue();
+                    if(blockSpec.value != null && blockSpec.value.containsKey(keyString))keyString = blockSpec.value.get(keyString);
+                    newWorkString = newWorkString.replaceAll("\\{"+i+"}",keyString);
+                }
+            }
+        }
+
+        Matcher matcherWork = pattern.matcher(newWorkString);
         ArrayList<Integer> argCountWork = new ArrayList<>();
         while(matcherWork.find())
             argCountWork.add(Integer.valueOf(matcherWork.group()));
 
-        String[] workString = this.blockSpec.code.work.split("\\{[0-9]+}");
-        code.code.append(workString[0]);
-        for(int i=1;i<workString.length;i++){
-            StackPane stackPane = allStackPanes.get(argCountWork.get(i-1));
-            if(stackPane.getChildren().size()>1){
-                //has inner block
-                ((Block)stackPane.getChildren().get(1)).generateCode(code);
-            }else{
-                code.code.append(((TextField)stackPane.getChildren().get(0)).getText());
+        String[] workString = newWorkString.split("\\{[0-9]+}");
+        if(workString.length>0){
+            code.code.append(workString[0]);
+            for(int i=1;i<workString.length;i++){
+                StackPane stackPane = allStackPanes.get(argCountWork.get(i-1));
+                if(stackPane.getChildren().size()>1){
+                    //has inner block
+                    ((Block)stackPane.getChildren().get(1)).generateCode(code);
+                }else{
+                    Node node = stackPane.getChildren().get(0);
+                    if(node instanceof TextField) {
+                        if (node.getUserData().equals("string"))
+                            code.code.append('"');
+                        code.code.append(((TextField) stackPane.getChildren().get(0)).getText());
+                        if (node.getUserData().equals("string"))
+                            code.code.append('"');
+                    }else if(node instanceof ComboBox && ((ComboBox)node).getValue() instanceof String) {
+                        String keyString = ((ComboBox<String>) stackPane.getChildren().get(0)).getValue();
+                        if(blockSpec.value != null && blockSpec.value.containsKey(keyString))keyString = blockSpec.value.get(keyString);
+                        code.code.append(keyString);
+                    }
+                }
+                code.code.append(workString[i]);
             }
-            code.code.append(workString[i]);
         }
+
         String[] setupString = this.blockSpec.code.setup.split("\\{[0-9]+}");
         StringBuilder setup = new StringBuilder();
         setup.append(setupString[0]);
@@ -95,7 +124,18 @@ public class ValueBlock extends Block {
                 ((Block)stackPane.getChildren().get(1)).generateCode(tmpCode);
                 setup.append(tmpCode.code);
             }else{
-                setup.append(((TextField)stackPane.getChildren().get(0)).getText());
+                Node node = stackPane.getChildren().get(0);
+                if(node instanceof TextField) {
+                    if (node.getUserData().equals("string"))
+                        setup.append('"');
+                    setup.append(((TextField) stackPane.getChildren().get(0)).getText());
+                    if (node.getUserData().equals("string"))
+                        setup.append('"');
+                }else if(node instanceof ComboBox && ((ComboBox)node).getValue() instanceof String){
+                    String keyString = ((ComboBox<String>) stackPane.getChildren().get(0)).getValue();
+                    if(blockSpec.value != null && blockSpec.value.containsKey(keyString))keyString = blockSpec.value.get(keyString);
+                    setup.append(keyString);
+                }
             }
             setup.append(setupString[i]);
         }
@@ -111,7 +151,18 @@ public class ValueBlock extends Block {
                 ((Block)stackPane.getChildren().get(1)).generateCode(tmpCode);
                 define.append(tmpCode.code);
             }else{
-                define.append(((TextField)stackPane.getChildren().get(0)).getText());
+                Node node = stackPane.getChildren().get(0);
+                if(node instanceof TextField) {
+                    if (node.getUserData().equals("string"))
+                        define.append('"');
+                    define.append(((TextField) stackPane.getChildren().get(0)).getText());
+                    if (node.getUserData().equals("string"))
+                        define.append('"');
+                }else if(node instanceof ComboBox && ((ComboBox)node).getValue() instanceof String){
+                    String keyString = ((ComboBox<String>) stackPane.getChildren().get(0)).getValue();
+                    if(blockSpec.value != null && blockSpec.value.containsKey(keyString))keyString = blockSpec.value.get(keyString);
+                    define.append(keyString);
+                }
             }
             define.append(defineString[i]);
         }
@@ -133,7 +184,9 @@ public class ValueBlock extends Block {
                         if(stackPane.getChildren().size()>1){
                             list.addAll(getStackPanes(stackPane));
                         }else{
-                            if(((TextField)stackPane.getChildren().get(0)).editableProperty().getValue())
+                            if(stackPane.getChildren().get(0) instanceof TextField && ((TextField)stackPane.getChildren().get(0)).editableProperty().getValue())
+                                list.add(stackPane);
+                            else if(stackPane.getChildren().get(0) instanceof ComboBox)
                                 list.add(stackPane);
                         }
                     }

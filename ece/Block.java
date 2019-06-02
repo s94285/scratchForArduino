@@ -14,6 +14,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
+import java.util.ArrayList;
+
 
 public abstract class Block extends VBox {
     protected final Pane drawingPane;
@@ -48,21 +50,22 @@ public abstract class Block extends VBox {
                 }
                 StackPane stackPane = new StackPane();
                 switch (arg.charAt(++i)) {      //read next character
-                    case 'm':
-                        String title[] = new String[10];
+                    case 'm':{
+                        StringBuilder menuLabel = new StringBuilder();
+                        if(arg.charAt(++i)=='.'){
+                            while(i<arg.length()-1&&arg.charAt(++i)!=' ')
+                                menuLabel.append(arg.charAt(i));
+                        }
+                        ArrayList<String> menuArray = blockSpec.menu.get(menuLabel.toString());
 
-                        for (int k=0; k < 10; k++)
-                            title[k] = "Item " + k;
-
-                        final ComboBox combobox1 = new ComboBox();
-
-                        combobox1.setItems(FXCollections.observableArrayList(title));
-                        combobox1.setValue("Item 0");
+                        final ComboBox<String> combobox1 = new ComboBox<>();
+                        if(menuArray!=null)
+                            combobox1.setItems(FXCollections.observableArrayList(menuArray));
                         combobox1.setPromptText("Editable");
                         combobox1.setVisibleRowCount(5);
                         combobox1.setEditable(true);
-
-// Cell Factory
+                        combobox1.autosize();
+ //Cell Factory
                         combobox1.setCellFactory(
                                 new Callback<ListView<String>, ListCell<String>>() {
                                     @Override
@@ -92,13 +95,84 @@ public abstract class Block extends VBox {
                                         };
                                     }
                                 });
-                        //combobox1.setPrefWidth();
+                        combobox1.autosize();
+                        combobox1.getEditor().textProperty().addListener((observableValue,oldValue,newValue) -> {
+                            combobox1.setValue(newValue);
+                            Text text = new Text(combobox1.getValue());
+                            double width = text.getLayoutBounds().getWidth()*1.17 +combobox1.getPadding().getLeft() + combobox1.getPadding().getRight() + 35d;
+                            combobox1.setPrefWidth(width);
+                            drawingPane.getOnMouseReleased().handle(null);
+                        });
+                        if(menuArray!=null)
+                            combobox1.setPrefWidth(menuArray.get(0).length()*14);
                         stackPane.getChildren().add(combobox1);
                         break;
-                    case 'd':
+                    }
+                    case 'd':{
+                        StringBuilder menuLabel = new StringBuilder();
+                        if(arg.charAt(++i)=='.'){
+                            while(i<arg.length()-1&&arg.charAt(++i)!=' ')
+                                menuLabel.append(arg.charAt(i));
+                        }
+                        ArrayList<String> menuArray = blockSpec.menu.get(menuLabel.toString());
+
+                        final ComboBox<String> combobox1 = new ComboBox<>();
+                        if(menuArray!=null)
+                            combobox1.setItems(FXCollections.observableArrayList(menuArray));
+                        combobox1.setPromptText("Editable");
+                        combobox1.setVisibleRowCount(5);
+                        combobox1.setEditable(true);
+                        combobox1.autosize();
+                        //Cell Factory
+                        combobox1.setCellFactory(
+                                new Callback<ListView<String>, ListCell<String>>() {
+                                    @Override
+                                    public ListCell<String> call(ListView<String> param) {
+
+                                        return new ListCell<String>()
+                                        {
+                                            {
+                                                super.setPrefWidth(60);
+                                            }
+                                            @Override
+                                            protected void updateItem(String item, boolean empty) {
+                                                super.updateItem(item, empty);
+
+                                                if (item != null) {
+                                                    setText(item);
+
+                                                    if (item.contains("Item 0"))
+                                                        setTextFill(Color.RED);
+                                                    else if (item.contains("Item 1"))
+                                                        setTextFill(Color.GREEN);
+                                                }
+                                                else {
+                                                    setText(null);
+                                                }
+                                            }
+                                        };
+                                    }
+                                });
+                        combobox1.autosize();
+                        combobox1.getEditor().textProperty().addListener((observableValue,oldValue,newValue) -> {
+                            if(!newValue.matches("\\d*"))
+                                combobox1.getEditor().setText(oldValue);
+                            else
+                                combobox1.setValue(newValue);
+                            Text text = new Text(combobox1.getValue());
+                            double width = text.getLayoutBounds().getWidth()*1.17 +combobox1.getPadding().getLeft() + combobox1.getPadding().getRight() + 35d;
+                            combobox1.setPrefWidth(width);
+
+                            drawingPane.getOnMouseReleased().handle(null);
+                        });
+                        if(menuArray!=null)
+                            combobox1.setPrefWidth(menuArray.get(0).length()*14);
+                        stackPane.getChildren().add(combobox1);
                         break;
+                    }
                     case 'n': {
                         TextField textField = new TextField("0");
+                        textField.setUserData("number");
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
                         textField.setFont(new Font(14));
@@ -135,7 +209,8 @@ public abstract class Block extends VBox {
                         break;
                     }
                     case 's':{
-                        TextField textField = new TextField(" ");
+                        TextField textField = new TextField("");
+                        textField.setUserData("string");
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
                         textField.setFont(new Font(14));
@@ -153,7 +228,7 @@ public abstract class Block extends VBox {
                         break;
                     }
                     case 'b':{
-                        TextField textField = new TextField(" ");
+                        TextField textField = new TextField("");
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
                         textField.setFont(new Font(14));

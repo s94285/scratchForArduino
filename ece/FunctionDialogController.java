@@ -54,7 +54,7 @@ public class FunctionDialogController {
     }
     @FXML
     private void onCancelButtonClicked(ActionEvent e){
-        hbox.getChildren().removeAll();
+        hbox.getChildren().clear();
         ((Stage)((Button)e.getSource()).getScene().getWindow()).close();
     }
     @FXML

@@ -354,7 +354,7 @@ public class ScratchForArduinoController {
         blockSpec.title = title;
         blockSpec.name = name;
         blockSpec.type = "";
-        blockSpec.field = new String[0];
+        blockSpec.field = new ArrayList<>();
         blockSpec.code = new BlockSpec.BlockSpecCode();
         blockSpec.code.inc = "";
         blockSpec.code.def = "";

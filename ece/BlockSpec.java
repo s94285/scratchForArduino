@@ -1,10 +1,15 @@
 package ece;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
 public class BlockSpec {
     public String name;
     public String type;
     public String title;
-    public String[] field;
+    public ArrayList<String> field;      //default value
+    public LinkedHashMap<String,ArrayList<String>> menu;
+    public LinkedHashMap<String,String> value;
     public BlockSpecCode code;
 
     @Override
@@ -15,6 +20,8 @@ public class BlockSpec {
         str.append(title).append("\n");
         for(String s:field)
             str.append(s).append("\n");
+        str.append(menu).append("\n");
+        str.append(value).append("\n");
         str.append(code).append("\n");
         return str.toString();
     }

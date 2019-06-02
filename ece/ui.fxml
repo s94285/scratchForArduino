@@ -45,9 +45,15 @@
                                     </VBox>
                                  </children>
                               </Pane>
-                              <ScrollPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
+                              <ScrollPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0">
                                 <content>
-                                  <AnchorPane fx:id="blockPane" minHeight="0.0" minWidth="0.0" prefHeight="500.0" />
+                                  <AnchorPane fx:id="blockPane" minHeight="0.0" minWidth="0.0">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <padding>
+                                          <Insets bottom="50.0" />
+                                       </padding></AnchorPane>
                                 </content>
                               </ScrollPane>
                            </items>
