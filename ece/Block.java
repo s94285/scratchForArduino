@@ -39,6 +39,7 @@ public abstract class Block extends VBox {
         this.drawingPane = drawingPane;
         this.blockName = blockName;
         StringBuilder tmp = new StringBuilder();
+        int fieldCount = 0;
         for(int i=0;i<arg.length();i++){
             if(arg.charAt(i)=='%'){
                 if (tmp.length() > 0) {
@@ -64,6 +65,7 @@ public abstract class Block extends VBox {
                         combobox1.setPromptText("Editable");
                         combobox1.setVisibleRowCount(5);
                         combobox1.setEditable(true);
+                        combobox1.setValue(blockSpec.field.get(fieldCount++));
                         combobox1.autosize();
  //Cell Factory
                         combobox1.setCellFactory(
@@ -101,7 +103,7 @@ public abstract class Block extends VBox {
                             Text text = new Text(combobox1.getValue());
                             double width = text.getLayoutBounds().getWidth()*1.17 +combobox1.getPadding().getLeft() + combobox1.getPadding().getRight() + 35d;
                             combobox1.setPrefWidth(width);
-                            drawingPane.getOnMouseReleased().handle(null);
+                            if(drawingPane.getOnMouseReleased()!=null)drawingPane.getOnMouseReleased().handle(null);
                         });
                         if(menuArray!=null)
                             combobox1.setPrefWidth(menuArray.get(0).length()*14);
@@ -122,6 +124,7 @@ public abstract class Block extends VBox {
                         combobox1.setPromptText("Editable");
                         combobox1.setVisibleRowCount(5);
                         combobox1.setEditable(true);
+                        combobox1.setValue(blockSpec.field.get(fieldCount++));
                         combobox1.autosize();
                         //Cell Factory
                         combobox1.setCellFactory(
@@ -162,8 +165,7 @@ public abstract class Block extends VBox {
                             Text text = new Text(combobox1.getValue());
                             double width = text.getLayoutBounds().getWidth()*1.17 +combobox1.getPadding().getLeft() + combobox1.getPadding().getRight() + 35d;
                             combobox1.setPrefWidth(width);
-
-                            drawingPane.getOnMouseReleased().handle(null);
+                            if(drawingPane.getOnMouseReleased()!=null)drawingPane.getOnMouseReleased().handle(null);
                         });
                         if(menuArray!=null)
                             combobox1.setPrefWidth(menuArray.get(0).length()*14);
@@ -171,7 +173,7 @@ public abstract class Block extends VBox {
                         break;
                     }
                     case 'n': {
-                        TextField textField = new TextField("0");
+                        TextField textField = new TextField(blockSpec.field.get(fieldCount++));
                         textField.setUserData("number");
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
@@ -209,7 +211,7 @@ public abstract class Block extends VBox {
                         break;
                     }
                     case 's':{
-                        TextField textField = new TextField("");
+                        TextField textField = new TextField(blockSpec.field.get(fieldCount++));
                         textField.setUserData("string");
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
@@ -228,7 +230,7 @@ public abstract class Block extends VBox {
                         break;
                     }
                     case 'b':{
-                        TextField textField = new TextField("");
+                        TextField textField = new TextField(blockSpec.field.get(fieldCount++));
                         textField.setUserData("number");
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
