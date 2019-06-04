@@ -168,14 +168,17 @@ public class ScratchForArduinoController {
                         switch(pair.getKey()){
                             case NUMBER:
                                 title.append("%n");
+                                blockSpec.field.add("0");
                                 parameters.append("{").append(paraCnt++).append("},");
                                 break;
                             case STRING:
                                 title.append("%s");
+                                blockSpec.field.add("");
                                 parameters.append("{").append(paraCnt++).append("},");
                                 break;
                             case BOOLEAN:
                                 title.append("%b");
+                                blockSpec.field.add("");
                                 parameters.append("{").append(paraCnt++).append("},");
                                 break;
                             case TEXT:
