@@ -173,6 +173,7 @@ public abstract class Block extends VBox {
                         break;
                     }
                     case 'n': {
+
                         TextField textField = new TextField(blockSpec.field.get(fieldCount++));
                         textField.setUserData("number");
                         textField.setAlignment(Pos.CENTER);
@@ -211,11 +212,12 @@ public abstract class Block extends VBox {
                         break;
                     }
                     case 's':{
-                        TextField textField = new TextField(blockSpec.field.get(fieldCount++));
+                        TextField textField = new TextField();
                         textField.setUserData("string");
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
                         textField.setFont(new Font(14));
+
                         textField.setPadding(new Insets(0,2,0,2));
                         textField.textProperty().addListener((observableValue, oldValue, newValue) -> {
                             System.out.println(newValue.length());
@@ -226,6 +228,7 @@ public abstract class Block extends VBox {
                             textField.setPrefWidth(width+1); // Set the width
                             textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
                         });
+                        textField.setText(blockSpec.field.get(fieldCount++));
                         stackPane.getChildren().add(textField);
                         break;
                     }

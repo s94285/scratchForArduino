@@ -27,7 +27,7 @@
     "type": "b",
     "title": "read digital pin %n",
     "field": [
-      "0"
+      "9"
     ],
     "code": {
       "inc": "",
@@ -55,7 +55,7 @@
   {
     "name": "set pwm pin output as",
     "type": "w",
-    "title": "set pwm pin %n output as %n",
+    "title": "set pwm pin %n output as %d.power",
     "field": [
       "5",
       "0"
@@ -66,6 +66,16 @@
       "setup": "pinMode({0},OUTPUT);\n",
       "work": "analogWrite({0},{1});\n",
       "loop": ""
+    },
+    "menu": {
+      "power": ["0","50","100","150","255"]
+    },
+    "value": {
+      "0": 0,
+      "50": 50,
+      "100": 100,
+      "150": 150,
+      "255": 255
     }
   },
   {
@@ -103,7 +113,7 @@
   {
     "name": "set servo",
     "type": "w",
-    "title": "set servo pin %n angle as %n",
+    "title": "set servo pin %n angle as %d.angle",
     "field": [
       "0",
       "90"
@@ -114,6 +124,16 @@
       "setup": "servo_{0}.attach({0});\n",
       "work": "servo_{0}.write({1});\n",
       "loop": ""
+    },
+    "menu": {
+      "angle": ["0","45","90","135","180"]
+    },
+    "value": {
+      "0": 0,
+      "45": 45,
+      "90": 90,
+      "135": 135,
+      "180": 180
     }
   },
   {
@@ -121,7 +141,7 @@
     "type": "w",
     "title": "serial write text %s",
     "field": [
-      ""
+      "hello"
     ],
     "code": {
       "inc": "",

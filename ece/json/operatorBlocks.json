@@ -4,8 +4,8 @@
     "type": "r",
     "title": "%n + %n",
     "field": [
-      "0",
-      "1"
+      "",
+      ""
     ],
     "code": {
       "inc": "",
@@ -20,8 +20,8 @@
     "type": "r",
     "title": "%n - %n",
     "field": [
-      "1",
-      "2"
+      "",
+      ""
     ],
     "code": {
       "inc": "",
@@ -36,8 +36,8 @@
     "type": "r",
     "title": "%n * %n",
     "field": [
-      "0",
-      "1"
+      "",
+      ""
     ],
     "code": {
       "inc": "",
@@ -52,8 +52,8 @@
     "type": "r",
     "title": "%n / %n",
     "field": [
-      "0",
-      "1"
+      "",
+      ""
     ],
     "code": {
       "inc": "",
@@ -64,12 +64,90 @@
     }
   },
   {
+    "name": "pick random",
+    "type": "r",
+    "title": "pick random %n to %n",
+    "field": [
+      "",
+      ""
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "random({0},{1}+1)",
+      "loop": ""
+    }
+  },
+  {
+    "name": "letter length",
+    "type": "r",
+    "title": "letter %n of %s",
+    "field": [
+      "1",
+      "world"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "String({1}).charAt({0}-1)",
+      "loop": ""
+    }
+  },
+  {
+    "name": "length of string",
+    "type": "r",
+    "title": "length of %s",
+    "field": [
+      "world"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "String({0}).length()",
+      "loop": ""
+    }
+  },
+  {
+    "name": "index of substring of string",
+    "type": "r",
+    "title": "index of %s in %s",
+    "field": [
+      "world",
+      "hello world"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "String({1}).indexOf(String({0}))",
+      "loop": ""
+    }
+  },
+  {
+    "name": "cast number to string",
+    "type": "r",
+    "title": "cast %n to string",
+    "field": [
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "String({0})",
+      "loop": ""
+    }
+  },
+  {
     "name": "and",
     "type": "b",
     "title": "%b and %b",
     "field": [
-      "0",
-      "1"
+      "",
+      ""
     ],
     "code": {
       "inc": "",
@@ -84,8 +162,8 @@
     "type": "b",
     "title": "%b or %b",
     "field": [
-      "0",
-      "1"
+      "",
+      ""
     ],
     "code": {
       "inc": "",
@@ -100,9 +178,8 @@
     "type": "b",
     "title": "not %b",
     "field": [
-      "0",
-      "1"
-    ],
+      ""
+          ],
     "code": {
       "inc": "",
       "def": "",
@@ -116,8 +193,8 @@
     "type": "b",
     "title": "%n > %n",
     "field": [
-      "0",
-      "1"
+      "",
+      ""
     ],
     "code": {
       "inc": "",
@@ -132,8 +209,8 @@
     "type": "b",
     "title": "%n = %n",
     "field": [
-      "0",
-      "1"
+      "",
+      ""
     ],
     "code": {
       "inc": "",
@@ -148,8 +225,8 @@
     "type": "b",
     "title": "%n < %n",
     "field": [
-      "0",
-      "1"
+      "",
+      ""
     ],
     "code": {
       "inc": "",
@@ -164,8 +241,8 @@
     "type": "r",
     "title": "join %s %s",
     "field": [
-      "0",
-      "1"
+      "hello",
+      "world"
     ],
     "code": {
       "inc": "",
@@ -180,8 +257,8 @@
     "type": "r",
     "title": "%m.op of %n",
     "field": [
-      "0",
-      "1"
+      "sqrt",
+      "9"
     ],
     "code": {
       "inc": "",
@@ -195,18 +272,18 @@
     },
     "value": {
       "abs": "abs({1})",
-      "floor": "",
-      "ceiling": "",
-      "sqrt": "",
-      "sin": "",
-      "cos": "",
-      "tan": "",
-      "asin": "",
-      "acos": "",
-      "atan":"",
-      "ln": "",
-      "log": "",
-      "e ^": "",
+      "floor": "floor({1})",
+      "ceiling": "ceiling({1})",
+      "sqrt": "sqrt({1})",
+      "sin": "sin(angle_rad*{1})",
+      "cos": "cos(angle_rad*{1})",
+      "tan": "tan(angle_rad*{1})",
+      "asin": "asin({1})*angle_deg",
+      "acos": "acos({1})*angle_deg",
+      "atan":"atan({1})*angle_deg",
+      "ln": "log({1})",
+      "log": "log10({1})",
+      "e ^": "exp({1})",
       "10 ^": "pow(10,{1})"
     }
   }

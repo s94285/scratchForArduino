@@ -210,6 +210,8 @@ public class ValueBlock extends Block {
             Point2D blockScenePoint = this.localToScene(0,0);
             //System.out.println("test");
             //System.out.println(blockScenePoint);
+            ((Pane)this.getParent()).getChildren().get(0).setManaged(true);
+            ((Pane)this.getParent()).getChildren().get(0).setVisible(true);
             drawingPane.getChildren().add(this);
             this.relocate(drawingPane.sceneToLocal(blockScenePoint).getX(),drawingPane.sceneToLocal(blockScenePoint).getY());
             System.out.println(this.getLayoutX() + " " + this.getLayoutY());
@@ -249,6 +251,8 @@ public class ValueBlock extends Block {
             try {
 
                 selectedStackPane.getChildren().add(this);
+                selectedStackPane.getChildren().get(0).setManaged(false);
+                selectedStackPane.getChildren().get(0).setVisible(false);
                 selectedStackPane.setEffect(null);
             }catch (Exception e){
                 //do nothing;

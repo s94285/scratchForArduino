@@ -4,7 +4,7 @@
     "type": "one block",
     "title": "If      %b      then",
     "field": [
-      "0"
+      " "
     ],
     "code": {
       "inc": "",
@@ -47,7 +47,7 @@
     "type": "one block",
     "title": "repeat until %b",
     "field": [
-      "0"
+      " "
     ],
     "code": {
       "inc": "",
@@ -62,7 +62,7 @@
     "type": "two block",
     "title": "if    %b   then",
     "field": [
-      "0"
+      " "
     ],
     "code": {
       "inc": "",
