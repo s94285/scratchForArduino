@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import ece.FunctionDialogController.ArgumentType;
+import org.fxmisc.flowless.VirtualizedScrollPane;
 
 import javax.sql.StatementEvent;
 
@@ -44,7 +45,8 @@ public class ScratchForArduinoController {
     @FXML private Pane drawingPane;
     @FXML private RadioButton controlsButton,operatorsButton,arduinoButton,userDefinedButton;
     @FXML private AnchorPane blockPane;
-    @FXML private TextArea codeArea;
+    @FXML private AnchorPane codeAreaPane;
+    private CustomCodeArea codeArea = new CustomCodeArea();
     enum BlockClass{CONTROLS,OPERATORS,ARDUINO,USER_DEFINED}
     private BlockClass currentBlockClass = BlockClass.ARDUINO;
     private VBox selectedOperatorsPane, selectedArduinoPane,selectedControlsPane,selectedUserDefinedPane,variablePane,functionPane;
@@ -56,6 +58,12 @@ public class ScratchForArduinoController {
         operatorsButton.setUserData(BlockClass.OPERATORS);
         arduinoButton.setUserData(BlockClass.ARDUINO);
         userDefinedButton.setUserData(BlockClass.USER_DEFINED);
+        VirtualizedScrollPane codeScrollPane = new VirtualizedScrollPane<>(codeArea);
+        codeAreaPane.getChildren().add(codeScrollPane);
+        AnchorPane.setTopAnchor(codeScrollPane,0.0);
+        AnchorPane.setLeftAnchor(codeScrollPane,0.0);
+        AnchorPane.setRightAnchor(codeScrollPane,0.0);
+        AnchorPane.setBottomAnchor(codeScrollPane,0.0);
         try {
             robot = new java.awt.Robot();
         }catch (Exception e) {
@@ -86,7 +94,7 @@ public class ScratchForArduinoController {
             Label labelType = new Label("Variable Type");
             TextField textFieldName = new TextField();
             textFieldName.setPrefColumnCount(10);
-            String types[] = {"double","boolean"};
+            String[] types = {"double","boolean"};
             ComboBox<String> comboBoxType = new ComboBox<>(FXCollections.observableArrayList(types));
             comboBoxType.setValue("double");
             gridPane.add(labelName,0,0);
@@ -125,7 +133,7 @@ public class ScratchForArduinoController {
                         if (robot != null) {
                             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                             robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                            robot.delay(50);
+                            robot.delay(20);
                             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                         }
                     }
@@ -204,7 +212,7 @@ public class ScratchForArduinoController {
                             if (robot != null) {
                                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                                 robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                                robot.delay(50);
+                                robot.delay(20);
                                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                             }
                         }
@@ -223,7 +231,7 @@ public class ScratchForArduinoController {
         selectedUserDefinedPane.getChildren().addAll(variablePane,functionPane);
         blockPane.getChildren().addAll(selectedControlsPane,selectedOperatorsPane, selectedArduinoPane,selectedUserDefinedPane);
 //        codeArea.setEditable(false);
-        codeArea.setFont(new Font("consolas",17));
+//        codeArea.setFont(new Font("consolas",17));
         initializeBlocks();     //add blocks to left pane
         drawingPane.setOnMouseReleased(mouseEvent -> refreshCode());
         drawingPane.setOnKeyReleased(keyEvent -> refreshCode());
@@ -231,6 +239,8 @@ public class ScratchForArduinoController {
         selectedControlsPane.setVisible(currentBlockClass==BlockClass.CONTROLS);
         selectedArduinoPane.setVisible(currentBlockClass==BlockClass.ARDUINO);
         selectedUserDefinedPane.setVisible(currentBlockClass==BlockClass.USER_DEFINED);
+//        drawingPane.setViewOrder(5);
+//        drawingPane.toFront();
         //finish interface initialize
 
         Head block1 = new Head(blockSpecBuilder("Arduino Program","headBlock"),drawingPane);
@@ -278,7 +288,7 @@ public class ScratchForArduinoController {
                                     if (robot != null) {
                                         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                                         robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                                        robot.delay(50);
+                                        robot.delay(20);
                                         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                                     }
                                 }
@@ -302,7 +312,7 @@ public class ScratchForArduinoController {
                                     if (robot != null) {
                                         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                                         robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                                        robot.delay(50);
+                                        robot.delay(20);
                                         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                                     }
                                 }
@@ -326,7 +336,7 @@ public class ScratchForArduinoController {
                                     if (robot != null) {
                                         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                                         robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                                        robot.delay(50);
+                                        robot.delay(20);
                                         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                                     }
                                 }
@@ -348,7 +358,7 @@ public class ScratchForArduinoController {
                                     if (robot != null) {
                                         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                                         robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                                        robot.delay(50);
+                                        robot.delay(20);
                                         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                                     }
                                 }
@@ -370,7 +380,7 @@ public class ScratchForArduinoController {
                                     if (robot != null) {
                                         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                                         robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                                        robot.delay(50);
+                                        robot.delay(20);
                                         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                                     }
                                 }
@@ -392,7 +402,7 @@ public class ScratchForArduinoController {
                                     if (robot != null) {
                                         robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                                         robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                                        robot.delay(50);
+                                        robot.delay(20);
                                         robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                                     }
                                 }
@@ -509,7 +519,7 @@ public class ScratchForArduinoController {
             }
         }
 
-        codeArea.setText(result.toString());
+//        codeArea.setText(result.toString());
         System.out.println("Refresh Code");
     }
 

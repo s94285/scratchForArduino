@@ -9,70 +9,18 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ece.ScratchForArduinoController">
+<TabPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ece.ScratchForArduinoController">
   <tabs>
     <Tab text="Edit">
          <content>
             <BorderPane prefHeight="686.0" prefWidth="1094.0">
-               <left>
-                  <VBox prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" orientation="VERTICAL" prefHeight="1000.0" prefWidth="400.0">
-                           <items>
-                              <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="200.0" prefWidth="400.0">
-                                 <children>
-                                    <VBox prefHeight="200.0" prefWidth="195.0" spacing="30.0">
-                                       <children>
-                                          <RadioButton fx:id="arduinoButton" mnemonicParsing="false" onAction="#typeClicked" selected="true" text="Arduino">
-                                             <toggleGroup>
-                                                <ToggleGroup fx:id="BlockToggleGroup" />
-                                             </toggleGroup>
-                                          </RadioButton>
-                                          <RadioButton fx:id="controlsButton" mnemonicParsing="false" onAction="#typeClicked" text="Controls" toggleGroup="$BlockToggleGroup" />
-                                          <RadioButton fx:id="operatorsButton" mnemonicParsing="false" onAction="#typeClicked" text="Operators" toggleGroup="$BlockToggleGroup" />
-                                          <RadioButton fx:id="userDefinedButton" layoutX="60.0" layoutY="122.0" mnemonicParsing="false" onAction="#typeClicked" text="User Defined" toggleGroup="$BlockToggleGroup" />
-                                       </children>
-                                       <padding>
-                                          <Insets bottom="8.0" left="50.0" right="8.0" top="20.0" />
-                                       </padding>
-                                    </VBox>
-                                 </children>
-                              </Pane>
-                              <ScrollPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0">
-                                <content>
-                                  <AnchorPane fx:id="blockPane" minHeight="0.0" minWidth="0.0">
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
-                                       <padding>
-                                          <Insets bottom="50.0" />
-                                       </padding></AnchorPane>
-                                </content>
-                              </ScrollPane>
-                           </items>
-                        </SplitPane>
-                     </children>
-                  </VBox>
-               </left>
-               <right>
-                  <VBox BorderPane.alignment="CENTER_RIGHT">
-                     <children>
-                        <ScrollPane prefHeight="1000.0" prefWidth="500.0">
-                                <TextArea fx:id="codeArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1000.0" prefWidth="1500.0" />
-                         </ScrollPane>
-                     </children>
-                     <BorderPane.margin>
-                        <Insets bottom="8.0" right="8.0" top="8.0" />
-                     </BorderPane.margin>
-                  </VBox>
-               </right>
                <top>
                   <MenuBar BorderPane.alignment="CENTER">
                     <menus>
@@ -95,16 +43,69 @@
                     </menus>
                   </MenuBar>
                </top>
-                <center>
-                    <Pane fx:id="drawingPane" prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-                        <BorderPane.margin>
-                            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                        </BorderPane.margin>
-                        <opaqueInsets>
-                            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                        </opaqueInsets>
-                    </Pane>
-                </center>
+               <center>
+                  <SplitPane dividerPositions="0.5" BorderPane.alignment="CENTER">
+                     <items>
+                        <HBox>
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" orientation="VERTICAL" prefHeight="1000.0" prefWidth="400.0">
+                                       <items>
+                                          <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="200.0" prefWidth="400.0">
+                                             <children>
+                                                <VBox prefHeight="200.0" prefWidth="195.0" spacing="30.0">
+                                                   <children>
+                                                      <RadioButton fx:id="arduinoButton" mnemonicParsing="false" onAction="#typeClicked" selected="true" text="Arduino">
+                                                         <toggleGroup>
+                                                            <ToggleGroup fx:id="BlockToggleGroup" />
+                                                         </toggleGroup>
+                                                      </RadioButton>
+                                                      <RadioButton fx:id="controlsButton" mnemonicParsing="false" onAction="#typeClicked" text="Controls" toggleGroup="$BlockToggleGroup" />
+                                                      <RadioButton fx:id="operatorsButton" mnemonicParsing="false" onAction="#typeClicked" text="Operators" toggleGroup="$BlockToggleGroup" />
+                                                      <RadioButton fx:id="userDefinedButton" layoutX="60.0" layoutY="122.0" mnemonicParsing="false" onAction="#typeClicked" text="User Defined" toggleGroup="$BlockToggleGroup" />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="8.0" left="50.0" right="8.0" top="20.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </Pane>
+                                          <ScrollPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0">
+                                            <content>
+                                              <AnchorPane fx:id="blockPane" minHeight="0.0" minWidth="0.0">
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <padding>
+                                                      <Insets bottom="50.0" />
+                                                   </padding>
+                                                </AnchorPane>
+                                            </content>
+                                          </ScrollPane>
+                                       </items>
+                                    </SplitPane>
+                                 </children>
+                              </VBox>
+                                <Pane fx:id="drawingPane" prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: white;">
+                                    <opaqueInsets>
+                                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                    </opaqueInsets>
+                                </Pane>
+                           </children>
+                        </HBox>
+                         <VBox>
+                             <children>
+                                 <AnchorPane fx:id="codeAreaPane" prefHeight="1000" prefWidth="500" style="-fx-background-color: lightgray;" BorderPane.alignment="CENTER_RIGHT">
+                                     <BorderPane.margin>
+                                         <Insets bottom="8.0" right="8.0" top="8.0" />
+                                     </BorderPane.margin>
+                                 </AnchorPane>
+                             </children>
+                         </VBox>
+                     </items>
+                  </SplitPane>
+               </center>
             </BorderPane>
          </content>
     </Tab>

@@ -4,6 +4,7 @@ module scratchForArduino {
     requires java.desktop;
     requires jackson.all;
     requires java.sql;
+    requires richtextfx.fat;
 
     opens ece;
 }
