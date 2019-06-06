@@ -44,9 +44,9 @@
                   </MenuBar>
                </top>
                <center>
-                  <SplitPane dividerPositions="0.5" BorderPane.alignment="CENTER">
+                  <SplitPane dividerPositions="0.5" style="-fx-background-color: white;">
                      <items>
-                        <HBox>
+                        <HBox style="-fx-background-color: white;">
                            <children>
                               <VBox prefHeight="200.0" prefWidth="200.0">
                                  <children>
@@ -87,7 +87,7 @@
                                     </SplitPane>
                                  </children>
                               </VBox>
-                                <Pane fx:id="drawingPane" prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: white;">
+                                <Pane fx:id="drawingPane" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: white;">
                                     <opaqueInsets>
                                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                                     </opaqueInsets>
@@ -96,7 +96,7 @@
                         </HBox>
                          <VBox>
                              <children>
-                                 <AnchorPane fx:id="codeAreaPane" prefHeight="1000" prefWidth="500" style="-fx-background-color: lightgray;" BorderPane.alignment="CENTER_RIGHT">
+                                 <AnchorPane fx:id="codeAreaPane" prefHeight="1000" prefWidth="300" style="-fx-background-color: lightgray;" BorderPane.alignment="CENTER_RIGHT">
                                      <BorderPane.margin>
                                          <Insets bottom="8.0" right="8.0" top="8.0" />
                                      </BorderPane.margin>

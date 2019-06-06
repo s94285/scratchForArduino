@@ -60,6 +60,7 @@ public class ScratchForArduinoController {
         userDefinedButton.setUserData(BlockClass.USER_DEFINED);
         VirtualizedScrollPane codeScrollPane = new VirtualizedScrollPane<>(codeArea);
         codeAreaPane.getChildren().add(codeScrollPane);
+        codeAreaPane.getStylesheets().add(getClass().getResource("keywords.css").toExternalForm());
         AnchorPane.setTopAnchor(codeScrollPane,0.0);
         AnchorPane.setLeftAnchor(codeScrollPane,0.0);
         AnchorPane.setRightAnchor(codeScrollPane,0.0);
@@ -248,6 +249,7 @@ public class ScratchForArduinoController {
         block1.setLayoutY(50);
 
         drawingPane.getChildren().add(block1);
+        refreshCode();
     }
     @FXML
     private void typeClicked(ActionEvent e){
@@ -518,8 +520,8 @@ public class ScratchForArduinoController {
                 result.append(str.charAt(i));
             }
         }
-
-//        codeArea.setText(result.toString());
+        codeArea.clear();
+        codeArea.replaceText(result.toString());
         System.out.println("Refresh Code");
     }
 

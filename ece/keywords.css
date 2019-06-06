@@ -1,0 +1,35 @@
+.keyword1{
+    -fx-fill: brown;
+}
+.keyword2{
+    -fx-fill: darkorange;
+}
+.keyword3{
+    -fx-fill: purple;
+}
+/*Parenthesis*/
+.paren{
+
+}
+.brace{
+
+}
+.bracket{
+
+}
+.semicolon{
+
+}
+.string{
+    -fx-fill: darkgreen;
+}
+.comment{
+    -fx-fill: darkgrey;
+}
+.include{
+    -fx-fill: brown;
+}
+/*Change the color of selection*/
+#codeArea .selection {
+    -fx-fill: lightblue;
+}
