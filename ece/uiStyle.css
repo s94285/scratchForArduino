@@ -1,0 +1,6 @@
+#serialConnectButton{
+    -fx-background-color: indianred;
+}
+#serialConnectButton:selected{
+    -fx-background-color: lightgreen;
+}

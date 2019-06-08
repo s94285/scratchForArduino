@@ -237,6 +237,21 @@
     }
   },
   {
+    "name": "cast to char",
+    "type": "r",
+    "title": "cast ascii %n to char",
+    "field": [
+      "68"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "char({0})",
+      "loop": ""
+    }
+  },
+  {
     "name": "join string",
     "type": "r",
     "title": "join %s %s",
@@ -285,6 +300,19 @@
       "log": "log10({1})",
       "e ^": "exp({1})",
       "10 ^": "pow(10,{1})"
+    }
+  },
+  {
+    "name": "Next Line",
+    "type": "r",
+    "title": "next line",
+    "field": [],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "\"\\n\"",
+      "loop": ""
     }
   }
 ]

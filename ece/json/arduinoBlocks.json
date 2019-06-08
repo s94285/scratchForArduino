@@ -163,7 +163,7 @@
       "inc": "",
       "def": "",
       "setup": "Serial.begin(115200);\n",
-      "work": "Serial.println({0});\n",
+      "work": "Serial.print({0});\n",
       "loop": ""
     }
   },

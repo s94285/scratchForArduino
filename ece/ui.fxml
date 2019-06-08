@@ -14,6 +14,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -22,7 +23,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1000.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ece.ScratchForArduinoController">
+<TabPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1000.0" stylesheets="@uiStyle.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ece.ScratchForArduinoController">
   <tabs>
     <Tab text="Edit">
          <content>
@@ -118,12 +119,13 @@
                                     <Insets bottom="8.0" right="8.0" top="8.0" />
                                  </BorderPane.margin>
                                  <items>
-                                       <AnchorPane fx:id="codeAreaPane" prefHeight="700.0" prefWidth="300" style="-fx-background-color: lightgray;" />
+                                       <AnchorPane fx:id="codeAreaPane" prefHeight="1000.0" prefWidth="500.0" style="-fx-background-color: lightgray;" />
                                     <TextArea fx:id="serialTextArea" editable="false" />
                                  </items>
                               </SplitPane>
                               <ToolBar prefHeight="40.0" prefWidth="200.0">
                                 <items>
+                                    <ToggleButton id="serialConnectButton" fx:id="serialConnectButton" mnemonicParsing="false" text="Connect" />
                                     <Button mnemonicParsing="false" onAction="#onSerialClearButtonClicked" text="Clear" />
                                     <TextField fx:id="serialInputTextField" onAction="#onSendButtonClicked" HBox.Hgrow="SOMETIMES" />
                                     <Button mnemonicParsing="false" onAction="#onSendButtonClicked" text="Send" />

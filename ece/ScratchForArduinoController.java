@@ -2,6 +2,7 @@ package ece;
 
 import com.fazecast.jSerialComm.SerialPort;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -44,160 +45,13 @@ public class ScratchForArduinoController {
     @FXML private TextArea serialTextArea;
     @FXML private TextField serialInputTextField;
     @FXML private ComboBox<String> boardComboBox,portComboBox;
+    @FXML private ToggleButton serialConnectButton;
     private Properties configs = new Properties();
     private CustomCodeArea codeArea = new CustomCodeArea();
-    private String boardName="",portName="";
+    private String boardName="";
+    private boolean serialListening = false;
+    private SerialPort comPort;
 
-    private void portComboBoxOnShowing(Event event) {
-        SerialPort[] ports = SerialPort.getCommPorts();
-        ArrayList<String> portNames = new ArrayList<>();
-        for(SerialPort port : ports)
-            portNames.add(port.getSystemPortName());
-        portComboBox.setItems(FXCollections.observableList(portNames));
-    }
-
-    private void makeVariableButtonOnAction(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Make a Variable");
-        GridPane gridPane = new GridPane();
-        Label labelName = new Label("Variable Name");
-        Label labelType = new Label("Variable Type");
-        TextField textFieldName = new TextField();
-        textFieldName.setPrefColumnCount(10);
-        String[] types = {"double", "boolean"};
-        ComboBox<String> comboBoxType = new ComboBox<>(FXCollections.observableArrayList(types));
-        comboBoxType.setValue("double");
-        gridPane.add(labelName, 0, 0);
-        gridPane.add(labelType, 0, 1);
-        gridPane.add(textFieldName, 1, 0);
-        gridPane.add(comboBoxType, 1, 1);
-        gridPane.setHgap(10);
-        gridPane.setVgap(15);
-        alert.getDialogPane().setContent(gridPane);
-        alert.showAndWait();
-        if (alert.getResult() == ButtonType.CANCEL) return;
-        String varName = textFieldName.getText();
-        if (varName.length() == 0 || varName.contains(" ")) {
-            Alert alert1 = new Alert(Alert.AlertType.WARNING);
-            alert1.setTitle("Invalid variable name");
-            alert1.setContentText((varName.contains(" ")) ? "Variable name cannot contain space" : ((varName.length() == 0) ? "Variable name cannot be empty" : "Invalid variable name"));
-            alert1.showAndWait();
-            return;
-        }
-        if (comboBoxType.getValue().equals("double")) {
-            BlockSpec blockSpec = blockSpecBuilder(varName, varName);
-            blockSpec.code.work = varName;
-            blockSpec.code.def = "double " + varName + ";\n";
-            ValueBlock valueBlock = new ValueBlock(blockSpec, variablePane) {
-                @Override
-                public void onMousePressed(MouseEvent mouseEvent) {
-                    //super.onMousePressed(mouseEvent);
-                    System.out.println("Mouse Entered on Click Me Two");
-                    ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
-                    valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
-                    valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
-                    ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
-                    Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
-                    valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
-                    valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
-                    if (robot != null) {
-                        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-                        robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                        robot.delay(20);
-                        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-                    }
-                }
-
-                @Override
-                public void onMouseDragged(MouseEvent mouseEvent) {
-                }
-            };
-            valueBlock.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
-            valueBlock.setPadding(new Insets(-5, 2, -2, 2));
-            variablePane.getChildren().add(valueBlock);
-        }
-    }
-
-    private void makeFunctionButtonOnAction(ActionEvent actionEvent) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("newFunctionDialog.fxml"));
-            Parent parent = fxmlLoader.load();
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-//                stage.setResizable(false);
-            stage.sizeToScene();
-            stage.setTitle("Make a Function");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-            ArrayList<Pair<ArgumentType, String>> funcSpec = fxmlLoader.<FunctionDialogController>getController().getArgumentList();
-            System.out.println(funcSpec);
-            if (funcSpec != null) {
-                FunctionBlock functionBlock = new FunctionBlock(blockSpecBuilder("define ", funcSpec.get(0).getValue()), drawingPane, funcSpec, functionPane);
-                functionBlock.setLayoutX(50);
-                functionBlock.setLayoutY(50);
-                drawingPane.getChildren().add(functionBlock);
-                BlockSpec blockSpec = blockSpecBuilder(funcSpec.get(0).getValue(), funcSpec.get(0).getValue());
-                StringBuilder parameters = new StringBuilder();
-                StringBuilder title = new StringBuilder();
-                int paraCnt = 0;
-                for (Pair<ArgumentType, String> pair : funcSpec) {
-                    switch (pair.getKey()) {
-                        case NUMBER:
-                            title.append("%n");
-                            blockSpec.field.add("0");
-                            parameters.append("{").append(paraCnt++).append("},");
-                            break;
-                        case STRING:
-                            title.append("%s");
-                            blockSpec.field.add("");
-                            parameters.append("{").append(paraCnt++).append("},");
-                            break;
-                        case BOOLEAN:
-                            title.append("%b");
-                            blockSpec.field.add("");
-                            parameters.append("{").append(paraCnt++).append("},");
-                            break;
-                        case TEXT:
-                            title.append(pair.getValue());
-                            break;
-                    }
-                    title.append(" ");
-                }
-                if (parameters.length() > 0) parameters.deleteCharAt(parameters.length() - 1);
-                blockSpec.title = title.toString();
-                blockSpec.code.work = funcSpec.get(0).getValue() + "(" + parameters.toString() + ");\n";
-                StatementBlock statementBlock = new StatementBlock(blockSpec, functionPane) {
-                    @Override
-                    public void onMousePressed(MouseEvent mouseEvent) {
-                        //super.onMousePressed(mouseEvent);
-                        System.out.println("Mouse Entered on Click Me Two");
-                        StatementBlock valueBlock1 = new StatementBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
-                        valueBlock1.setBackground(new Background(new BackgroundFill(FUNCTION_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
-                        ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
-                        Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
-                        valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
-                        valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
-                        if (robot != null) {
-                            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-                            robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                            robot.delay(20);
-                            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-                        }
-                    }
-
-                    @Override
-                    public void onMouseDragged(MouseEvent mouseEvent) {
-                    }
-                };
-                statementBlock.setBackground(new Background(new BackgroundFill(FUNCTION_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
-                functionPane.getChildren().add(statementBlock);
-            } else
-                System.out.println("Not valid function block");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     enum BlockClass{CONTROLS,OPERATORS,ARDUINO,USER_DEFINED}
     private BlockClass currentBlockClass = BlockClass.ARDUINO;
@@ -271,6 +125,7 @@ public class ScratchForArduinoController {
             }
         });
         portComboBox.setOnShowing(this::portComboBoxOnShowing);
+        serialConnectButton.selectedProperty().addListener(this::serialConnectButtonChanged);
         //finish interface initialize
 
         Head block1 = new Head(blockSpecBuilder("Arduino Program","headBlock"),drawingPane);
@@ -575,7 +430,8 @@ public class ScratchForArduinoController {
 
             Thread update = new Thread(new Runnable() {
                 public void run() {
-                    BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                    InputStreamReader isr = new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8);
+                    BufferedReader input = new BufferedReader(isr);
                     String line = null;
 
                     try {
@@ -599,6 +455,7 @@ public class ScratchForArduinoController {
     @FXML
     public void onUploadButtonClicked(ActionEvent event){
         //TODO: not finished yet
+        serialConnectButton.setSelected(false);
         if(configs.isEmpty()||!Files.exists(Paths.get(configs.getProperty("arduinoPath")))){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid arduino path");
@@ -617,7 +474,8 @@ public class ScratchForArduinoController {
 
             Thread update = new Thread(new Runnable() {
                 public void run() {
-                    BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                    InputStreamReader isr = new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8);
+                    BufferedReader input = new BufferedReader(isr);
                     String line = null;
 
                     try {
@@ -644,7 +502,11 @@ public class ScratchForArduinoController {
 
     @FXML
     public void onSendButtonClicked(ActionEvent event){
-        serialTextArea.appendText(serialInputTextField.getText()+"\n");
+        if(comPort!=null  && comPort.isOpen()){
+            byte[] data = serialInputTextField.getText().getBytes();
+            comPort.writeBytes(data,data.length);
+//            serialTextArea.appendText(serialInputTextField.getText()+"\n");
+        }
     }
 
     @FXML
@@ -674,6 +536,202 @@ public class ScratchForArduinoController {
             Path pathToConfig = Paths.get("configs.properties");
             configs.store(new FileWriter(pathToConfig.toString()),"Arduino Path");
         }catch(Exception e){e.printStackTrace();}
+    }
+
+    private void serialConnectButtonChanged(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
+        if(newValue){
+            //open port
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        comPort = SerialPort.getCommPort(portComboBox.getValue());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setHeaderText("Invalid port");
+                            alert.setContentText("Please check selected port");
+                            alert.showAndWait();
+                            serialConnectButton.setSelected(false);
+                        });
+                        return;
+                    }
+                    serialListening = true;
+                    comPort.setBaudRate(115200);
+                    comPort.openPort();
+                    try {
+                        while (serialListening)
+                        {
+                            while (serialListening&&comPort.bytesAvailable() == 0)
+                                Thread.sleep(20);
+
+                            byte[] readBuffer = new byte[comPort.bytesAvailable()];
+                            int numRead = comPort.readBytes(readBuffer, readBuffer.length);
+                            System.out.println("Read " + numRead + " bytes.");
+                            Platform.runLater(() -> serialTextArea.appendText(new String(readBuffer,StandardCharsets.UTF_8)));
+                        }
+                    } catch (Exception e) { e.printStackTrace(); }
+                    comPort.closePort();
+                }
+            });
+            thread.setDaemon(true);
+            thread.start();
+        }else{
+            //close port
+            serialListening = false;
+        }
+    }
+
+    private void portComboBoxOnShowing(Event event) {
+        SerialPort[] ports = SerialPort.getCommPorts();
+        ArrayList<String> portNames = new ArrayList<>();
+        for(SerialPort port : ports)
+            portNames.add(port.getSystemPortName());
+        portComboBox.setItems(FXCollections.observableList(portNames));
+    }
+
+    private void makeVariableButtonOnAction(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Make a Variable");
+        GridPane gridPane = new GridPane();
+        Label labelName = new Label("Variable Name");
+        Label labelType = new Label("Variable Type");
+        TextField textFieldName = new TextField();
+        textFieldName.setPrefColumnCount(10);
+        String[] types = {"double", "boolean"};
+        ComboBox<String> comboBoxType = new ComboBox<>(FXCollections.observableArrayList(types));
+        comboBoxType.setValue("double");
+        gridPane.add(labelName, 0, 0);
+        gridPane.add(labelType, 0, 1);
+        gridPane.add(textFieldName, 1, 0);
+        gridPane.add(comboBoxType, 1, 1);
+        gridPane.setHgap(10);
+        gridPane.setVgap(15);
+        alert.getDialogPane().setContent(gridPane);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.CANCEL) return;
+        String varName = textFieldName.getText();
+        if (varName.length() == 0 || varName.contains(" ")) {
+            Alert alert1 = new Alert(Alert.AlertType.WARNING);
+            alert1.setTitle("Invalid variable name");
+            alert1.setContentText((varName.contains(" ")) ? "Variable name cannot contain space" : ((varName.length() == 0) ? "Variable name cannot be empty" : "Invalid variable name"));
+            alert1.showAndWait();
+            return;
+        }
+        if (comboBoxType.getValue().equals("double")) {
+            BlockSpec blockSpec = blockSpecBuilder(varName, varName);
+            blockSpec.code.work = varName;
+            blockSpec.code.def = "double " + varName + ";\n";
+            ValueBlock valueBlock = new ValueBlock(blockSpec, variablePane) {
+                @Override
+                public void onMousePressed(MouseEvent mouseEvent) {
+                    //super.onMousePressed(mouseEvent);
+                    System.out.println("Mouse Entered on Click Me Two");
+                    ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                    valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
+                    valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
+                    ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                    Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                    valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                    valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+                    if (robot != null) {
+                        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                        robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                        robot.delay(20);
+                        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                    }
+                }
+
+                @Override
+                public void onMouseDragged(MouseEvent mouseEvent) {
+                }
+            };
+            valueBlock.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
+            valueBlock.setPadding(new Insets(-5, 2, -2, 2));
+            variablePane.getChildren().add(valueBlock);
+        }
+    }
+
+    private void makeFunctionButtonOnAction(ActionEvent actionEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("newFunctionDialog.fxml"));
+            Parent parent = fxmlLoader.load();
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+//                stage.setResizable(false);
+            stage.sizeToScene();
+            stage.setTitle("Make a Function");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            ArrayList<Pair<ArgumentType, String>> funcSpec = fxmlLoader.<FunctionDialogController>getController().getArgumentList();
+            System.out.println(funcSpec);
+            if (funcSpec != null) {
+                FunctionBlock functionBlock = new FunctionBlock(blockSpecBuilder("define ", funcSpec.get(0).getValue()), drawingPane, funcSpec, functionPane);
+                functionBlock.setLayoutX(50);
+                functionBlock.setLayoutY(50);
+                drawingPane.getChildren().add(functionBlock);
+                BlockSpec blockSpec = blockSpecBuilder(funcSpec.get(0).getValue(), funcSpec.get(0).getValue());
+                StringBuilder parameters = new StringBuilder();
+                StringBuilder title = new StringBuilder();
+                int paraCnt = 0;
+                for (Pair<ArgumentType, String> pair : funcSpec) {
+                    switch (pair.getKey()) {
+                        case NUMBER:
+                            title.append("%n");
+                            blockSpec.field.add("0");
+                            parameters.append("{").append(paraCnt++).append("},");
+                            break;
+                        case STRING:
+                            title.append("%s");
+                            blockSpec.field.add("");
+                            parameters.append("{").append(paraCnt++).append("},");
+                            break;
+                        case BOOLEAN:
+                            title.append("%b");
+                            blockSpec.field.add("");
+                            parameters.append("{").append(paraCnt++).append("},");
+                            break;
+                        case TEXT:
+                            title.append(pair.getValue());
+                            break;
+                    }
+                    title.append(" ");
+                }
+                if (parameters.length() > 0) parameters.deleteCharAt(parameters.length() - 1);
+                blockSpec.title = title.toString();
+                blockSpec.code.work = funcSpec.get(0).getValue() + "(" + parameters.toString() + ");\n";
+                StatementBlock statementBlock = new StatementBlock(blockSpec, functionPane) {
+                    @Override
+                    public void onMousePressed(MouseEvent mouseEvent) {
+                        //super.onMousePressed(mouseEvent);
+                        System.out.println("Mouse Entered on Click Me Two");
+                        StatementBlock valueBlock1 = new StatementBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                        valueBlock1.setBackground(new Background(new BackgroundFill(FUNCTION_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+                        ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                        Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                        valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                        valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+                        if (robot != null) {
+                            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                            robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                            robot.delay(20);
+                            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                        }
+                    }
+
+                    @Override
+                    public void onMouseDragged(MouseEvent mouseEvent) {
+                    }
+                };
+                statementBlock.setBackground(new Background(new BackgroundFill(FUNCTION_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+                functionPane.getChildren().add(statementBlock);
+            } else
+                System.out.println("Not valid function block");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
