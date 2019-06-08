@@ -4,7 +4,7 @@
     "type": "w",
     "title": "set %n to %n",
     "field": [
-      "0",
+      "",
       "1"
     ],
     "code": {
@@ -24,7 +24,7 @@
     "type": "w",
     "title": "change %n by %n",
     "field": [
-      "0",
+      "",
       "1"
     ],
     "code": {
@@ -44,7 +44,7 @@
     "type": "w",
     "title": "set %b to %m.val",
     "field": [
-      "0",
+      " ",
       "1"
     ],
     "code": {

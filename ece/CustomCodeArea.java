@@ -84,7 +84,11 @@ public class CustomCodeArea extends CodeArea {
         contextMenu.getItems().addAll(menuCopy,menuCut,menuPaste,menuSelectAll);
 
         this.setContextMenu(contextMenu);
-        this.textProperty().addListener((observableValue, s, t1) -> this.setStyleSpans(0,computeHighlighting(this.getText())));
+        this.textProperty().addListener((observableValue, s, t1) -> refreshHighlight());
+    }
+
+    private void refreshHighlight(){
+        this.setStyleSpans(0,computeHighlighting(this.getText()));
     }
 
     private StyleSpans<Collection<String>> computeHighlighting(String text) {
@@ -137,6 +141,7 @@ public class CustomCodeArea extends CodeArea {
                 }
             }else if(actionEvent.getSource() == menuPaste){
                 CustomCodeArea.this.replaceSelection(clipboard.getString());
+                refreshHighlight();
             }else if(actionEvent.getSource() == menuSelectAll){
                 CustomCodeArea.this.selectAll();
             }

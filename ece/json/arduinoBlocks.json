@@ -1,4 +1,20 @@
 [
+
+  {
+    "name": "delay",
+    "type": "w",
+    "title": "delay %n sec",
+    "field": [
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "delay({0}*1000.0);\n",
+      "loop": ""
+    }
+  },
   {
     "name": "set digital pin as",
     "type": "w",
