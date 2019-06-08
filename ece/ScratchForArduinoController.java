@@ -208,7 +208,7 @@ public class ScratchForArduinoController {
     public void initialize(){
         //setup property file
         try {
-            Path pathToConfig = Paths.get(getClass().getResource("configs.properties").toURI());
+            Path pathToConfig = Paths.get("configs.properties");
             if (Files.exists(pathToConfig))
                 configs.load(new FileReader(pathToConfig.toString()));
         }catch (Exception e){e.printStackTrace();}
@@ -671,7 +671,7 @@ public class ScratchForArduinoController {
         }
         configs.setProperty("arduinoPath",str);
         try {
-            Path pathToConfig = Paths.get(getClass().getResource("configs.properties").toURI());
+            Path pathToConfig = Paths.get("configs.properties");
             configs.store(new FileWriter(pathToConfig.toString()),"Arduino Path");
         }catch(Exception e){e.printStackTrace();}
     }
