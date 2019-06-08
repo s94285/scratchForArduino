@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -9,7 +12,10 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -22,26 +28,37 @@
          <content>
             <BorderPane prefHeight="686.0" prefWidth="1094.0">
                <top>
-                  <MenuBar BorderPane.alignment="CENTER">
-                    <menus>
-                      <Menu mnemonicParsing="false" text="File">
-                        <items>
-                          <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open" />
-                              <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Save" />
-                        </items>
-                      </Menu>
-                      <Menu mnemonicParsing="false" text="Edit">
-                        <items>
-                          <MenuItem mnemonicParsing="false" text="Delete" />
-                        </items>
-                      </Menu>
-                      <Menu mnemonicParsing="false" text="Help">
-                        <items>
-                          <MenuItem mnemonicParsing="false" text="About" />
-                        </items>
-                      </Menu>
-                    </menus>
-                  </MenuBar>
+                  <ToolBar BorderPane.alignment="CENTER">
+                     <items>
+                        <MenuBar style="-fx-background-color: rgba(0,0,0,0.0);" HBox.Hgrow="SOMETIMES">
+                          <menus>
+                            <Menu mnemonicParsing="false" text="File">
+                              <items>
+                                <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open" />
+                                    <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Save" />
+                                    <MenuItem mnemonicParsing="false" onAction="#menuSetupArduinoPath" text="Setup Arduino Path..." />
+                              </items>
+                            </Menu>
+                            <Menu mnemonicParsing="false" text="Edit">
+                              <items>
+                                <MenuItem mnemonicParsing="false" text="Delete" />
+                              </items>
+                            </Menu>
+                            <Menu mnemonicParsing="false" text="Help">
+                              <items>
+                                <MenuItem mnemonicParsing="false" text="About" />
+                              </items>
+                            </Menu>
+                          </menus>
+                        </MenuBar>
+                        <Label text="Board" />
+                        <ComboBox fx:id="boardComboBox" prefWidth="100.0" />
+                        <Label text="Port" />
+                        <ComboBox fx:id="portComboBox" layoutX="712.0" layoutY="10.0" prefWidth="100.0" />
+                        <Button mnemonicParsing="false" onAction="#onVerifyButtonClicked" text="Verify" />
+                        <Button layoutX="943.0" layoutY="10.0" mnemonicParsing="false" onAction="#onUploadButtonClicked" text="Upload" />
+                     </items>
+                  </ToolBar>
                </top>
                <center>
                   <SplitPane dividerPositions="0.5" style="-fx-background-color: white;">
@@ -96,11 +113,22 @@
                         </HBox>
                          <VBox>
                              <children>
-                                 <AnchorPane fx:id="codeAreaPane" prefHeight="1000" prefWidth="300" style="-fx-background-color: lightgray;" BorderPane.alignment="CENTER_RIGHT">
-                                     <BorderPane.margin>
-                                         <Insets bottom="8.0" right="8.0" top="8.0" />
-                                     </BorderPane.margin>
-                                 </AnchorPane>
+                              <SplitPane dividerPositions="0.75" orientation="VERTICAL" BorderPane.alignment="CENTER_RIGHT">
+                                 <BorderPane.margin>
+                                    <Insets bottom="8.0" right="8.0" top="8.0" />
+                                 </BorderPane.margin>
+                                 <items>
+                                       <AnchorPane fx:id="codeAreaPane" prefHeight="700.0" prefWidth="300" style="-fx-background-color: lightgray;" />
+                                    <TextArea fx:id="serialTextArea" editable="false" />
+                                 </items>
+                              </SplitPane>
+                              <ToolBar prefHeight="40.0" prefWidth="200.0">
+                                <items>
+                                    <Button mnemonicParsing="false" onAction="#onSerialClearButtonClicked" text="Clear" />
+                                    <TextField fx:id="serialInputTextField" onAction="#onSendButtonClicked" HBox.Hgrow="SOMETIMES" />
+                                    <Button mnemonicParsing="false" onAction="#onSendButtonClicked" text="Send" />
+                                </items>
+                              </ToolBar>
                              </children>
                          </VBox>
                      </items>
