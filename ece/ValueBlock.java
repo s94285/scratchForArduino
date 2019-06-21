@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
 
 public class ValueBlock extends Block {
     protected StackPane selectedStackPane = null;
+    private ArrayList<StackPane> currentStackPanes;
+
     public ValueBlock(BlockSpec blockSpec,Pane drawingPane) {
         super(blockSpec,drawingPane);
         this.setAlignment(Pos.CENTER_LEFT);
@@ -216,6 +218,7 @@ public class ValueBlock extends Block {
             this.relocate(drawingPane.sceneToLocal(blockScenePoint).getX(),drawingPane.sceneToLocal(blockScenePoint).getY());
             System.out.println(this.getLayoutX() + " " + this.getLayoutY());
         }
+        currentStackPanes = getStackPanes(drawingPane);
         super.onMousePressed(mouseEvent);
         mouseEvent.consume();
     }
@@ -227,8 +230,8 @@ public class ValueBlock extends Block {
 
         Transform blockTransformToScene = this.getLocalToSceneTransform();
         Point2D blockScenePoint = blockTransformToScene.transform(0,0);
-        ArrayList<StackPane> stackPanes = getStackPanes(drawingPane);
-        for(StackPane stackPane : stackPanes) {
+        if(currentStackPanes==null)return;
+        for(StackPane stackPane : currentStackPanes) {
             Transform stackPaneTransformToScene = stackPane.getLocalToSceneTransform();
             Point2D stackPaneScenePoint = stackPaneTransformToScene.transform(0, stackPane.getHeight()/2.0);
             if (stackPaneScenePoint.distance(blockScenePoint) < 15) {
