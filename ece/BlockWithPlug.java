@@ -113,4 +113,13 @@ public abstract class BlockWithPlug extends Block {
         }
 
     }
+
+    @Override
+    public BlockMap getBlockMap() {
+        BlockMap blockMap = super.getBlockMap();
+        for(int i=0;i<plugs.size();i++)
+            if(plugs.get(i).getBlock()!=null)
+                blockMap.plugs[i] = plugs.get(i).getBlock().getBlockMap();
+        return blockMap;
+    }
 }

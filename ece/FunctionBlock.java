@@ -21,11 +21,12 @@ import ece.FunctionDialogController.ArgumentType;
 public class FunctionBlock extends Head {
     public static final Color FUNCTION_COLOR =  Color.rgb(99, 141, 217);
     public static final Color ARGUMENT_COLOR =  Color.rgb(89, 71, 177);
-    private ArrayList<Pair<ArgumentType,String>> functionSpec;
+    private ArrayList<MyPair<ArgumentType,String>> functionSpec;
     private java.awt.Robot robot;
     private Pane functionPane;
-    public FunctionBlock(BlockSpec blockSpec, Pane drawingPane, ArrayList<Pair<ArgumentType,String>> functionSpec,Pane functionPane) {
+    public FunctionBlock(BlockSpec blockSpec, Pane drawingPane, ArrayList<MyPair<ArgumentType,String>> functionSpec,Pane functionPane) {
         super(blockSpec, drawingPane);
+        blockSpec.type = "FunctionBlock";
         this.functionPane = functionPane;
         try {
             robot = new java.awt.Robot();
@@ -36,7 +37,7 @@ public class FunctionBlock extends Head {
         this.setBackground(new Background(new BackgroundFill(FUNCTION_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
 
         titlePane.getChildren().removeAll();
-        for(Pair<ArgumentType,String> pair : functionSpec){
+        for(MyPair<ArgumentType,String> pair : functionSpec){
             BlockSpec newBlockSpec = ScratchForArduinoController.blockSpecBuilder(pair.getValue(),pair.getValue());
             newBlockSpec.code.work = pair.getValue();
             switch(pair.getKey()){
@@ -153,7 +154,7 @@ public class FunctionBlock extends Head {
     public String getFunctionPrototype() {
         StringBuilder str = new StringBuilder();
         str.append("void ").append(functionSpec.get(0).getValue()).append("(");
-        for(Pair<ArgumentType,String> pair:functionSpec){
+        for(MyPair<ArgumentType,String> pair:functionSpec){
             switch(pair.getKey()) {
                 case TEXT:    //do nothing
                     break;
@@ -162,7 +163,7 @@ public class FunctionBlock extends Head {
                 case STRING:
                     str.append("String ").append(pair.getValue()).append(", ");break;
                 case BOOLEAN:
-                    str.append("Boolean ").append(pair.getValue()).append(", ");break;
+                    str.append("boolean ").append(pair.getValue()).append(", ");break;
             }
         }
         if(str.charAt(str.length()-2)==',')str.deleteCharAt(str.length()-2);
@@ -170,16 +171,51 @@ public class FunctionBlock extends Head {
         return str.toString();
     }
 
+    public static BlockSpec getStatementBlockSpec(ArrayList<MyPair<ArgumentType, String>> funcSpec){
+        BlockSpec blockSpec = ScratchForArduinoController.blockSpecBuilder(funcSpec.get(0).getValue(), funcSpec.get(0).getValue());
+        StringBuilder parameters = new StringBuilder();
+        StringBuilder title = new StringBuilder();
+        int paraCnt = 0;
+        for (MyPair<ArgumentType, String> pair : funcSpec) {
+            switch (pair.getKey()) {
+                case NUMBER:
+                    title.append("%n");
+                    blockSpec.field.add("0");
+                    parameters.append("{").append(paraCnt++).append("},");
+                    break;
+                case STRING:
+                    title.append("%s");
+                    blockSpec.field.add("");
+                    parameters.append("{").append(paraCnt++).append("},");
+                    break;
+                case BOOLEAN:
+                    title.append("%b");
+                    blockSpec.field.add("");
+                    parameters.append("{").append(paraCnt++).append("},");
+                    break;
+                case TEXT:
+                    title.append(pair.getValue());
+                    break;
+            }
+            title.append(" ");
+        }
+        if (parameters.length() > 0) parameters.deleteCharAt(parameters.length() - 1);
+        blockSpec.title = title.toString();
+        blockSpec.code.work = funcSpec.get(0).getValue() + "(" + parameters.toString() + ");\n";
+        return blockSpec;
+    }
+
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
         super.onMouseReleased(mouseEvent);
+        String statementBlockTitle = getStatementBlockSpec(functionSpec).title;
         //not only remove FunctionBlock, also statementBlock
         if(this.getLayoutX()+mouseEvent.getX()<0){
             //delete statementBlock in functionPane
             for(Node node :functionPane.getChildren()){
                 if(node instanceof StatementBlock){
                     StatementBlock statementBlock = (StatementBlock) node;
-                    if(statementBlock.blockSpec.name.equals(functionSpec.get(0).getValue())){
+                    if(statementBlock.blockSpec.title.equals(statementBlockTitle)){
                         functionPane.getChildren().remove(statementBlock);
                         break;
                     }
@@ -190,7 +226,7 @@ public class FunctionBlock extends Head {
             for(Node node :drawingPane.getChildren()){
                 if(node instanceof StatementBlock){
                     StatementBlock statementBlock = (StatementBlock) node;
-                    if(statementBlock.blockSpec.name.equals(functionSpec.get(0).getValue())){
+                    if(statementBlock.blockSpec.title.equals(statementBlockTitle)){
                         toRemove.add(statementBlock);
                         //remove plug and slot
                         BlockWithPlug upperBlock = statementBlock.slot.getBlock();
@@ -222,5 +258,12 @@ public class FunctionBlock extends Head {
             drawingPane.getChildren().removeAll(toRemove);
             drawingPane.getChildren().remove(this);
         }
+    }
+
+    @Override
+    public BlockMap getBlockMap() {
+        BlockMap blockMap = super.getBlockMap();
+        blockMap.functionSpec = this.functionSpec;
+        return blockMap;
     }
 }

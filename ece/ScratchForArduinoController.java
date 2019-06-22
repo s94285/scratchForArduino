@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -30,8 +31,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import ece.FunctionDialogController.ArgumentType;
+import org.codehaus.jackson.map.ObjectWriter;
+import org.codehaus.jackson.type.TypeReference;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 
 import static ece.FunctionBlock.FUNCTION_COLOR;
@@ -664,44 +668,17 @@ public class ScratchForArduinoController {
             stage.sizeToScene();
             stage.setTitle("Make a Function");
             stage.initModality(Modality.APPLICATION_MODAL);
+            AtomicBoolean isClosed = new AtomicBoolean(false);
+            stage.setOnCloseRequest(windowEvent -> isClosed.set(true));
             stage.showAndWait();
-            ArrayList<Pair<ArgumentType, String>> funcSpec = fxmlLoader.<FunctionDialogController>getController().getArgumentList();
+            ArrayList<MyPair<ArgumentType, String>> funcSpec = fxmlLoader.<FunctionDialogController>getController().getArgumentList();
             System.out.println(funcSpec);
-            if (funcSpec != null) {
+            if (funcSpec != null && !isClosed.get()) {
                 FunctionBlock functionBlock = new FunctionBlock(blockSpecBuilder("define ", funcSpec.get(0).getValue()), drawingPane, funcSpec, functionPane);
                 functionBlock.setLayoutX(50);
                 functionBlock.setLayoutY(50);
                 drawingPane.getChildren().add(functionBlock);
-                BlockSpec blockSpec = blockSpecBuilder(funcSpec.get(0).getValue(), funcSpec.get(0).getValue());
-                StringBuilder parameters = new StringBuilder();
-                StringBuilder title = new StringBuilder();
-                int paraCnt = 0;
-                for (Pair<ArgumentType, String> pair : funcSpec) {
-                    switch (pair.getKey()) {
-                        case NUMBER:
-                            title.append("%n");
-                            blockSpec.field.add("0");
-                            parameters.append("{").append(paraCnt++).append("},");
-                            break;
-                        case STRING:
-                            title.append("%s");
-                            blockSpec.field.add("");
-                            parameters.append("{").append(paraCnt++).append("},");
-                            break;
-                        case BOOLEAN:
-                            title.append("%b");
-                            blockSpec.field.add("");
-                            parameters.append("{").append(paraCnt++).append("},");
-                            break;
-                        case TEXT:
-                            title.append(pair.getValue());
-                            break;
-                    }
-                    title.append(" ");
-                }
-                if (parameters.length() > 0) parameters.deleteCharAt(parameters.length() - 1);
-                blockSpec.title = title.toString();
-                blockSpec.code.work = funcSpec.get(0).getValue() + "(" + parameters.toString() + ");\n";
+                BlockSpec blockSpec = FunctionBlock.getStatementBlockSpec(funcSpec);
                 StatementBlock statementBlock = new StatementBlock(blockSpec, functionPane) {
                     @Override
                     public void onMousePressed(MouseEvent mouseEvent) {
@@ -738,33 +715,226 @@ public class ScratchForArduinoController {
     public void openFile(ActionEvent event){
 //        System.out.println("open pressed");
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Files","*"));
-        File file = fileChooser.showSaveDialog(drawingPane.getScene().getWindow());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ScratchForAndroid File","*.sfa"));
+        File file = fileChooser.showOpenDialog(drawingPane.getScene().getWindow());
         if(file != null){
             System.out.println(file);
+            drawingPane.getChildren().clear();
+            for(int i=0;i<variablePane.getChildren().size();i++){
+                Node node = variablePane.getChildren().get(i);
+                if(node instanceof ValueBlock || node instanceof BooleanBlock) {
+                    variablePane.getChildren().remove(node);
+                    i--;
+                }
+            }
+            for(int i=0;i<functionPane.getChildren().size();i++){
+                Node node = functionPane.getChildren().get(i);
+                if(node instanceof StatementBlock) {
+                    functionPane.getChildren().remove(node);
+                    i--;
+                }
+            }
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                LinkedHashMap<String,ArrayList<BlockMap>> fileMap = mapper.readValue(file, new TypeReference<LinkedHashMap<String,ArrayList<BlockMap>>>(){});
+                ArrayList<BlockMap> blockMaps = fileMap.get("Blocks");
+                System.out.println(blockMaps);
+                for(BlockMap blockMap : blockMaps){
+                    drawingPane.getChildren().add(getBlockFromBlockMap(blockMap,null,drawingPane));
+                }
+                ArrayList<BlockMap> variableMaps = fileMap.get("Variables");
+                for(BlockMap blockMap : variableMaps){
+                    ValueBlock valueBlock = new ValueBlock(blockMap.blockSpec, variablePane) {
+                        @Override
+                        public void onMousePressed(MouseEvent mouseEvent) {
+                            //super.onMousePressed(mouseEvent);
+                            System.out.println("Mouse Entered on Click Me Two");
+                            ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                            valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
+                            valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
+                            ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                            Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                            valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                            valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+                            if (robot != null) {
+                                robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                                robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                                robot.delay(20);
+                                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                            }
+                        }
 
+                        @Override
+                        public void onMouseDragged(MouseEvent mouseEvent) {
+                        }
+                    };
+                    valueBlock.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
+                    valueBlock.setPadding(new Insets(-5, 2, -2, 2));
+                    variablePane.getChildren().add(valueBlock);
+                }
+                ArrayList<BlockMap> functionMaps = fileMap.get("Functions");
+                for(BlockMap blockMap : functionMaps){
+                    StatementBlock statementBlock = new StatementBlock(blockMap.blockSpec, functionPane) {
+                        @Override
+                        public void onMousePressed(MouseEvent mouseEvent) {
+                            //super.onMousePressed(mouseEvent);
+                            System.out.println("Mouse Entered on Click Me Two");
+                            StatementBlock valueBlock1 = new StatementBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                            valueBlock1.setBackground(new Background(new BackgroundFill(FUNCTION_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+                            ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                            Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                            valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                            valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+                            if (robot != null) {
+                                robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                                robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                                robot.delay(20);
+                                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                            }
+                        }
+
+                        @Override
+                        public void onMouseDragged(MouseEvent mouseEvent) {
+                        }
+                    };
+                    statementBlock.setBackground(new Background(new BackgroundFill(FUNCTION_COLOR, CornerRadii.EMPTY, Insets.EMPTY)));
+                    functionPane.getChildren().add(statementBlock);
+                }
+                System.out.println("The Object  was successfully read from a file\n"+fileMap);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Open Failed");
+                alert.setContentText(ex.getLocalizedMessage());
+                alert.showAndWait();
+            }
         }
     }
 
     @FXML
     public void saveFile(ActionEvent event){
-//        System.out.println("save pressed");
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Files","*"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("ScratchForAndroid File","*.sfa"));
         File file = fileChooser.showSaveDialog(drawingPane.getScene().getWindow());
         if(file != null){
             System.out.println(file);
             try {
                 ObjectMapper mapper = new ObjectMapper();
 
-                String jsonInString = mapper.writeValueAsString(drawingPane.getChildren().get(0));
+                ObjectWriter writer = mapper.defaultPrettyPrintingWriter();
+                LinkedHashMap<String,Object> fileMap = new LinkedHashMap<>();
+                ArrayList<BlockMap> blockMaps = new ArrayList<>();
+                for(Node node : drawingPane.getChildren()){
+                    if(node instanceof Block){
+                        //if not top block, skip
+                        if(node instanceof BlockWithSlotAndPlug && ((BlockWithSlotAndPlug) node).slot.getBlock()!=null)continue;
+                        blockMaps.add(((Block) node).getBlockMap());
+                    }
+                }
+                ArrayList<BlockMap> variableMaps = new ArrayList<>();
+                for(Node node : variablePane.getChildren()){
+                    if(node instanceof ValueBlock){
+                        variableMaps.add(((Block) node).getBlockMap());
+                    }
+                }
+                ArrayList<BlockMap> functionMaps = new ArrayList<>();
+                for(Node node : functionPane.getChildren()){
+                    if(node instanceof Block){
+                        functionMaps.add(((Block) node).getBlockMap());
+                    }
+                }
+                fileMap.put("Blocks",blockMaps);
+                fileMap.put("Variables",variableMaps);
+                fileMap.put("Functions",functionMaps);
+                writer.writeValue(file,fileMap);
 
-
-                System.out.println("The Object  was succesfully written to a file\n"+jsonInString);
-
+                System.out.println("The Object  was successfully written to a file");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("File Saved");
+                alert.setContentText("File Saved");
+                alert.showAndWait();
             } catch (Exception ex) {
                 ex.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Save Failed");
+                alert.setContentText(ex.getLocalizedMessage());
+                alert.showAndWait();
             }
         }
+    }
+
+    /**
+     * New a block from blockMap.
+     * @param blockMap Block constructs according to information in it.
+     * @param parentBlock If the block is a succeeding block, provide parent block to point to in its slot.
+     * @param containedPane The pane which the block is going to be in.
+     * @return The new block's reference.
+     */
+    public Block getBlockFromBlockMap(BlockMap blockMap,BlockWithPlug parentBlock,Pane containedPane){
+        BlockSpec blockSpec = blockMap.blockSpec;
+        Block newBlock = null;
+        System.out.println("Type="+blockSpec.type);
+        switch(blockSpec.type){
+            case "h":
+                newBlock = new Head(blockSpec, containedPane);
+                break;
+            case "r":
+                newBlock = new ValueBlock(blockSpec, containedPane);
+                break;
+            case "b":
+                newBlock = new BooleanBlock(blockSpec, containedPane);
+                break;
+            case "w":
+                newBlock = new StatementBlock(blockSpec, containedPane);
+                break;
+            case "one block":
+                newBlock = new ControlBlock(blockSpec, containedPane);
+                break;
+            case "loop":
+                newBlock = new ForeverLoopBlock(blockSpec,containedPane);
+                break;
+            case "two block":
+                newBlock = new IfandElseBlock(blockSpec,containedPane);
+                break;
+            case "FunctionBlock":
+                newBlock = new FunctionBlock(blockSpec,containedPane,blockMap.functionSpec,functionPane);
+                break;
+        }
+        if(newBlock==null)return null;
+        //process titlePane
+        Iterator<BlockMap.TitleField> titleFieldIterator = blockMap.titleFields.iterator(); //iterator points in front of first element
+        for(Node node : newBlock.titlePane.getChildren()){
+            if(node instanceof StackPane){
+                BlockMap.TitleField titleField = titleFieldIterator.next();
+                Node textComponent = ((StackPane) node).getChildren().get(0);
+                if(textComponent instanceof TextField)
+                    ((TextField) textComponent).setText(titleField.value);
+                else if(textComponent instanceof ComboBox && ((ComboBox) textComponent).getValue() instanceof String)
+                    ((ComboBox<String>) textComponent).setValue(titleField.value);
+                if(titleField.block != null){
+                    textComponent.setManaged(false);
+                    textComponent.setVisible(false);
+                    ((StackPane) node).getChildren().add(getBlockFromBlockMap(titleField.block,null,containedPane));
+                }
+            }
+        }
+        //process with slot connection
+        if(parentBlock != null && newBlock instanceof BlockWithSlotAndPlug)
+            ((BlockWithSlotAndPlug) newBlock).slot.setBlock(parentBlock);
+        //process with succeeding blocks
+        if(newBlock instanceof BlockWithPlug){
+            BlockWithPlug blockWithPlug = (BlockWithPlug) newBlock;
+            for(int i=0;i<blockWithPlug.plugs.size();i++){
+                if(blockMap.plugs[i]!=null){
+                    BlockWithSlotAndPlug blockWithSlotAndPlug = (BlockWithSlotAndPlug)getBlockFromBlockMap(blockMap.plugs[i],(BlockWithPlug)newBlock,containedPane);
+                    blockWithPlug.plugs.get(i).setBlock(blockWithSlotAndPlug);
+                    drawingPane.getChildren().add(blockWithSlotAndPlug);
+                }
+            }
+        }
+        newBlock.setBackground(new Background(new BackgroundFill(Paint.valueOf(blockMap.color), CornerRadii.EMPTY, Insets.EMPTY)));
+        newBlock.setLayoutX(blockMap.layoutX);
+        newBlock.setLayoutY(blockMap.layoutY);
+        return newBlock;
     }
 }

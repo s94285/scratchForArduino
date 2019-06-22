@@ -201,6 +201,8 @@ public class ValueBlock extends Block {
 
     @Override
     public void onMousePressed(MouseEvent mouseEvent) {
+        System.out.println(this);
+        System.out.println(this.drawingPane);
         super.onMousePressed(mouseEvent);
         Node node = (Node)mouseEvent.getTarget();
         while(node != drawingPane){
@@ -225,6 +227,7 @@ public class ValueBlock extends Block {
 
     @Override
     public void onMouseDragged(MouseEvent mouseEvent) {
+        System.out.println(this);
         super.onMouseDragged(mouseEvent);
 //        System.out.println(this + " " + mouseEvent.getTarget());
 
@@ -244,6 +247,7 @@ public class ValueBlock extends Block {
                 selectedStackPane = null;
             }
         }
+        mouseEvent.consume();
     }
 
     @Override

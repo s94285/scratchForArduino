@@ -4,6 +4,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
@@ -13,6 +14,8 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.reactfx.value.Val;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,7 @@ public abstract class Block extends VBox {
     protected HBox titlePane = new HBox();
     protected String blockName;
     protected BlockSpec blockSpec;
+    protected static final ObjectMapper jsonMapper = new ObjectMapper();
     protected ChangeListener<?super Number> sizeChangeListener = new ChangeListener<Number>() {
         @Override
         public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -309,5 +313,39 @@ public abstract class Block extends VBox {
     public abstract void generateCode(Code code);
     public BlockSpec getBlockSpec() {
         return blockSpec;
+    }
+    public BlockMap getBlockMap(){       //return a LinkedHashMap of this block
+        BlockMap blockMap = new BlockMap();
+        //fill type in spec if forgot
+        if(this.blockSpec.type == null || this.blockSpec.type.equals("")){
+            if(this instanceof StatementBlock)
+                this.blockSpec.type = "w";
+            else if(this instanceof Head)
+                this.blockSpec.type = "h";
+            else if(this instanceof ValueBlock)
+                this.blockSpec.type = "r";
+            else if(this instanceof BooleanBlock)
+                this.blockSpec.type = "b";
+        }
+        blockMap.blockSpec = this.blockSpec;
+        blockMap.color = this.getBackground().getFills().get(0).getFill().toString();
+        blockMap.layoutX = this.getLayoutX();
+        blockMap.layoutY = this.getLayoutY();
+        blockMap.titleFields = new ArrayList<>();
+        for(Node node : titlePane.getChildren()){
+            if(node instanceof StackPane){
+                Node textComponent = ((StackPane) node).getChildren().get(0);
+                BlockMap.TitleField titleField = new BlockMap.TitleField();
+                if(textComponent instanceof TextField)
+                    titleField.value = ((TextField) textComponent).getText();
+                else if(textComponent instanceof ComboBox)
+                    titleField.value = (String)((ComboBox) textComponent).getValue();
+                if(((StackPane) node).getChildren().size()>1){
+                    titleField.block = ((Block)(((StackPane) node).getChildren().get(1))).getBlockMap();
+                }
+                blockMap.titleFields.add(titleField);
+            }
+        }
+        return blockMap;
     }
 }

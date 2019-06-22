@@ -7,7 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -18,6 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonValue;
 
 import java.util.ArrayList;
 
@@ -78,17 +79,17 @@ public class FunctionDialogController {
         hbox.getChildren().add(labelString);
     }
 
-    public ArrayList<Pair<ArgumentType,String>> getArgumentList(){
-        ArrayList<Pair<ArgumentType,String>> list = new ArrayList<>();
+    public ArrayList<MyPair<ArgumentType,String>> getArgumentList(){
+        ArrayList<MyPair<ArgumentType,String>> list = new ArrayList<>();
         for(Node node : hbox.getChildren()){
             if(node instanceof LabelString){
-                list.add(new Pair<>(ArgumentType.TEXT,((TextField)node).getText()));
+                list.add(new MyPair<>(ArgumentType.TEXT,((TextField)node).getText()));
             }else if(node instanceof NumberArg){
-                list.add(new Pair<>(ArgumentType.NUMBER,((TextField)node).getText()));
+                list.add(new MyPair<>(ArgumentType.NUMBER,((TextField)node).getText()));
             }else if(node instanceof StringArg){
-                list.add(new Pair<>(ArgumentType.STRING,((TextField)node).getText()));
+                list.add(new MyPair<>(ArgumentType.STRING,((TextField)node).getText()));
             }else if(node instanceof BooleanArg){
-                list.add(new Pair<>(ArgumentType.BOOLEAN,((TextField)node).getText()));
+                list.add(new MyPair<>(ArgumentType.BOOLEAN,((TextField)node).getText()));
             }
         }
         if(list.size()<1||!(list.get(0).getKey()==ArgumentType.TEXT)){
