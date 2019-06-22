@@ -18,6 +18,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -907,9 +912,10 @@ public class ScratchForArduinoController {
             if(node instanceof StackPane){
                 BlockMap.TitleField titleField = titleFieldIterator.next();
                 Node textComponent = ((StackPane) node).getChildren().get(0);
-                if(textComponent instanceof TextField)
-                    ((TextField) textComponent).setText(titleField.value);
-                else if(textComponent instanceof ComboBox && ((ComboBox) textComponent).getValue() instanceof String)
+                if(textComponent instanceof TextField) {
+                    TextField textField = ((TextField) textComponent);
+                    textField.setText(titleField.value);
+                }else if(textComponent instanceof ComboBox && ((ComboBox) textComponent).getValue() instanceof String)
                     ((ComboBox<String>) textComponent).setValue(titleField.value);
                 if(titleField.block != null){
                     textComponent.setManaged(false);

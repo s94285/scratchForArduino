@@ -205,8 +205,8 @@ public abstract class Block extends VBox {
                             arcTo1.setRadiusX(12);
                             arcTo1.setRadiusY(getHeight()/2);
                             arcTo1.setSweepFlag(true);
-                            LineTo lineTo1 = new LineTo(getWidth()-12, 0);
-                            ArcTo arcTo2 = new ArcTo(12, getHeight()/2, 0,getWidth()-12 , getHeight(), false, true);
+                            LineTo lineTo1 = new LineTo((width+3)-12, 0);
+                            ArcTo arcTo2 = new ArcTo(12, getHeight()/2, 0,(width+3)-12 , getHeight(), false, true);
                             path.getElements().addAll(moveTo, arcTo1, lineTo1, arcTo2, new ClosePath());
                             textField.setShape(path);
                         });
