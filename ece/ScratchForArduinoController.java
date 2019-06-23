@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -673,6 +674,29 @@ public class ScratchForArduinoController {
                 @Override
                 public void onMousePressed(MouseEvent mouseEvent) {
                     //super.onMousePressed(mouseEvent);
+                    if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                        //delete the variable
+                        drawingPane.getChildren().remove(this);
+                        ArrayList<StackPane> stackPanes = getAllValueStackPanes(ScratchForArduinoController.this.drawingPane);
+                        //find in drawingPane
+                        for(int i=0;i<ScratchForArduinoController.this.drawingPane.getChildren().size();i++){
+                            Node node = ScratchForArduinoController.this.drawingPane.getChildren().get(i);
+                            if(node instanceof BooleanBlock && ((BooleanBlock) node).blockSpec.title.equals(this.blockSpec.title))
+                                ScratchForArduinoController.this.drawingPane.getChildren().remove(i--);
+                        }
+                        //find in stackPanes
+                        for(StackPane stackPane : stackPanes){
+                            if(stackPane.getChildren().size()>1) {
+                                Node node = stackPane.getChildren().get(1);
+                                if (node instanceof BooleanBlock && ((BooleanBlock) node).blockSpec.title.equals(this.blockSpec.title)){
+                                    stackPane.getChildren().remove(node);
+                                    stackPane.getChildren().get(0).setManaged(true);
+                                    stackPane.getChildren().get(0).setVisible(true);
+                                }
+                            }
+                        }
+                        return;
+                    }
                     System.out.println("Mouse Entered on Click Me Two");
                     BooleanBlock valueBlock1 = new BooleanBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
                     valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -698,6 +722,29 @@ public class ScratchForArduinoController {
                 @Override
                 public void onMousePressed(MouseEvent mouseEvent) {
                     //super.onMousePressed(mouseEvent);
+                    if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                        //delete the variable
+                        drawingPane.getChildren().remove(this);
+                        ArrayList<StackPane> stackPanes = getAllValueStackPanes(ScratchForArduinoController.this.drawingPane);
+                        //find in drawingPane
+                        for(int i=0;i<ScratchForArduinoController.this.drawingPane.getChildren().size();i++){
+                            Node node = ScratchForArduinoController.this.drawingPane.getChildren().get(i);
+                            if(node instanceof ValueBlock && ((ValueBlock) node).blockSpec.title.equals(this.blockSpec.title))
+                                ScratchForArduinoController.this.drawingPane.getChildren().remove(i--);
+                        }
+                        //find in stackPanes
+                        for(StackPane stackPane : stackPanes){
+                            if(stackPane.getChildren().size()>1) {
+                                Node node = stackPane.getChildren().get(1);
+                                if (node instanceof ValueBlock && ((ValueBlock) node).blockSpec.title.equals(this.blockSpec.title)) {
+                                    stackPane.getChildren().remove(node);
+                                    stackPane.getChildren().get(0).setManaged(true);
+                                    stackPane.getChildren().get(0).setVisible(true);
+                                }
+                            }
+                        }
+                        return;
+                    }
                     System.out.println("Mouse Entered on Click Me Two");
                     ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
                     valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -1032,5 +1079,30 @@ public class ScratchForArduinoController {
         newBlock.setLayoutX(blockMap.layoutX);
         newBlock.setLayoutY(blockMap.layoutY);
         return newBlock;
+    }
+
+    /**
+     * Get all stackPanes for finding {@link ValueBlock} and {@link BooleanBlock}
+     * @param pane The pane to find
+     * @return ArrayList containing {@link StackPane}
+     */
+    private ArrayList<StackPane> getAllValueStackPanes(Pane pane){
+        ArrayList<StackPane> list = new ArrayList<>();
+        for(Node nodeInPane : pane.getChildren()){
+            if(nodeInPane instanceof Block){
+                Block block = (Block)nodeInPane;
+                for(Node nodeInTitlePane : block.getTitlePane().getChildren()){
+                    if(nodeInTitlePane instanceof StackPane){
+                        StackPane stackPane = (StackPane)nodeInTitlePane;
+                        if(stackPane.getChildren().size()>1){
+                            list.addAll(getAllValueStackPanes(stackPane));
+                        }
+                        list.add(stackPane);
+                    }
+                }
+
+            }
+        }
+        return list;
     }
 }

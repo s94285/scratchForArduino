@@ -20,6 +20,26 @@
     }
   },
   {
+    "name": "setString",
+    "type": "w",
+    "title": "set string %n to %s",
+    "field": [
+      "",
+      "Hello"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "{0} = {1};\n",
+      "loop": ""
+    },
+    "menu": {
+    },
+    "value": {
+    }
+  },
+  {
     "name": "changeBy",
     "type": "w",
     "title": "change %n by %n",
