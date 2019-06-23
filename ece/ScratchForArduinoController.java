@@ -483,7 +483,7 @@ public class ScratchForArduinoController {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Platform.runLater(() -> serialTextArea.appendText("Verify Finished\n"));
+                    Platform.runLater(() -> serialTextArea.appendText((p.exitValue()==0)?"Verify Finished\n":"Verify Failed\n"));
                 }
             });
             update.setDaemon(true);
@@ -531,7 +531,7 @@ public class ScratchForArduinoController {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Platform.runLater(() -> serialTextArea.appendText("Upload Finished\n"));
+                    Platform.runLater(() -> serialTextArea.appendText((p.exitValue()==0)?"Upload Finished\n":"Upload Failed\n"));
                 }
             });
             update.setDaemon(true);
@@ -811,33 +811,61 @@ public class ScratchForArduinoController {
                 }
                 ArrayList<BlockMap> variableMaps = fileMap.get("Variables");
                 for(BlockMap blockMap : variableMaps){
-                    ValueBlock valueBlock = new ValueBlock(blockMap.blockSpec, variablePane) {
-                        @Override
-                        public void onMousePressed(MouseEvent mouseEvent) {
-                            //super.onMousePressed(mouseEvent);
-                            System.out.println("Mouse Entered on Click Me Two");
-                            ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
-                            valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
-                            valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
-                            ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
-                            Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
-                            valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
-                            valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
-                            if (robot != null) {
-                                robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-                                robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
-                                robot.delay(20);
-                                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                    Block newBlock;
+                    if(blockMap.blockSpec.type.equals("b")){
+                        newBlock = new BooleanBlock(blockMap.blockSpec, variablePane) {
+                            @Override
+                            public void onMousePressed(MouseEvent mouseEvent) {
+                                //super.onMousePressed(mouseEvent);
+                                System.out.println("Mouse Entered on Click Me Two");
+                                BooleanBlock valueBlock1 = new BooleanBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                                valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
+                                valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
+                                ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                                Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                                valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                                valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+                                if (robot != null) {
+                                    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                                    robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                                    robot.delay(20);
+                                    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onMouseDragged(MouseEvent mouseEvent) {
-                        }
-                    };
-                    valueBlock.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
-                    valueBlock.setPadding(new Insets(-5, 2, -2, 2));
-                    variablePane.getChildren().add(valueBlock);
+                            @Override
+                            public void onMouseDragged(MouseEvent mouseEvent) {
+                            }
+                        };
+                    }else{
+                        newBlock = new ValueBlock(blockMap.blockSpec, variablePane) {
+                            @Override
+                            public void onMousePressed(MouseEvent mouseEvent) {
+                                //super.onMousePressed(mouseEvent);
+                                System.out.println("Mouse Entered on Click Me Two");
+                                ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                                valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
+                                valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
+                                ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                                Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                                valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                                valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+                                if (robot != null) {
+                                    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                                    robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                                    robot.delay(20);
+                                    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                                }
+                            }
+
+                            @Override
+                            public void onMouseDragged(MouseEvent mouseEvent) {
+                            }
+                        };
+                    }
+                    newBlock.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
+                    newBlock.setPadding(new Insets(-5, 2, -2, 2));
+                    variablePane.getChildren().add(newBlock);
                 }
                 ArrayList<BlockMap> functionMaps = fileMap.get("Functions");
                 for(BlockMap blockMap : functionMaps){
@@ -900,7 +928,7 @@ public class ScratchForArduinoController {
                 }
                 ArrayList<BlockMap> variableMaps = new ArrayList<>();
                 for(Node node : variablePane.getChildren()){
-                    if(node instanceof ValueBlock){
+                    if(node instanceof ValueBlock || node instanceof BooleanBlock){
                         variableMaps.add(((Block) node).getBlockMap());
                     }
                 }
