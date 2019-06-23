@@ -48,6 +48,7 @@ public abstract class Block extends VBox {
             if(arg.charAt(i)=='%'){
                 if (tmp.length() > 0) {
                     Label label = new Label(tmp.toString());
+                    label.setPadding(new Insets(0,5,0,5));
                     label.setFont(new Font(17));
                     label.setTextFill(Color.WHITE);
                     this.titlePane.getChildren().add(label);

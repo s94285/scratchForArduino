@@ -65,6 +65,7 @@ public class ScratchForArduinoController {
     enum BlockClass{CONTROLS,OPERATORS,ARDUINO,USER_DEFINED}
     private BlockClass currentBlockClass = BlockClass.ARDUINO;
     private VBox selectedOperatorsPane, selectedArduinoPane,selectedControlsPane,selectedUserDefinedPane,variablePane,functionPane;
+    private ScrollPane selectedOperatorsScroller,selectedArduinoScroller,selectedControlsScroller,selectedUserDefinedScroller;
     private final Button makeVariableButton = new Button("Make a Variable");
     private final Button makeFunctionButton = new Button("Make a Function");
     private java.awt.Robot robot;
@@ -114,7 +115,36 @@ public class ScratchForArduinoController {
         makeFunctionButton.setOnAction(this::makeFunctionButtonOnAction);
         functionPane.getChildren().add(makeFunctionButton);
         selectedUserDefinedPane.getChildren().addAll(variablePane,functionPane);
-        blockPane.getChildren().addAll(selectedControlsPane,selectedOperatorsPane, selectedArduinoPane,selectedUserDefinedPane);
+        selectedArduinoScroller = new ScrollPane();
+        selectedControlsScroller = new ScrollPane();
+        selectedOperatorsScroller = new ScrollPane();
+        selectedUserDefinedScroller = new ScrollPane();
+        //force scrollPane to maximum in size
+        AnchorPane.setTopAnchor(selectedArduinoScroller,0.0);
+        AnchorPane.setTopAnchor(selectedControlsScroller,0.0);
+        AnchorPane.setTopAnchor(selectedOperatorsScroller,0.0);
+        AnchorPane.setTopAnchor(selectedUserDefinedScroller,0.0);
+        AnchorPane.setRightAnchor(selectedArduinoScroller,0.0);
+        AnchorPane.setRightAnchor(selectedControlsScroller,0.0);
+        AnchorPane.setRightAnchor(selectedOperatorsScroller,0.0);
+        AnchorPane.setRightAnchor(selectedUserDefinedScroller,0.0);
+        AnchorPane.setBottomAnchor(selectedArduinoScroller,0.0);
+        AnchorPane.setBottomAnchor(selectedControlsScroller,0.0);
+        AnchorPane.setBottomAnchor(selectedOperatorsScroller,0.0);
+        AnchorPane.setBottomAnchor(selectedUserDefinedScroller,0.0);
+        AnchorPane.setLeftAnchor(selectedArduinoScroller,0.0);
+        AnchorPane.setLeftAnchor(selectedControlsScroller,0.0);
+        AnchorPane.setLeftAnchor(selectedOperatorsScroller,0.0);
+        AnchorPane.setLeftAnchor(selectedUserDefinedScroller,0.0);
+        selectedArduinoScroller.setContent(selectedArduinoPane);
+        selectedControlsScroller.setContent(selectedControlsPane);
+        selectedOperatorsScroller.setContent(selectedOperatorsPane);
+        selectedUserDefinedScroller.setContent(selectedUserDefinedPane);
+        selectedArduinoScroller.visibleProperty().bindBidirectional(selectedArduinoPane.visibleProperty());
+        selectedControlsScroller.visibleProperty().bindBidirectional(selectedControlsPane.visibleProperty());
+        selectedOperatorsScroller.visibleProperty().bindBidirectional(selectedOperatorsPane.visibleProperty());
+        selectedUserDefinedScroller.visibleProperty().bindBidirectional(selectedUserDefinedPane.visibleProperty());
+        blockPane.getChildren().addAll(selectedArduinoScroller,selectedControlsScroller, selectedOperatorsScroller,selectedUserDefinedScroller);
 //        codeArea.setEditable(false);
 //        codeArea.setFont(new Font("consolas",17));
         initializeBlocks();     //add blocks to left pane
@@ -608,7 +638,7 @@ public class ScratchForArduinoController {
         Label labelType = new Label("Variable Type");
         TextField textFieldName = new TextField();
         textFieldName.setPrefColumnCount(10);
-        String[] types = {"double", "boolean"};
+        String[] types = {"double", "boolean", "char", "int", "string"};
         ComboBox<String> comboBoxType = new ComboBox<>(FXCollections.observableArrayList(types));
         comboBoxType.setValue("double");
         gridPane.add(labelName, 0, 0);
@@ -628,11 +658,43 @@ public class ScratchForArduinoController {
             alert1.showAndWait();
             return;
         }
-        if (comboBoxType.getValue().equals("double")) {
-            BlockSpec blockSpec = blockSpecBuilder(varName, varName);
-            blockSpec.code.work = varName;
-            blockSpec.code.def = "double " + varName + ";\n";
-            ValueBlock valueBlock = new ValueBlock(blockSpec, variablePane) {
+        BlockSpec blockSpec = blockSpecBuilder("(" + comboBoxType.getValue() + ") " + varName, varName);
+        blockSpec.code.work = varName;
+        switch (comboBoxType.getValue()) {
+            case "double":blockSpec.code.def = "double " + varName + ";\n";break;
+            case "boolean":blockSpec.code.def = "boolean " + varName + ";\n";break;
+            case "char":blockSpec.code.def = "char " + varName + ";\n";break;
+            case "int":blockSpec.code.def = "int " + varName + ";\n";break;
+            case "string":blockSpec.code.def = "String " + varName + ";\n";break;
+        }
+        Block newBlock;
+        if(comboBoxType.getValue().equals("boolean")) {
+            newBlock = new BooleanBlock(blockSpec, variablePane) {
+                @Override
+                public void onMousePressed(MouseEvent mouseEvent) {
+                    //super.onMousePressed(mouseEvent);
+                    System.out.println("Mouse Entered on Click Me Two");
+                    BooleanBlock valueBlock1 = new BooleanBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
+                    valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
+                    valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
+                    ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
+                    Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+                    valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
+                    valueBlock1.setLayoutX(scenePoint.getX() - mouseEvent.getX());
+                    if (robot != null) {
+                        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                        robot.mouseMove((int) mouseEvent.getScreenX(), (int) mouseEvent.getScreenY());
+                        robot.delay(20);
+                        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                    }
+                }
+
+                @Override
+                public void onMouseDragged(MouseEvent mouseEvent) {
+                }
+            };
+        }else{
+            newBlock = new ValueBlock(blockSpec, variablePane) {
                 @Override
                 public void onMousePressed(MouseEvent mouseEvent) {
                     //super.onMousePressed(mouseEvent);
@@ -656,10 +718,10 @@ public class ScratchForArduinoController {
                 public void onMouseDragged(MouseEvent mouseEvent) {
                 }
             };
-            valueBlock.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
-            valueBlock.setPadding(new Insets(-5, 2, -2, 2));
-            variablePane.getChildren().add(valueBlock);
         }
+        newBlock.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
+        newBlock.setPadding(new Insets(-5, 2, -2, 2));
+        variablePane.getChildren().add(newBlock);
     }
 
     private void makeFunctionButtonOnAction(ActionEvent actionEvent) {

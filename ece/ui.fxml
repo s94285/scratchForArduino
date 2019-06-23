@@ -8,7 +8,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -89,18 +88,11 @@
                                                 </VBox>
                                              </children>
                                           </Pane>
-                                          <ScrollPane maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0">
-                                            <content>
-                                              <AnchorPane fx:id="blockPane" minHeight="0.0" minWidth="0.0">
-                                                   <opaqueInsets>
-                                                      <Insets />
-                                                   </opaqueInsets>
-                                                   <padding>
-                                                      <Insets bottom="50.0" />
-                                                   </padding>
-                                                </AnchorPane>
-                                            </content>
-                                          </ScrollPane>
+                                        <AnchorPane fx:id="blockPane" minHeight="0.0" minWidth="300.0">
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                          </AnchorPane>
                                        </items>
                                     </SplitPane>
                                  </children>
