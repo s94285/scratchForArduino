@@ -652,10 +652,10 @@ public class ScratchForArduinoController {
         alert.showAndWait();
         if (alert.getResult() == ButtonType.CANCEL) return;
         String varName = textFieldName.getText();
-        if (varName.length() == 0 || varName.contains(" ")) {
+        if (varName.length() == 0 || varName.contains(" ") || Character.isDigit(varName.charAt(0))) {
             Alert alert1 = new Alert(Alert.AlertType.WARNING);
             alert1.setTitle("Invalid variable name");
-            alert1.setContentText((varName.contains(" ")) ? "Variable name cannot contain space" : ((varName.length() == 0) ? "Variable name cannot be empty" : "Invalid variable name"));
+            alert1.setContentText((varName.contains(" ")) ? "Variable name cannot contain space" : ((varName.length() == 0) ? "Variable name cannot be empty" : (Character.isDigit(varName.charAt(0))) ? "Variable name cannot start with a digit" : "Invalid variable name"));
             alert1.showAndWait();
             return;
         }
