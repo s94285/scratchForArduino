@@ -24,6 +24,7 @@ import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -43,6 +44,8 @@ import ece.FunctionDialogController.ArgumentType;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.codehaus.jackson.type.TypeReference;
 import org.fxmisc.flowless.VirtualizedScrollPane;
+
+import javax.swing.*;
 
 import static ece.FunctionBlock.FUNCTION_COLOR;
 
@@ -475,7 +478,7 @@ public class ScratchForArduinoController {
             if(!Files.exists(folder)){
                 Files.createDirectories(folder);
             }
-            Path file = Paths.get(folder.toString(),"tmp.ino");
+            Path file = Paths.get(folder.toString(),"inoTmp.ino");
             Files.write(file,Arrays.asList(codeArea.getText()) , StandardCharsets.UTF_8);
             final Process p = Runtime.getRuntime().exec(String.format("%s\\arduino_debug --verify --board %s --port %s --verbose --preserve-temp-files \"%s\"",configs.getProperty("arduinoPath"),boardName,portComboBox.getValue(),file.toAbsolutePath()));
 
@@ -519,7 +522,7 @@ public class ScratchForArduinoController {
             if(!Files.exists(folder)){
                 Files.createDirectories(folder);
             }
-            Path file = Paths.get(folder.toString(),"tmp.ino");
+            Path file = Paths.get(folder.toString(),"inoTmp.ino");
             Files.write(file,Arrays.asList(codeArea.getText()) , StandardCharsets.UTF_8);
             final Process p = Runtime.getRuntime().exec(String.format("%s\\arduino_debug --upload --board %s --port %s --verbose --preserve-temp-files \"%s\"",configs.getProperty("arduinoPath"),boardName,portComboBox.getValue(),file.toAbsolutePath()));
 
@@ -572,15 +575,28 @@ public class ScratchForArduinoController {
         textInputDialog.setTitle("Setup Arduino Path");
         textInputDialog.setHeaderText("Input full arduino path below without \\ at last\neg: "+"C:\\Program Files (x86)\\Arduino");
         textInputDialog.setContentText("Path: ");
+        System.out.println(textInputDialog.getDialogPane().getContent());
+        GridPane grid = (GridPane) textInputDialog.getDialogPane().getContent();
+        System.out.println(grid.getChildren());
+        Button browseButton = new Button("Browse...");
+        browseButton.setOnAction(event1 -> {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            File file = directoryChooser.showDialog(drawingPane.getScene().getWindow());
+            if(file!=null){
+                textInputDialog.getEditor().setText(file.toString());
+            }
+        });
+        grid.add(browseButton,2,0);
         textInputDialog.showAndWait();
         String str = textInputDialog.getResult();
         if(str==null)return;
         System.out.println(str);
-        if(!Files.exists(Paths.get(str))){
+        if(!Files.exists(Paths.get(str+"\\arduino.exe"))){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Invalid arduino path");
             alert.setContentText("Current Path: "+str+"\nPlease setup correct path");
             alert.showAndWait();
+            menuSetupArduinoPath(event);
             return;
         }
         configs.setProperty("arduinoPath",str);
@@ -955,6 +971,7 @@ public class ScratchForArduinoController {
                     functionPane.getChildren().add(statementBlock);
                 }
                 System.out.println("The Object  was successfully read from a file\n"+fileMap);
+                this.refreshCode();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -1117,5 +1134,27 @@ public class ScratchForArduinoController {
             }
         }
         return list;
+    }
+
+    @FXML
+    private void onOpenInArduinoClicked(ActionEvent event){
+        if(configs.isEmpty()||!Files.exists(Paths.get(configs.getProperty("arduinoPath")))){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid arduino path");
+            alert.setContentText("Current Path: "+configs.getProperty("arduinoPath")+"\nPlease setup correct path in File/Arduino Path");
+            alert.showAndWait();
+            return;
+        }
+        try {
+            Path folder = Paths.get("./inoTmp");
+            if(!Files.exists(folder)){
+                Files.createDirectories(folder);
+            }
+            Path file = Paths.get(folder.toString(),"inoTmp.ino");
+            Files.write(file,Arrays.asList(codeArea.getText()) , StandardCharsets.UTF_8);
+            Runtime.getRuntime().exec(String.format("%s\\arduino \"%s\"",configs.getProperty("arduinoPath"),file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

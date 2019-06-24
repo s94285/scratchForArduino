@@ -58,6 +58,7 @@
                         <ComboBox fx:id="portComboBox" layoutX="712.0" layoutY="10.0" prefWidth="100.0" />
                         <Button mnemonicParsing="false" onAction="#onVerifyButtonClicked" text="Verify" />
                         <Button layoutX="943.0" layoutY="10.0" mnemonicParsing="false" onAction="#onUploadButtonClicked" text="Upload" />
+                        <Button mnemonicParsing="false" onAction="#onOpenInArduinoClicked" text="Open In Arduino" />
                      </items>
                   </ToolBar>
                </top>
