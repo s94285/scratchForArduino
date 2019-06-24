@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -201,6 +202,11 @@ public class ValueBlock extends Block {
 
     @Override
     public void onMousePressed(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton() == MouseButton.SECONDARY){
+            this.duplicate();
+            mouseEvent.consume();
+            return;
+        }
         System.out.println(this);
         System.out.println(this.drawingPane);
         super.onMousePressed(mouseEvent);
@@ -227,6 +233,7 @@ public class ValueBlock extends Block {
 
     @Override
     public void onMouseDragged(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton() == MouseButton.SECONDARY)return;
         System.out.println(this);
         super.onMouseDragged(mouseEvent);
 //        System.out.println(this + " " + mouseEvent.getTarget());
@@ -252,6 +259,7 @@ public class ValueBlock extends Block {
 
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton() == MouseButton.SECONDARY)return;
         super.onMouseReleased(mouseEvent);
         if(selectedStackPane != null){
 //            System.out.println("selectedStackPane");

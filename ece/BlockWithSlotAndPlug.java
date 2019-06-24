@@ -2,6 +2,7 @@ package ece;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
@@ -32,6 +33,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
     }
     @Override
     public void onMouseDragged(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton() == MouseButton.SECONDARY)return;
         super.onMouseDragged(mouseEvent);
 //        System.out.println("slot dragged" + slot.getBlock());
         if(slot.getBlock()!=null){
@@ -59,6 +61,7 @@ public abstract class BlockWithSlotAndPlug extends BlockWithPlug {
 
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton() == MouseButton.SECONDARY)return;
         super.onMouseReleased(mouseEvent);
         //find plug for slot
 

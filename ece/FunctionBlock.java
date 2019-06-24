@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -207,6 +208,7 @@ public class FunctionBlock extends Head {
 
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton() == MouseButton.SECONDARY)return;
         super.onMouseReleased(mouseEvent);
         String statementBlockTitle = getStatementBlockSpec(functionSpec).title;
         //not only remove FunctionBlock, also statementBlock

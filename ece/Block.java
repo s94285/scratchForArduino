@@ -10,6 +10,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -18,6 +19,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.reactfx.value.Val;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public abstract class Block extends VBox {
@@ -282,9 +284,7 @@ public abstract class Block extends VBox {
     }
     public  void onMousePressed(MouseEvent mouseEvent){
 
-        Pane myParent = (Pane) this.getParent();
-        myParent.getChildren().remove(this);        //put self to the front
-        myParent.getChildren().add(this);
+        this.toFront();
         nowlayoutx=this.getLayoutX();
         nowlayouty=this.getLayoutY();
         pressedx=mouseEvent.getSceneX();
@@ -348,5 +348,79 @@ public abstract class Block extends VBox {
             }
         }
         return blockMap;
+    }
+
+    public Block duplicate(){
+        BlockMap blockMap = this.getBlockMap();
+        Block block =  getBlockFromBlockMap(blockMap,null,drawingPane);
+        if(block!=null) {
+            block.setLayoutX(block.getLayoutX() + 20);
+            block.setLayoutY(block.getLayoutY() + 20);
+            drawingPane.getChildren().add(block);
+        }
+        return block;
+    }
+
+    private Block getBlockFromBlockMap(BlockMap blockMap,BlockWithPlug parentBlock,Pane containedPane){
+        BlockSpec blockSpec = blockMap.blockSpec;
+        Block newBlock = null;
+        System.out.println("Type="+blockSpec.type);
+        switch(blockSpec.type){
+            case "r":
+                newBlock = new ValueBlock(blockSpec, containedPane);
+                break;
+            case "b":
+                newBlock = new BooleanBlock(blockSpec, containedPane);
+                break;
+            case "w":
+                newBlock = new StatementBlock(blockSpec, containedPane);
+                break;
+            case "one block":
+                newBlock = new ControlBlock(blockSpec, containedPane);
+                break;
+            case "loop":
+                newBlock = new ForeverLoopBlock(blockSpec,containedPane);
+                break;
+            case "two block":
+                newBlock = new IfandElseBlock(blockSpec,containedPane);
+                break;
+        }
+        if(newBlock==null)return null;
+        //process titlePane
+        Iterator<BlockMap.TitleField> titleFieldIterator = blockMap.titleFields.iterator(); //iterator points in front of first element
+        for(Node node : newBlock.titlePane.getChildren()){
+            if(node instanceof StackPane){
+                BlockMap.TitleField titleField = titleFieldIterator.next();
+                Node textComponent = ((StackPane) node).getChildren().get(0);
+                if(textComponent instanceof TextField) {
+                    TextField textField = ((TextField) textComponent);
+                    textField.setText(titleField.value);
+                }else if(textComponent instanceof ComboBox && ((ComboBox) textComponent).getValue() instanceof String)
+                    ((ComboBox<String>) textComponent).setValue(titleField.value);
+                if(titleField.block != null){
+                    textComponent.setManaged(false);
+                    textComponent.setVisible(false);
+                    ((StackPane) node).getChildren().add(getBlockFromBlockMap(titleField.block,null,containedPane));
+                }
+            }
+        }
+        //process with slot connection
+        if(parentBlock != null && newBlock instanceof BlockWithSlotAndPlug)
+            ((BlockWithSlotAndPlug) newBlock).slot.setBlock(parentBlock);
+        //process with succeeding blocks
+        if(newBlock instanceof BlockWithPlug){
+            BlockWithPlug blockWithPlug = (BlockWithPlug) newBlock;
+            for(int i=0;i<blockWithPlug.plugs.size();i++){
+                if(blockMap.plugs[i]!=null){
+                    BlockWithSlotAndPlug blockWithSlotAndPlug = (BlockWithSlotAndPlug)getBlockFromBlockMap(blockMap.plugs[i],(BlockWithPlug)newBlock,containedPane);
+                    blockWithPlug.plugs.get(i).setBlock(blockWithSlotAndPlug);
+                    drawingPane.getChildren().add(blockWithSlotAndPlug);
+                }
+            }
+        }
+        newBlock.setBackground(new Background(new BackgroundFill(Paint.valueOf(blockMap.color), CornerRadii.EMPTY, Insets.EMPTY)));
+        newBlock.setLayoutX(blockMap.layoutX);
+        newBlock.setLayoutY(blockMap.layoutY);
+        return newBlock;
     }
 }

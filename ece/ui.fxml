@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -121,6 +122,7 @@
                                     <Button mnemonicParsing="false" onAction="#onSerialClearButtonClicked" text="Clear" />
                                     <TextField fx:id="serialInputTextField" onAction="#onSendButtonClicked" HBox.Hgrow="SOMETIMES" />
                                     <Button mnemonicParsing="false" onAction="#onSendButtonClicked" text="Send" />
+                                    <ChoiceBox fx:id="endingCharacterChoiceBox" />
                                 </items>
                               </ToolBar>
                              </children>

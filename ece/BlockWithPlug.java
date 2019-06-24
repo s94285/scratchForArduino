@@ -2,6 +2,7 @@ package ece;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
@@ -92,20 +93,25 @@ public abstract class BlockWithPlug extends Block {
 
     @Override
     public void onMouseDragged(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton() == MouseButton.SECONDARY)return;
         super.onMouseDragged(mouseEvent);
 //        System.out.println("plug dragged " + plugs.get(0).getBlock());
     }
 
     @Override
     public void onMousePressed(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton() == MouseButton.SECONDARY){
+            this.duplicate();
+            mouseEvent.consume();
+            return;
+        }
         super.onMousePressed(mouseEvent);
         bringToFront(this);
     }
 
     private void bringToFront(BlockWithPlug blockWithPlug) {
         if (blockWithPlug != this) {        //this already done in Block
-            drawingPane.getChildren().remove(blockWithPlug);
-            drawingPane.getChildren().add(blockWithPlug);
+            blockWithPlug.toFront();
         }
         for (PointBlockPair<BlockWithSlotAndPlug> pair : blockWithPlug.plugs) {
             if (pair.getBlock() != null)

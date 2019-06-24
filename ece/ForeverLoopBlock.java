@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -24,6 +25,7 @@ public class ForeverLoopBlock extends BlockWithSlotAndPlug {
     }
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton() == MouseButton.SECONDARY)return;
         super.onMouseReleased(mouseEvent);
         reShape();      //for reshape after plug to others
     }

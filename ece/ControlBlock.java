@@ -24,6 +24,7 @@ public class ControlBlock extends  BlockWithSlotAndPlug {
 
     @Override
     public void onMouseReleased(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton() == MouseButton.SECONDARY)return;
         super.onMouseReleased(mouseEvent);
         reShape();      //for reshape after plug to others
     }

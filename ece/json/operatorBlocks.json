@@ -241,7 +241,7 @@
     "type": "r",
     "title": "cast ascii %n to char",
     "field": [
-      "68"
+      ""
     ],
     "code": {
       "inc": "",
@@ -303,15 +303,15 @@
     }
   },
   {
-    "name": "Next Line",
+    "name": "New Line Char",
     "type": "r",
-    "title": "next line",
+    "title": "new line",
     "field": [],
     "code": {
       "inc": "",
       "def": "",
       "setup": "",
-      "work": "\"\\n\"",
+      "work": "'\\n'",
       "loop": ""
     }
   }

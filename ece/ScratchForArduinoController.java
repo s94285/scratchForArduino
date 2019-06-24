@@ -56,12 +56,13 @@ public class ScratchForArduinoController {
     @FXML private TextField serialInputTextField;
     @FXML private ComboBox<String> boardComboBox,portComboBox;
     @FXML private ToggleButton serialConnectButton;
+    @FXML private ChoiceBox<String> endingCharacterChoiceBox;
     private Properties configs = new Properties();
     private CustomCodeArea codeArea = new CustomCodeArea();
     private String boardName="";
     private boolean serialListening = false;
     private SerialPort comPort;
-
+    private String lineEnding = "";
 
     enum BlockClass{CONTROLS,OPERATORS,ARDUINO,USER_DEFINED}
     private BlockClass currentBlockClass = BlockClass.ARDUINO;
@@ -166,6 +167,16 @@ public class ScratchForArduinoController {
         });
         portComboBox.setOnShowing(this::portComboBoxOnShowing);
         serialConnectButton.selectedProperty().addListener(this::serialConnectButtonChanged);
+        endingCharacterChoiceBox.setItems(FXCollections.observableList(Arrays.asList("No line ending","Newline","Carriage return","Both Nl & CR")));
+        endingCharacterChoiceBox.setValue("No line ending");
+        endingCharacterChoiceBox.setOnAction(event -> {
+            switch(endingCharacterChoiceBox.getValue()){
+                case "No line ending":  lineEnding = "";    break;
+                case "Newline":         lineEnding = "\n";  break;
+                case "Carriage return": lineEnding = "\r";  break;
+                case "Both Nl & CR":    lineEnding = "\r\n";  break;
+            }
+        });
         //finish interface initialize
 
         Head block1 = new Head(blockSpecBuilder("Arduino Program","headBlock"),drawingPane);
@@ -543,7 +554,8 @@ public class ScratchForArduinoController {
     @FXML
     public void onSendButtonClicked(ActionEvent event){
         if(comPort!=null  && comPort.isOpen()){
-            byte[] data = serialInputTextField.getText().getBytes();
+            String toWrite = serialInputTextField.getText() + lineEnding;
+            byte[] data = toWrite.getBytes();
             comPort.writeBytes(data,data.length);
 //            serialTextArea.appendText(serialInputTextField.getText()+"\n");
         }
