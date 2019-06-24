@@ -165,7 +165,7 @@ public abstract class Block extends VBox {
                                 });
                         combobox1.autosize();
                         combobox1.getEditor().textProperty().addListener((observableValue,oldValue,newValue) -> {
-                            if(!newValue.matches("([\\d*.])*"))
+                            if(!newValue.matches("([\\d.-])*"))
                                 combobox1.getEditor().setText(oldValue);
                             else
                                 combobox1.setValue(newValue);
@@ -195,7 +195,7 @@ public abstract class Block extends VBox {
                                     + 2d; // Add some spacing
                             textField.setPrefWidth(width+1); // Set the width
                             textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
-                            if(!newValue.matches("([\\d*.])*")){
+                            if(!newValue.matches("([\\d.-])*")){
                                 textField.setText(oldValue);
                             }
                             Path path = new Path();

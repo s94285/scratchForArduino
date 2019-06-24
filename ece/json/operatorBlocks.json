@@ -64,6 +64,22 @@
     }
   },
   {
+    "name": "mod",
+    "type": "r",
+    "title": "%n mod %n",
+    "field": [
+      "",
+      ""
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "({0})%({1})",
+      "loop": ""
+    }
+  },
+  {
     "name": "pick random",
     "type": "r",
     "title": "pick random %n to %n",
@@ -138,6 +154,21 @@
       "def": "",
       "setup": "",
       "work": "String({0})",
+      "loop": ""
+    }
+  },
+  {
+    "name": "cast number to int",
+    "type": "r",
+    "title": "cast %n to int",
+    "field": [
+      "1"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "((int)({0}))",
       "loop": ""
     }
   },
@@ -335,6 +366,32 @@
       "def": "",
       "setup": "",
       "work": "'\\n'",
+      "loop": ""
+    }
+  },
+  {
+    "name": "TRUE",
+    "type": "b",
+    "title": "TRUE",
+    "field": [],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "true",
+      "loop": ""
+    }
+  },
+  {
+    "name": "FALSE",
+    "type": "b",
+    "title": "FALSE",
+    "field": [],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "false",
       "loop": ""
     }
   }
