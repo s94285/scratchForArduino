@@ -268,6 +268,29 @@
     }
   },
   {
+    "name": "string convert",
+    "type": "r",
+    "title": "convert string %s to %m.type",
+    "field": [
+      "",
+      "int"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "",
+      "work": "{1}",
+      "loop": ""
+    },
+    "menu": {
+      "type": ["int","double"]
+    },
+    "value": {
+      "int": "String({0}).toInt()",
+      "double": "String({0}).toDouble()"
+    }
+  },
+  {
     "name": "math operator",
     "type": "r",
     "title": "%m.op of %n",
@@ -305,7 +328,7 @@
   {
     "name": "New Line Char",
     "type": "r",
-    "title": "new line",
+    "title": "new line char",
     "field": [],
     "code": {
       "inc": "",

@@ -65,7 +65,7 @@ public class ScratchForArduinoController {
     private String boardName="";
     private boolean serialListening = false;
     private SerialPort comPort;
-    private String lineEnding = "";
+    private String lineEnding = "\n";
 
     enum BlockClass{CONTROLS,OPERATORS,ARDUINO,USER_DEFINED}
     private BlockClass currentBlockClass = BlockClass.ARDUINO;
@@ -171,7 +171,7 @@ public class ScratchForArduinoController {
         portComboBox.setOnShowing(this::portComboBoxOnShowing);
         serialConnectButton.selectedProperty().addListener(this::serialConnectButtonChanged);
         endingCharacterChoiceBox.setItems(FXCollections.observableList(Arrays.asList("No line ending","Newline","Carriage return","Both Nl & CR")));
-        endingCharacterChoiceBox.setValue("No line ending");
+        endingCharacterChoiceBox.setValue("Newline");
         endingCharacterChoiceBox.setOnAction(event -> {
             switch(endingCharacterChoiceBox.getValue()){
                 case "No line ending":  lineEnding = "";    break;
@@ -666,14 +666,18 @@ public class ScratchForArduinoController {
         Label labelName = new Label("Variable Name");
         Label labelType = new Label("Variable Type");
         TextField textFieldName = new TextField();
+        TextField textFieldInit = new TextField();
         textFieldName.setPrefColumnCount(10);
+        textFieldInit.setPrefColumnCount(10);
         String[] types = {"double", "boolean", "char", "int", "string"};
         ComboBox<String> comboBoxType = new ComboBox<>(FXCollections.observableArrayList(types));
         comboBoxType.setValue("double");
         gridPane.add(labelName, 0, 0);
         gridPane.add(labelType, 0, 1);
+        gridPane.add(new Label("Initial Value"),0,2);
         gridPane.add(textFieldName, 1, 0);
         gridPane.add(comboBoxType, 1, 1);
+        gridPane.add(textFieldInit,1,2);
         gridPane.setHgap(10);
         gridPane.setVgap(15);
         alert.getDialogPane().setContent(gridPane);
@@ -689,12 +693,13 @@ public class ScratchForArduinoController {
         }
         BlockSpec blockSpec = blockSpecBuilder("(" + comboBoxType.getValue() + ") " + varName, varName);
         blockSpec.code.work = varName;
+        String initValue = textFieldInit.getText();
         switch (comboBoxType.getValue()) {
-            case "double":blockSpec.code.def = "double " + varName + ";\n";break;
-            case "boolean":blockSpec.code.def = "boolean " + varName + ";\n";break;
-            case "char":blockSpec.code.def = "char " + varName + ";\n";break;
-            case "int":blockSpec.code.def = "int " + varName + ";\n";break;
-            case "string":blockSpec.code.def = "String " + varName + ";\n";break;
+            case "double":blockSpec.code.def = "double " + varName + " = " + ((initValue.equals(""))?"0.0":initValue) + ";\n";break;
+            case "boolean":blockSpec.code.def = "boolean " + varName + " = " + ((initValue.equals(""))?"false":initValue) + ";\n";break;
+            case "char":blockSpec.code.def = "char " + varName + " = " + ((initValue.equals(""))?"'0'":"'"+initValue+"'") + ";\n";break;
+            case "int":blockSpec.code.def = "int " + varName + " = " + ((initValue.equals(""))?"0":initValue) + ";\n";break;
+            case "string":blockSpec.code.def = "String " + varName + " = " + ((initValue.equals(""))?"\"\"":"\""+initValue+"\"") + ";\n";break;
         }
         Block newBlock;
         if(comboBoxType.getValue().equals("boolean")) {
@@ -728,7 +733,7 @@ public class ScratchForArduinoController {
                     System.out.println("Mouse Entered on Click Me Two");
                     BooleanBlock valueBlock1 = new BooleanBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
                     valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
-                    valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
+//                    valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
                     ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
                     Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
                     valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
@@ -776,7 +781,7 @@ public class ScratchForArduinoController {
                     System.out.println("Mouse Entered on Click Me Two");
                     ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
                     valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
-                    valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
+//                    valueBlock1.setPadding(new Insets(-5, 2, -2, 2));
                     ScratchForArduinoController.this.drawingPane.getChildren().add(valueBlock1);
                     Point2D scenePoint = ScratchForArduinoController.this.drawingPane.sceneToLocal(new Point2D(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
                     valueBlock1.setLayoutY(scenePoint.getY() - mouseEvent.getY());
@@ -892,6 +897,29 @@ public class ScratchForArduinoController {
                             @Override
                             public void onMousePressed(MouseEvent mouseEvent) {
                                 //super.onMousePressed(mouseEvent);
+                                if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                                    //delete the variable
+                                    drawingPane.getChildren().remove(this);
+                                    ArrayList<StackPane> stackPanes = getAllValueStackPanes(ScratchForArduinoController.this.drawingPane);
+                                    //find in drawingPane
+                                    for(int i=0;i<ScratchForArduinoController.this.drawingPane.getChildren().size();i++){
+                                        Node node = ScratchForArduinoController.this.drawingPane.getChildren().get(i);
+                                        if(node instanceof BooleanBlock && ((BooleanBlock) node).blockSpec.title.equals(this.blockSpec.title))
+                                            ScratchForArduinoController.this.drawingPane.getChildren().remove(i--);
+                                    }
+                                    //find in stackPanes
+                                    for(StackPane stackPane : stackPanes){
+                                        if(stackPane.getChildren().size()>1) {
+                                            Node node = stackPane.getChildren().get(1);
+                                            if (node instanceof BooleanBlock && ((BooleanBlock) node).blockSpec.title.equals(this.blockSpec.title)){
+                                                stackPane.getChildren().remove(node);
+                                                stackPane.getChildren().get(0).setManaged(true);
+                                                stackPane.getChildren().get(0).setVisible(true);
+                                            }
+                                        }
+                                    }
+                                    return;
+                                }
                                 System.out.println("Mouse Entered on Click Me Two");
                                 BooleanBlock valueBlock1 = new BooleanBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
                                 valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -917,6 +945,29 @@ public class ScratchForArduinoController {
                             @Override
                             public void onMousePressed(MouseEvent mouseEvent) {
                                 //super.onMousePressed(mouseEvent);
+                                if(mouseEvent.getButton() == MouseButton.SECONDARY){
+                                    //delete the variable
+                                    drawingPane.getChildren().remove(this);
+                                    ArrayList<StackPane> stackPanes = getAllValueStackPanes(ScratchForArduinoController.this.drawingPane);
+                                    //find in drawingPane
+                                    for(int i=0;i<ScratchForArduinoController.this.drawingPane.getChildren().size();i++){
+                                        Node node = ScratchForArduinoController.this.drawingPane.getChildren().get(i);
+                                        if(node instanceof ValueBlock && ((ValueBlock) node).blockSpec.title.equals(this.blockSpec.title))
+                                            ScratchForArduinoController.this.drawingPane.getChildren().remove(i--);
+                                    }
+                                    //find in stackPanes
+                                    for(StackPane stackPane : stackPanes){
+                                        if(stackPane.getChildren().size()>1) {
+                                            Node node = stackPane.getChildren().get(1);
+                                            if (node instanceof ValueBlock && ((ValueBlock) node).blockSpec.title.equals(this.blockSpec.title)) {
+                                                stackPane.getChildren().remove(node);
+                                                stackPane.getChildren().get(0).setManaged(true);
+                                                stackPane.getChildren().get(0).setVisible(true);
+                                            }
+                                        }
+                                    }
+                                    return;
+                                }
                                 System.out.println("Mouse Entered on Click Me Two");
                                 ValueBlock valueBlock1 = new ValueBlock(blockSpec, ScratchForArduinoController.this.drawingPane);
                                 valueBlock1.setBackground(new Background(new BackgroundFill(Color.rgb(238, 125, 22), CornerRadii.EMPTY, Insets.EMPTY)));

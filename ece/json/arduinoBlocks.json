@@ -168,6 +168,21 @@
     }
   },
   {
+    "name": "serial write line",
+    "type": "w",
+    "title": "serial write line %s",
+    "field": [
+      "hello"
+    ],
+    "code": {
+      "inc": "",
+      "def": "",
+      "setup": "Serial.begin(115200);\n",
+      "work": "Serial.println({0});\n",
+      "loop": ""
+    }
+  },
+  {
     "name": "serial available",
     "type": "r",
     "title": "serial available bytes",

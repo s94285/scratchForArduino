@@ -1,5 +1,5 @@
 {
-  "KEYWORD1": ["double","int","bool","void","Serial"],
+  "KEYWORD1": ["double","int","bool","void","Serial","char","true","false"],
   "KEYWORD2": ["for","while","loop","setup","if","else"],
   "KEYWORD3": [""]
 }
