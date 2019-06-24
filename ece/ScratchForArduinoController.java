@@ -1002,10 +1002,11 @@ public class ScratchForArduinoController {
                 fileMap.put("Functions",functionMaps);
                 writer.writeValue(file,fileMap);
 
-                System.out.println("The Object  was successfully written to a file");
+                System.out.println("The Object  was successfully written to "+file);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("File Saved");
-                alert.setContentText("File Saved");
+                alert.setHeaderText("File Saved\n");
+                alert.setContentText("Saved at \""+file+"\"");
                 alert.showAndWait();
             } catch (Exception ex) {
                 ex.printStackTrace();
