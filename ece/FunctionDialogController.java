@@ -130,7 +130,7 @@ public class FunctionDialogController {
             textField.setAlignment(Pos.CENTER);
             textField.setPrefColumnCount(1);
             textField.setFont(new Font(14));
-            textField.setPadding(new Insets(0,2,0,2));
+            textField.setPadding(new Insets(0,12,0,12));
             textField.textProperty().addListener((observableValue, oldValue, newValue) -> {
 //                System.out.println(newValue.length());
                 Text text = new Text(newValue);
@@ -188,7 +188,7 @@ public class FunctionDialogController {
             textField.setAlignment(Pos.CENTER);
             textField.setPrefColumnCount(1);
             textField.setFont(new Font(14));
-            textField.setPadding(new Insets(0,2,0,2));
+            textField.setPadding(new Insets(0,10,0,10));
             textField.textProperty().addListener((observableValue, oldValue, newValue) -> {
 //                System.out.println(newValue.length());
                 Text text = new Text(newValue);
@@ -240,12 +240,12 @@ public class FunctionDialogController {
             TextField textField = this;
             textField.setFont(new Font(14));
             textField.textProperty().addListener((observableValue, oldValue, newValue) -> {
-//                System.out.println(newValue.length());
+                System.out.println(newValue.length());
                 Text text = new Text(newValue);
-                double width = text.getLayoutBounds().getWidth() * 1 // This big is the Text in the TextField
+                double width = text.getLayoutBounds().getWidth()*1.17 // This big is the Text in the TextField
                         + textField.getPadding().getLeft() + textField.getPadding().getRight() // Add the padding of the TextField
-                        ; // Add some spacing
-                textField.setPrefWidth(width + 1); // Set the width
+                        + 2d; // Add some spacing
+                textField.setPrefWidth(width+1); // Set the width
                 textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
             });
             this.setText(name);

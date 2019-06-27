@@ -67,53 +67,30 @@ public abstract class Block extends VBox {
                         ArrayList<String> menuArray = blockSpec.menu.get(menuLabel.toString());
 
                         final ComboBox<String> combobox1 = new ComboBox<>();
+                        final TextField textField = combobox1.getEditor();
                         if(menuArray!=null)
                             combobox1.setItems(FXCollections.observableArrayList(menuArray));
                         combobox1.setPromptText("Editable");
                         combobox1.setVisibleRowCount(5);
                         combobox1.setEditable(true);
                         combobox1.setValue(blockSpec.field.get(fieldCount++));
+                        combobox1.getEditor().setAlignment(Pos.CENTER);
+                        textField.setPadding(new Insets(0,2,0,2));
                         combobox1.autosize();
- //Cell Factory
-                        combobox1.setCellFactory(
-                                new Callback<ListView<String>, ListCell<String>>() {
-                                    @Override
-                                    public ListCell<String> call(ListView<String> param) {
-
-                                        return new ListCell<String>()
-                                        {
-                                            {
-                                                super.setPrefWidth(60);
-                                            }
-                                            @Override
-                                            protected void updateItem(String item, boolean empty) {
-                                                super.updateItem(item, empty);
-
-                                                if (item != null) {
-                                                    setText(item);
-
-                                                    if (item.contains("Item 0"))
-                                                        setTextFill(Color.RED);
-                                                    else if (item.contains("Item 1"))
-                                                        setTextFill(Color.GREEN);
-                                                }
-                                                else {
-                                                    setText(null);
-                                                }
-                                            }
-                                        };
-                                    }
-                                });
                         combobox1.autosize();
-                        combobox1.getEditor().textProperty().addListener((observableValue,oldValue,newValue) -> {
-                            combobox1.setValue(newValue);
-                            Text text = new Text(combobox1.getValue());
-                            double width = text.getLayoutBounds().getWidth()*1.17 +combobox1.getPadding().getLeft() + combobox1.getPadding().getRight() + 35d;
-                            combobox1.setPrefWidth(width);
+                        textField.textProperty().addListener((observableValue,oldValue,newValue) -> {
+                            Text text = new Text(newValue);
+                            double width = text.getLayoutBounds().getWidth()*1.17 // This big is the Text in the TextField
+                                    + textField.getPadding().getLeft() + textField.getPadding().getRight() // Add the padding of the TextField
+                                    + 2d; // Add some spacing
+                            double height = text.getLayoutBounds().getHeight()*1.2 + textField.getPadding().getTop() + textField.getPadding().getBottom() +2d;
+                            textField.setPrefWidth(width+1); // Set the width
+                            textField.setPrefHeight(height);
+                            textField.autosize();
+                            textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
+                            combobox1.autosize();
                             if(drawingPane.getOnMouseReleased()!=null)drawingPane.getOnMouseReleased().handle(null);
                         });
-                        if(menuArray!=null)
-                            combobox1.setPrefWidth(menuArray.get(0).length()*14);
                         stackPane.getChildren().add(combobox1);
                         break;
                     }
@@ -126,95 +103,93 @@ public abstract class Block extends VBox {
                         ArrayList<String> menuArray = blockSpec.menu.get(menuLabel.toString());
 
                         final ComboBox<String> combobox1 = new ComboBox<>();
+                        final TextField textField = combobox1.getEditor();
                         if(menuArray!=null)
                             combobox1.setItems(FXCollections.observableArrayList(menuArray));
                         combobox1.setPromptText("Editable");
                         combobox1.setVisibleRowCount(5);
                         combobox1.setEditable(true);
                         combobox1.setValue(blockSpec.field.get(fieldCount++));
+                        combobox1.getEditor().setAlignment(Pos.CENTER);
+                        textField.setPadding(new Insets(0,2,0,2));
                         combobox1.autosize();
-                        //Cell Factory
-                        combobox1.setCellFactory(
-                                new Callback<ListView<String>, ListCell<String>>() {
-                                    @Override
-                                    public ListCell<String> call(ListView<String> param) {
-
-                                        return new ListCell<String>()
-                                        {
-                                            {
-                                                super.setPrefWidth(60);
-                                            }
-                                            @Override
-                                            protected void updateItem(String item, boolean empty) {
-                                                super.updateItem(item, empty);
-
-                                                if (item != null) {
-                                                    setText(item);
-
-                                                    if (item.contains("Item 0"))
-                                                        setTextFill(Color.RED);
-                                                    else if (item.contains("Item 1"))
-                                                        setTextFill(Color.GREEN);
-                                                }
-                                                else {
-                                                    setText(null);
-                                                }
-                                            }
-                                        };
-                                    }
-                                });
                         combobox1.autosize();
-                        combobox1.getEditor().textProperty().addListener((observableValue,oldValue,newValue) -> {
+                        textField.textProperty().addListener((observableValue,oldValue,newValue) -> {
                             if(!newValue.matches("([\\d.-])*"))
                                 combobox1.getEditor().setText(oldValue);
                             else
                                 combobox1.setValue(newValue);
                             Text text = new Text(combobox1.getValue());
-                            double width = text.getLayoutBounds().getWidth()*1.17 +combobox1.getPadding().getLeft() + combobox1.getPadding().getRight() + 35d;
-                            combobox1.setPrefWidth(width);
+                            double width = text.getLayoutBounds().getWidth()*1.17 // This big is the Text in the TextField
+                                    + textField.getPadding().getLeft() + textField.getPadding().getRight() // Add the padding of the TextField
+                                    + 2d; // Add some spacing
+                            double height = text.getLayoutBounds().getHeight()*1.2 + textField.getPadding().getTop() + textField.getPadding().getBottom() +2d;
+                            textField.setPrefWidth(width+1); // Set the width
+                            textField.setPrefHeight(height);
+                            textField.autosize();
+                            textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
+                            combobox1.autosize();
                             if(drawingPane.getOnMouseReleased()!=null)drawingPane.getOnMouseReleased().handle(null);
                         });
-                        if(menuArray!=null)
-                            combobox1.setPrefWidth(menuArray.get(0).length()*14);
                         stackPane.getChildren().add(combobox1);
                         break;
                     }
                     case 'n': {
-
                         TextField textField = new TextField(blockSpec.field.get(fieldCount++));
                         textField.setUserData("number");
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
                         textField.setFont(new Font(14));
-                        textField.setPadding(new Insets(0,2,0,2));
+                        textField.setPadding(new Insets(0,12,0,12));
                         textField.textProperty().addListener((observableValue, oldValue, newValue) -> {
-                            System.out.println(newValue.length());
+//                System.out.println(newValue.length());
                             Text text = new Text(newValue);
                             double width = text.getLayoutBounds().getWidth()*1.17 // This big is the Text in the TextField
                                     + textField.getPadding().getLeft() + textField.getPadding().getRight() // Add the padding of the TextField
                                     + 2d; // Add some spacing
+                            double height = text.getLayoutBounds().getHeight()*1.2 + textField.getPadding().getTop() + textField.getPadding().getBottom() +2d;
                             textField.setPrefWidth(width+1); // Set the width
+                            textField.setPrefHeight(height);
+                            textField.autosize();
                             textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
-                            if(!newValue.matches("([\\d.-])*")){
-                                textField.setText(oldValue);
-                            }
                             Path path = new Path();
                             MoveTo moveTo = new MoveTo();
                             moveTo.setX(12);
-                            moveTo.setY(getHeight());
+                            moveTo.setY(height);
                             ArcTo arcTo1 = new ArcTo();
                             arcTo1.setX(12);
                             arcTo1.setY(0);
                             arcTo1.setRadiusX(12);
-                            arcTo1.setRadiusY(getHeight()/2);
+                            arcTo1.setRadiusY(height/2);
                             arcTo1.setSweepFlag(true);
-                            LineTo lineTo1 = new LineTo((width+3)-12, 0);
-                            ArcTo arcTo2 = new ArcTo(12, getHeight()/2, 0,(width+3)-12 , getHeight(), false, true);
+                            LineTo lineTo1 = new LineTo(width-12, 0);
+                            ArcTo arcTo2 = new ArcTo(12, height/2, 0,width-12 , height, false, true);
                             path.getElements().addAll(moveTo, arcTo1, lineTo1, arcTo2, new ClosePath());
                             textField.setShape(path);
                         });
-
-                        textField.setShape(new Circle(5));
+                        Text text = new Text(textField.getText());
+                        textField.autosize();
+                        double width = text.getLayoutBounds().getWidth()*1.17 // This big is the Text in the TextField
+                                + textField.getPadding().getLeft() + textField.getPadding().getRight() // Add the padding of the TextField
+                                + 2d; // Add some spacing
+                        double height = text.getLayoutBounds().getHeight()*1.2 + textField.getPadding().getTop() + textField.getPadding().getBottom() +2d;
+                        textField.setPrefWidth(width+1); // Set the width
+                        textField.setPrefHeight(height);
+                        textField.positionCaret(textField.getCaretPosition()); // If you remove this line, it flashes a little bit
+                        Path path = new Path();
+                        MoveTo moveTo = new MoveTo();
+                        moveTo.setX(12);
+                        moveTo.setY(height);
+                        ArcTo arcTo1 = new ArcTo();
+                        arcTo1.setX(12);
+                        arcTo1.setY(0);
+                        arcTo1.setRadiusX(12);
+                        arcTo1.setRadiusY(height/2);
+                        arcTo1.setSweepFlag(true);
+                        LineTo lineTo1 = new LineTo(width-12, 0);
+                        ArcTo arcTo2 = new ArcTo(12, height/2, 0,width-12 , height, false, true);
+                        path.getElements().addAll(moveTo, arcTo1, lineTo1, arcTo2, new ClosePath());
+                        textField.setShape(path);
                         stackPane.getChildren().add(textField);
                         break;
                     }
@@ -245,7 +220,7 @@ public abstract class Block extends VBox {
                         textField.setAlignment(Pos.CENTER);
                         textField.setPrefColumnCount(1);
                         textField.setFont(new Font(14));
-                        textField.setPadding(new Insets(0,2,0,2));
+                        textField.setPadding(new Insets(0,8,0,8));
                         textField.setShape(new Polygon(0,6,6,0,30,0,36,6,30,12,6,12));
                         textField.setEditable(false);
                         textField.setFocusTraversable(false);
